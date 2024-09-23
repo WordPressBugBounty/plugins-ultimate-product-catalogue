@@ -1,0 +1,1 @@
+# plugins-ultimate-product-catalogue
