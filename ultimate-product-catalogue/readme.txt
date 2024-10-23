@@ -2,7 +2,7 @@
 Contributors: Rustaurius
 Tags: product catalog, catalog, product, catalogue, woocommerce, products, catalogue, catalogs, catalogues, catalog plugin, woocommerce product catalog, woocommerce catalog, woocommerce checkout, woocommerce products
 Tested up to: 6.6
-Stable tag: 5.2.19
+Stable tag: 5.2.20
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate Link: https://www.etoilewebdesign.com/plugin-donations/
@@ -260,6 +260,9 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 -----------------------------------------------------------------------------------
 
 == Changelog ==
+
+= 5.2.20 (2024-10-23) =
+- Added the ability to delete/remove the existing file for a product for a file type custom field.
 
 = 5.2.19 (2024-08-29) =
 - Bugfix: Once a custom field was created, it was no longer possible to delete all custom fields.

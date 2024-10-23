@@ -1457,6 +1457,22 @@ NEW DASHBOARD
   width: calc(100% - 180px);
 }
 
+.ewd-upcp-custom-field-file,
+.ewd-upcp-custom-field-current-file {
+  position: relative;
+  width: 100%;
+}
+.ewd-upcp-custom-field-delete-file {
+  display: flex;
+  width: 100%;
+  height: 32px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.ewd-upcp-custom-field-delete-file input {
+  margin-top: 1px;
+}
+
 .ewd-upcp-related-product {
   position: relative;
   float: left;

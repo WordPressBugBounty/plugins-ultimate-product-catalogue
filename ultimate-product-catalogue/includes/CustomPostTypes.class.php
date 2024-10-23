@@ -547,12 +547,18 @@ class ewdupcpCustomPostTypes {
 	
 						<?php if ( ! empty( $field_value ) ) { ?>
 							
-							<span>
+							<div class="ewd-upcp-custom-field-file">
 
-								<?php _e( 'Current file:', 'ultimate-product-catalogue' ); ?>
-								<?php echo esc_html( $field_value ); ?>
+								<div class="ewd-upcp-custom-field-current-file">
+									<?php _e( 'Current file:', 'ultimate-product-catalogue' ); ?>
+									<?php echo esc_html( $field_value ); ?><br />
+								</div>
 
-							</span>
+								<div class="ewd-upcp-custom-field-delete-file">
+									<input type='checkbox' name='ewd_upcp_custom_field_<?php echo esc_attr( $custom_field->id ); ?>-delete'> <?php _e( 'Delete', 'ultimate-product-catalogue' ); ?> 
+								</div>
+
+							</div>
 
 						<?php } ?>
 
@@ -1052,7 +1058,7 @@ class ewdupcpCustomPostTypes {
 
 				if ( empty( $_FILES[ $input_name ]['name'] ) ) { 
 					
-					$field_value = get_post_meta( $post_id, 'custom_field_' . $custom_field->id, true ); 
+					$field_value = isset( $_POST[ $input_name . '-delete' ] ) ? '' : get_post_meta( $post_id, 'custom_field_' . $custom_field->id, true ); 
 				}
 				else {
 					
