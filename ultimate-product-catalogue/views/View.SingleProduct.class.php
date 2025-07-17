@@ -16,6 +16,9 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	// URL of the single product page for this product, if any
 	public $details_link;
 
+	// The classes assigned to the product
+	public $classes = array();
+
 	// Pointers
 	public $custom_field;
 
@@ -125,11 +128,52 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	}
 
 	/**
+	 * Returns the correct label for the product action button
+	 * @since 5.3.0
+	 */
+	public function get_action_button_label() {
+  		global $ewd_upcp_controller;
+
+  		return $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ? $ewd_upcp_controller->settings->get_setting( 'label-add-to-cart-button' ) : $ewd_upcp_controller->settings->get_setting( 'label-inquire-button' );
+	}
+
+	/**
+	 * Print an add to cart button, if applicable
+	 *
+	 * @since 5.3.0
+	 */
+	public function maybe_print_add_to_cart() {
+		global $ewd_upcp_controller;
+
+		if ( empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ) or empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-sync' ) ) ) { return; }
+
+		$template = $this->find_template( 'single-product-cart-action-button' );
+		
+		if ( $template ) {
+			include( $template );
+		}
+	}
+
+	public function maybe_print_cart_quantity_select() {
+		global $ewd_upcp_controller;
+		
+		if ( empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ) or empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-sync' ) ) ) { return; }
+
+		$template = $this->find_template( 'single-product-cart-quantity-select' );
+		
+		if ( $template ) {
+			include( $template );
+		}
+	}
+
+	/**
 	 * Print the product's additional images
 	 *
 	 * @since 5.0.0
 	 */
-	public function print_additional_images() {
+	public function maybe_print_additional_images() {
+
+		if ( ( sizeof( $this->product->images ) + sizeof( $this->product->videos ) ) < 1 ) { return; }
 		
 		$template = $this->find_template( 'single-product-additional-images' );
 		
@@ -160,7 +204,7 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	public function maybe_print_previous_thumbnails_button() {
 		global $ewd_upcp_controller;
 
-		if ( ( sizeof( $this->product->images ) + sizeof( $this->product->videos ) ) ) { return; }
+		if ( ( sizeof( $this->product->images ) + sizeof( $this->product->videos ) ) <= 1 ) { return; }
 		
 		$template = $this->find_template( 'single-product-thumbnails-previous-button' );
 		
@@ -177,7 +221,7 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	public function maybe_print_next_thumbnails_button() {
 		global $ewd_upcp_controller;
 
-		if ( ( sizeof( $this->product->images ) + sizeof( $this->product->videos ) ) ) { return; }
+		if ( ( sizeof( $this->product->images ) + sizeof( $this->product->videos ) ) <= 1 ) { return; }
 		
 		$template = $this->find_template( 'single-product-thumbnails-next-button' );
 		
@@ -295,6 +339,40 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	}
 
 	/**
+	 * Print the details tab for the product, if selected
+	 *
+	 * @since 5.3.0
+	 */
+	public function maybe_print_details_tab() {
+		global $ewd_upcp_controller;
+
+		if ( in_array( 'details', $this->get_option( 'hide-product-tabs' ) ) ) { return; }
+		
+		$template = $this->find_template( 'single-product-tab-details' );
+		
+		if ( $template ) {
+			include( $template );
+		}
+	}
+
+	/**
+	 * Print the additional information tab for the product, if selected
+	 *
+	 * @since 5.3.0
+	 */
+	public function maybe_print_additional_information_tab() {
+		global $ewd_upcp_controller;
+
+		if ( in_array( 'additional_information', $this->get_option( 'hide-product-tabs' ) ) ) { return; }
+		
+		$template = $this->find_template( 'single-product-tab-additional-information' );
+		
+		if ( $template ) {
+			include( $template );
+		}
+	}
+
+	/**
 	 * Print an inquiry form tab for the product, if selected
 	 *
 	 * @since 5.0.0
@@ -303,6 +381,8 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 		global $ewd_upcp_controller;
 
 		if ( empty( $ewd_upcp_controller->settings->get_setting( 'product-inquiry-form' ) ) ) { return; }
+
+		if ( in_array( 'contact', $this->get_option( 'hide-product-tabs' ) ) ) { return; }
 		
 		$template = $this->find_template( 'single-product-tab-inquiry-form' );
 		
@@ -321,6 +401,8 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 
 		if ( empty( $ewd_upcp_controller->settings->get_setting( 'product-reviews' ) ) ) { return; }
 
+		if ( in_array( 'reviews', $this->get_option( 'hide-product-tabs' ) ) ) { return; }
+
 		$template = $this->find_template( 'single-product-tab-reviews' );
 		
 		if ( $template ) {
@@ -337,6 +419,8 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 		global $ewd_upcp_controller;
 
 		if ( empty( $ewd_upcp_controller->settings->get_setting( 'product-faqs' ) ) ) { return; }
+
+		if ( in_array( 'faqs', $this->get_option( 'hide-product-tabs' ) ) ) { return; }
 		
 		$template = $this->find_template( 'single-product-tab-faqs' );
 		
@@ -353,7 +437,7 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	public function print_custom_tabs() {
 		global $ewd_upcp_controller;
 
-		if ( empty( get_option( 'ewd-upcp-product-page-tabs' ) ) ) { return; }
+		if ( empty( $this->get_option( 'custom-tabs' ) ) ) { return; }
 		
 		$template = $this->find_template( 'single-product-custom-tabs' );
 		
@@ -700,7 +784,7 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	 */
   	public function get_product_page_tabs() {
 
-  		return is_array( get_option( 'ewd-upcp-product-page-tabs' ) ) ? get_option( 'ewd-upcp-product-page-tabs' ) : array();
+  		return ewd_upcp_decode_infinite_table_setting( $this->get_option( 'custom-tabs' ) );
   	}
 
 	/**
@@ -710,7 +794,7 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	 */
   	public function is_starting_tab( $tab ) {
   		
-  		return empty( get_option( 'ewd-upcp-product-page-starting-tab' ) ) ? ( $tab == 'details' ) : ( get_option( 'ewd-upcp-product-page-starting-tab' ) == $tab );
+  		return $this->get_option( 'product-page-starting-tab' ) == $tab;
   	}
 
   	/**
@@ -748,6 +832,21 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	}
 
 	/**
+	 * Returns a comma-separated string of this product's category slugs, if any
+	 * @since 5.3.0
+	 */
+	public function get_max_item_quantity() {
+
+		$woocommerce_id = get_post_meta( $this->product->id, 'woocommerce_id', true );
+
+		if ( empty( $woocommerce_id ) ) { return 1; }
+
+		$product = wc_get_product( $woocommerce_id );
+
+		return min( $product->get_stock_quantity(), 10 );
+	}
+
+	/**
 	 * Adds schema data about the Product being displayed
 	 *
 	 * @since 5.0.0
@@ -764,6 +863,7 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	    	'offers'			=> array(
 	    		'type'				=> 'Offer',
 	    		'price'				=> $this->product->current_price,
+	    		'priceCurrency'		=> apply_filters( 'ewd_upcp_currency', 'USD' ),
 	    		'url'				=> $this->details_link,
 	    	)
 	    );

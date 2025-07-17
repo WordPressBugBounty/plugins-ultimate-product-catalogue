@@ -1,6 +1,6 @@
 <div class='ewd-upcp-catalog-product-custom-field <?php echo esc_attr( $this->custom_field->slug ); ?>'>
 
-	<span><?php echo esc_html( $this->custom_field->name ); ?>:</span>
+	<span><?php echo esc_html( $this->custom_field->name ); ?></span>
 	
 	<?php
 		$value = wp_kses_post(

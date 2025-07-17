@@ -14,7 +14,7 @@
 
 		<?php $this->maybe_print_previous_thumbnails_button(); ?>
 
-		<?php $this->print_additional_images(); ?>
+		<?php $this->maybe_print_additional_images(); ?>
 
 		<?php $this->maybe_print_next_thumbnails_button(); ?>
 
@@ -25,10 +25,14 @@
 		<div class='ewd-upcp-single-product-details-title-and-price'>
 
 			<?php $this->print_title(); ?>
-		
-			<?php $this->maybe_print_price(); ?>
 
 			<?php $this->print_social_media_buttons(); ?>
+
+			<?php $this->maybe_print_price(); ?>
+
+			<?php $this->maybe_print_add_to_cart(); ?>
+
+			<?php $this->print_product_description(); ?>
 		
 		</div>
 
@@ -40,17 +44,9 @@
 
 			</div>
 
-			<div class='ewd-upcp-single-product-tab <?php echo ( ! $this->is_starting_tab( 'details' ) ? 'ewd-upcp-hidden' : '' ); ?>' data-tab='details'>
+			<?php //$this->maybe_print_details_tab(); ?>
 
-				<?php $this->print_product_description(); ?>
-
-			</div>
-
-			<div class='ewd-upcp-single-product-tab <?php echo ( ! $this->is_starting_tab( 'additional_information' ) ? 'ewd-upcp-hidden' : '' ); ?>' data-tab='additional_information'>
-
-				<?php $this->print_extra_description_elements(); ?>
-
-			</div>
+			<?php $this->maybe_print_additional_information_tab(); ?>
 
 			<?php $this->maybe_print_inquiry_form_tab(); ?>
 

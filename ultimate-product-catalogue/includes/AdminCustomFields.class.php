@@ -147,9 +147,9 @@ class ewdupcpAdminCustomFields {
 							<label><?php _e( 'Displays', 'ultimate-product-catalogue' ); ?></label>
 
 								<div class="ewd-upcp-custom-field-cell-checkbox-container">
-									<div class="ewd-upcp-custom-field-cell-checkbox-each"><input type='checkbox' name='ewd_upcp_custom_field_displays[]' value='thumbnail' <?php echo ( in_array( 'thumbnail', $custom_field->displays ) ? 'checked' : '' ); ?> /><?php _e( 'Thumbnail', 'ultimate-product-catalogue' ); ?></div>
-									<div class="ewd-upcp-custom-field-cell-checkbox-each"><input type='checkbox' name='ewd_upcp_custom_field_displays[]' value='list' <?php echo ( in_array( 'list', $custom_field->displays ) ? 'checked' : '' ); ?> /><?php _e( 'List', 'ultimate-product-catalogue' ); ?></div>
-									<div class="ewd-upcp-custom-field-cell-checkbox-each"><input type='checkbox' name='ewd_upcp_custom_field_displays[]' value='detail' <?php echo ( in_array( 'detail', $custom_field->displays ) ? 'checked' : '' ); ?> /><?php _e( 'Detail', 'ultimate-product-catalogue' ); ?></div>
+									<div class="ewd-upcp-custom-field-cell-checkbox-each"><label><input type='checkbox' name='ewd_upcp_custom_field_displays[]' value='thumbnail' <?php echo ( in_array( 'thumbnail', $custom_field->displays ) ? 'checked' : '' ); ?> /><span><?php _e( 'Thumbnail', 'ultimate-product-catalogue' ); ?></span></label></div>
+									<div class="ewd-upcp-custom-field-cell-checkbox-each"><label><input type='checkbox' name='ewd_upcp_custom_field_displays[]' value='list' <?php echo ( in_array( 'list', $custom_field->displays ) ? 'checked' : '' ); ?> /><span><?php _e( 'List', 'ultimate-product-catalogue' ); ?></span></label></div>
+									<div class="ewd-upcp-custom-field-cell-checkbox-each"><label><input type='checkbox' name='ewd_upcp_custom_field_displays[]' value='detail' <?php echo ( in_array( 'detail', $custom_field->displays ) ? 'checked' : '' ); ?> /><span><?php _e( 'Detail', 'ultimate-product-catalogue' ); ?></span></label></div>
 								</div>
 
 							</div>
@@ -160,42 +160,52 @@ class ewdupcpAdminCustomFields {
 
 								<div class='ewd-upcp-custom-field-cell-checkbox-container'>
 									<div class="ewd-upcp-custom-field-cell-checkbox-each">
-										<input type='checkbox' name='ewd_upcp_custom_field_searchable' value='1' <?php echo ( ! empty( $custom_field->searchable ) ? 'checked' : '' ); ?> /><?php _e( 'Searchable', 'ultimate-product-catalogue' ); ?>
+										<label><input type='checkbox' name='ewd_upcp_custom_field_searchable' value='1' <?php echo ( ! empty( $custom_field->searchable ) ? 'checked' : '' ); ?> /><span><?php _e( 'Searchable', 'ultimate-product-catalogue' ); ?></span></label>
 									</div>
 									<div class="ewd-upcp-custom-field-cell-checkbox-each">
-										<div class="ewd-upcp-custom-field-cell-filtering-label"><?php _e( 'Filtering Control Type', 'ultimate-product-catalogue' ); ?></div>
-										<select name='ewd_upcp_custom_field_filter_control_type'>
-											<option value='checkbox' <?php echo ( $custom_field->filter_control_type == 'checkbox' ? 'selected' : '' ); ?>><?php _e( 'Checkbox', 'ultimate-product-catalogue' ); ?></option>
-											<option value='radio' <?php echo ( $custom_field->filter_control_type == 'radio' ? 'selected' : '' ); ?>><?php _e( 'Radio', 'ultimate-product-catalogue' ); ?></option>
-											<option value='dropdown' <?php echo ( $custom_field->filter_control_type == 'dropdown' ? 'selected' : '' ); ?>><?php _e( 'Dropdown', 'ultimate-product-catalogue' ); ?></option>
-											<option value='slider' <?php echo ( $custom_field->filter_control_type == 'slider' ? 'selected' : '' ); ?>><?php _e( 'Slider (Number type only)', 'ultimate-product-catalogue' ); ?></option>
-										</select>
+										<label><input type='checkbox' name='ewd_upcp_custom_field_tabbed_display' value='1' <?php echo ( ! empty( $custom_field->tabbed_display ) ? 'checked' : '' ); ?> /><span><?php _e( 'Tabbed Product Page Display?', 'ultimate-product-catalogue' ); ?></span></label>
 									</div>
 									<div class="ewd-upcp-custom-field-cell-checkbox-each">
-										<input type='checkbox' name='ewd_upcp_custom_field_tabbed_display' value='1' <?php echo ( ! empty( $custom_field->tabbed_display ) ? 'checked' : '' ); ?> /><?php _e( 'Tabbed Product Page Display?', 'ultimate-product-catalogue' ); ?>
-									</div>
-									<div class="ewd-upcp-custom-field-cell-checkbox-each">
-										<input type='checkbox' name='ewd_upcp_custom_field_comparison_display' value='1' <?php echo ( ! empty( $custom_field->comparison_display ) ? 'checked' : '' ); ?> /><?php _e( 'Product Comparison Display?', 'ultimate-product-catalogue' ); ?>
+										<label><input type='checkbox' name='ewd_upcp_custom_field_comparison_display' value='1' <?php echo ( ! empty( $custom_field->comparison_display ) ? 'checked' : '' ); ?> /><span><?php _e( 'Product Comparison Display?', 'ultimate-product-catalogue' ); ?></span></label>
 									</div>
 								</div>
 
 							</div>
 
-							<div class='ewd-upcp-custom-field-cell ewd-upcp-custom-field-delete'>
-								<?php _e( 'Delete', 'ultimate-product-catalogue' ); ?>
+							<div class='ewd-upcp-custom-field-cell ewd-upcp-custom-field-cell-filtering-control-type'>
+
+								<label><?php _e( 'Filtering Control Type', 'ultimate-product-catalogue' ); ?></label>
+
+								<select name='ewd_upcp_custom_field_filter_control_type'>
+
+									<option value='checkbox' <?php echo ( $custom_field->filter_control_type == 'checkbox' ? 'selected' : '' ); ?>><?php _e( 'Checkbox', 'ultimate-product-catalogue' ); ?></option>
+									<option value='radio' <?php echo ( $custom_field->filter_control_type == 'radio' ? 'selected' : '' ); ?>><?php _e( 'Radio', 'ultimate-product-catalogue' ); ?></option>
+									<option value='dropdown' <?php echo ( $custom_field->filter_control_type == 'dropdown' ? 'selected' : '' ); ?>><?php _e( 'Dropdown', 'ultimate-product-catalogue' ); ?></option>
+									<option value='slider' <?php echo ( $custom_field->filter_control_type == 'slider' ? 'selected' : '' ); ?>><?php _e( 'Slider (Number type only)', 'ultimate-product-catalogue' ); ?></option>
+
+								</select>
+
+							</div>
+
+							<div class='ewd-upcp-custom-field-cell'>
+								<div class='ewd-upcp-custom-field-delete'>
+									<?php _e( 'Delete', 'ultimate-product-catalogue' ); ?>
+								</div>
 							</div>
 
 						</div>
 
 					<?php } ?>
 
-					<div class='ewd-upcp-custom-fields-add'>
-						<?php _e( '&plus;&nbsp;ADD', 'ultimate-product-catalogue' ); ?>
+					<div class='ewd-upcp-custom-fields-add-container'>
+						<div class='ewd-upcp-custom-fields-add'>
+							<?php _e( '+ Add Field', 'ultimate-product-catalogue' ); ?>
+						</div>
 					</div>
 
 				</div>
 
-				<input type='submit' class='button button-primary' name='ewd-upcp-custom-fields-submit' value='<?php _e( 'Update Fields', 'ultimate-product-catalogue' ); ?>' />
+				<input type='submit' class='ewd-upcp-custom-fields-submit' name='ewd-upcp-custom-fields-submit' value='<?php _e( 'Update Fields', 'ultimate-product-catalogue' ); ?>' />
 				
 			</form>
 			<?php do_action( 'ewd_upcp_custom_fields_table_bottom' ); ?>

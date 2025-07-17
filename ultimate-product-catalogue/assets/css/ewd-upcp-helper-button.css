@@ -1,0 +1,72 @@
+.ewd-upcp-dashboard-help-button {
+	position: fixed;
+	bottom: 40px;
+	right: 20px;
+	background-color: #7B31AF;
+	color: white;
+	border: none;
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	font-size: 24px;
+	cursor: pointer;
+	z-index: 1000;
+	transition: transform 0.3s;
+}
+
+.ewd-upcp-dashboard-help-button:hover {
+	transform: scale(1.1);
+}
+
+.ewd-upcp-dashboard-help-modal {
+	position: fixed;
+	right: 20px;
+	bottom: 100px;
+	background-color: white;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	display: flex;
+	flex-direction: column;
+	width: 420px;
+	padding: 12px 12px 4px;
+}
+
+.ewd-upcp-dashboard-help-description {
+	padding: 0 0 8px;
+	font-size: 14px;
+	color: #212427;
+	line-height: 1.4;
+}
+
+.ewd-upcp-dashboard-help-modal .ewd-upcp-dashboard-help-tutorials {
+	display: flex;
+	flex-direction: column;
+}
+
+.ewd-upcp-dashboard-help-modal .ewd-upcp-dashboard-help-links {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.ewd-upcp-dashboard-help-modal a {
+	font-size: 14px;
+	margin: 8px 0;
+	text-decoration: none;
+	color: #7B31AF;
+}
+.ewd-upcp-dashboard-help-modal a:hover {
+	text-decoration: underline;
+}
+
+@media screen and (max-width: 500px) {
+	.ewd-upcp-dashboard-help-modal {
+		width: 320px;
+	}
+	.ewd-upcp-dashboard-help-modal .ewd-upcp-dashboard-help-links {
+		flex-direction: column;
+		justify-content: initial;
+	}
+}

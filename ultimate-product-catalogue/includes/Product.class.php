@@ -390,7 +390,7 @@ class ewdupcpProduct {
 			}
 			elseif ( $custom_field->type == 'link' ) {
 
-				$replace[] = '<a href="' . $this->custom_fields[ $custom_field->id ] . '">' . __( 'Link', 'ultimate-product-catalogue' ) . '</a>';
+				$replace[] = '<a href="' . $this->custom_fields[ $custom_field->id ] . '">' . $this->custom_fields[ $custom_field->id ] . '</a>';
 			}
 			else { 
 
@@ -658,12 +658,14 @@ class ewdupcpProduct {
     		$post_ids[] = $post_id_result->ID;
     	}
 
+		$placeholders = implode(',', array_fill(0, count($post_ids), '%d'));
+
 		$this->rating = $wpdb->get_var( $wpdb->prepare(
-    		"SELECT AVG( meta_value )
+    		"SELECT TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM FORMAT(AVG(CAST(meta_value AS DECIMAL)), 2)))
     		FROM $wpdb->postmeta
     		WHERE meta_key = 'EWD_URP_Overall_Score'
-    		AND post_id IN (%s)",
-    		implode( ',', $post_ids )
+    		AND post_id IN ($placeholders)",
+    		...$post_ids
     	) );
 	}
 }

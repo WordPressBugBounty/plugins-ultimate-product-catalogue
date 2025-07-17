@@ -9,6 +9,8 @@
 			<?php $this->print_title(); ?>
 		
 			<?php $this->maybe_print_price(); ?>
+
+			<?php $this->maybe_print_add_to_cart(); ?>
 		
 		</div>
 
@@ -16,7 +18,7 @@
 			
 		<div class='ewd-upcp-single-product-images-div'>
 
-			<?php $this->print_additional_images(); ?>
+			<?php $this->maybe_print_additional_images(); ?>
 
 			<?php $this->print_main_image(); ?>
 

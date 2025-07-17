@@ -22,6 +22,12 @@ class ewdupcpBackwardsCompatibility {
 
 			wp_unschedule_event( $timestamp, 'ewd_upcp_run_backwards_compat' );
 		}
+
+		// Move the 'Starting Tab' and 'Custom Tabs' setting to the settings page
+		if ( get_option( 'ewd-upcp-product-page-starting-tab' ) !== false ) {
+
+			$this->move_starting_and_custom_tab_settings();
+		}
 	}
 
 	public function run_backwards_compat() {
@@ -809,6 +815,23 @@ class ewdupcpBackwardsCompatibility {
 			
 			update_term_meta( $tag->term_id, 'order', 9999 );
 		}
+	}
+
+	public function move_starting_and_custom_tab_settings() {
+
+		$settings = get_option( 'ewd-upcp-settings' );
+
+		$settings['product-page-starting-tab'] = get_option( 'ewd-upcp-product-page-starting-tab' );
+
+		$custom_tabs = is_array( get_option( 'ewd-upcp-product-page-tabs' ) ) ? get_option( 'ewd-upcp-product-page-tabs' ) : array();
+
+		$custom_tabs = json_encode( $custom_tabs );
+
+		$settings['custom-tabs'] = $custom_tabs;
+
+		update_option( 'ewd-upcp-settings', $settings );
+
+		delete_option( 'ewd-upcp-product-page-starting-tab' );
 	}
 }
 

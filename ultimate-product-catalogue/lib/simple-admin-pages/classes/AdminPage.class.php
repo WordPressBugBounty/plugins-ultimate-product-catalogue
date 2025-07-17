@@ -7,7 +7,7 @@
  * @package Simple Admin Pages
  */
 
-class sapAdminPage_2_6_19 {
+class sapAdminPage_2_7_0 {
 
 	public $title;
 	public $menu_title;
@@ -221,31 +221,34 @@ class sapAdminPage_2_6_19 {
 				<?php $this->display_page_title(); ?>
 
 				<?php if ( isset( $this->default_tab ) ) : ?>
-				<h2 class="nav-tab-wrapper">
-				<?php
-				foreach( $this->sections as $section ) {
+				<div class="sap-settings-menu-and-video-button">
+					<h2 class="nav-tab-wrapper">
+					<?php
+					foreach( $this->sections as $section ) {
 
-					if ( isset( $section->is_tab ) && $section->is_tab === true ) {
+						if ( isset( $section->is_tab ) && $section->is_tab === true ) {
 
-						$tab_url = add_query_arg(
-							array(
-								'settings-updated' => false,
-								'tab' => $section->id
-							)
-						);
+							$tab_url = add_query_arg(
+								array(
+									'settings-updated' => false,
+									'tab' => $section->id
+								)
+							);
 
-						if( isset( $section->show_submit_button ) && $current_page == $section->id ) {
-							$this->show_button = $section->show_submit_button;
+							if( isset( $section->show_submit_button ) && $current_page == $section->id ) {
+								$this->show_button = $section->show_submit_button;
+							}
+
+							$active = $current_page == $section->id ? ' nav-tab-active' : '';
+							echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $section->title ) . '" class="nav-tab' . esc_attr( $active ) . '">';
+								echo '<span class="dashicons dashicons-' . esc_attr( $section->icon ) . '"></span>';
+								echo esc_html( $section->title );
+							echo '</a>';
 						}
-
-						$active = $current_page == $section->id ? ' nav-tab-active' : '';
-						echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $section->title ) . '" class="nav-tab' . esc_attr( $active ) . '">';
-							echo esc_html( $section->title );
-						echo '</a>';
 					}
-				}
-				?>
-				</h2>
+					?>
+					</h2>
+				</div>	
 				<?php endif; ?>
 
 				<form method="post" action="options.php" class="sap-parent-form">

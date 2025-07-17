@@ -149,11 +149,15 @@ if ( !class_exists( 'ewdupcpAJAX' ) ) {
 				ewdupcpHelper::bad_nonce_ajax();
 			}
 
+			$quantity = intval( $_POST['quantity'] );
+
 			if ( ! empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ) and ! empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-sync' ) ) and is_object( $woocommerce ) ) {
 
 				$woocommerce_id = get_post_meta( intval( $_POST['product_id'] ), 'woocommerce_id', true );
 
-				$woocommerce->cart->add_to_cart( $woocommerce_id );
+				$quantity = intval( $_POST['quantity'] );
+
+				$woocommerce->cart->add_to_cart( $woocommerce_id, $quantity );
 			}
 
 			$products = ! empty( $_COOKIE['upcp_cart_products'] ) ? explode( ',', sanitize_text_field( $_COOKIE['upcp_cart_products'] ) ) : array();

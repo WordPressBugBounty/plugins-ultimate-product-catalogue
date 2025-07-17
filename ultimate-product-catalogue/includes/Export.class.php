@@ -17,44 +17,34 @@ class ewdupcpExport {
 	public $nonce_check = true;
 
 	public function __construct() {
-		add_action( 'admin_menu', array($this, 'register_install_screen' ));
+		add_action( 'admin_footer-edit.php', array( $this, 'print_button' ) );
 
 		if ( isset( $_POST['ewd_upcp_export'] ) ) { add_action( 'admin_menu', array($this, 'export_products' )); }
 	}
 
-	public function register_install_screen() {
-		global $ewd_upcp_controller;
-		
-		add_submenu_page( 
-			'edit.php?post_type=upcp_product', 
-			'Export Menu', 
-			'Export', 
-			$ewd_upcp_controller->settings->get_setting( 'access-role' ), 
-			'ewd-upcp-export', 
-			array($this, 'display_export_screen') 
-		);
-	}
-
-	public function display_export_screen() {
+	/**
+	 * Adds 'Export' button to products page
+	 * 
+	 * @since 5.3.0
+	 */
+	public function print_button() {
+		global $post_type;
 		global $ewd_upcp_controller;
 
-		$export_permission = $ewd_upcp_controller->permissions->check_permission( 'export' );
+		if ( ! isset( $post_type ) or $post_type != EWD_UPCP_PRODUCT_POST_TYPE ) { return; }
+
+		if ( ! $ewd_upcp_controller->permissions->check_permission( 'export' ) ) { return; }
 
 		?>
-		<div class='wrap'>
-			<h2>Export</h2>
-			<?php if ( $export_permission ) { ?> 
-				<form method='post'>
-					<?php wp_nonce_field( 'EWD_UPCP_Export', 'EWD_UPCP_Export_Nonce' );  ?>
-					<input type='submit' name='ewd_upcp_export' value='Export to Spreadsheet' class='button button-primary' />
-				</form>
-			<?php } else { ?>
-				<div class='ewd-upcp-premium-locked'>
-					<a href="https://www.etoilewebdesign.com/license-payment/?Selected=UPCP&Quantity=1&utm_source=upcp_export" target="_blank">Upgrade</a> to the premium version to use this feature
-				</div>
-			<?php } ?>
-		</div>
-	<?php }
+
+		<form method='post' id='ewd-upcp-export'>
+			<?php wp_nonce_field( 'EWD_UPCP_Export', 'EWD_UPCP_Export_Nonce' );  ?>
+			<input type='submit' name='ewd_upcp_export' value='Export' class='button button-primary' />
+		</form>
+
+		<?php 
+
+	}
 
 	public function export_products() {
 		global $ewd_upcp_controller;

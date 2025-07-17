@@ -1,4 +1,3 @@
-
 <?php
 
 /**
@@ -8,7 +7,7 @@
  * @package Simple Admin Pages
  */
 
-class sapAdminPageSettingWarningTip_2_6_19 extends sapAdminPageSetting_2_6_19 {
+class sapAdminPageSettingWarningTip_2_7_0 extends sapAdminPageSetting_2_7_0 {
 
 	public $sanitize_callback = 'sanitize_text_field';
 

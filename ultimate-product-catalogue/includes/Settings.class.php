@@ -65,6 +65,9 @@ class ewdupcpSettings {
 			'extra-elements'					=> array(),
 
 			'product-page'						=> 'default',
+			'product-page-starting-tab'			=> 'details',
+			'hide-product-tabs'					=> array(),
+			'custom-tabs'						=> array(),
 			'product-image-lightbox'			=> 'no',
 			'related-products'					=> 'none',
 			'next-previous-products'			=> 'none',
@@ -174,7 +177,7 @@ class ewdupcpSettings {
 		require_once( EWD_UPCP_PLUGIN_DIR . '/lib/simple-admin-pages/simple-admin-pages.php' );
 		$sap = sap_initialize_library(
 			$args = array(
-				'version'       => '2.6.19',
+				'version'       => '2.7.0',
 				'lib_url'       => EWD_UPCP_PLUGIN_URL . '/lib/simple-admin-pages/',
 				'theme'			=> 'purple',
 			)
@@ -196,10 +199,11 @@ class ewdupcpSettings {
 		$sap->add_section(
 			'ewd-upcp-settings',
 			array(
-				'id'            => 'ewd-upcp-basic-tab',
-				'title'         => __( 'Basic', 'ultimate-product-catalogue' ),
-				'is_tab'		=> true,
-				'tutorial_yt_id'	=> '4OCSpwLbmWU'
+				'id'            	=> 'ewd-upcp-basic-tab',
+				'title'         	=> __( 'Basic', 'ultimate-product-catalogue' ),
+				'is_tab'			=> true,
+				'tutorial_yt_id'	=> '4OCSpwLbmWU',
+				'icon'				=> 'text'
 			)
 		);
 
@@ -648,11 +652,12 @@ class ewdupcpSettings {
 	    $sap->add_section(
 	      'ewd-upcp-settings',
 	      array(
-	        'id'     => 'ewd-upcp-premium-tab',
-	        'title'  => __( 'Premium', 'ultimate-product-catalogue' ),
-	        'is_tab' => true,
-			'tutorial_yt_id'	=> '4WpT_62jK6g',
-	        'show_submit_button' => $this->show_submit_button( 'premium' )
+	        'id'     				=> 'ewd-upcp-premium-tab',
+	        'title'  				=> __( 'Premium', 'ultimate-product-catalogue' ),
+	        'is_tab' 				=> true,
+			'tutorial_yt_id'		=> '4WpT_62jK6g',
+	        'show_submit_button' 	=> $this->show_submit_button( 'premium' ),
+			'icon'					=> 'awards'
 	      )
 	    );
 	    $sap->add_section(
@@ -668,11 +673,12 @@ class ewdupcpSettings {
 	    $sap->add_section(
 	      'ewd-upcp-settings',
 	      array(
-	        'id'     => 'ewd-upcp-woocommerce-tab',
-	        'title'  => __( 'WooCommerce', 'ultimate-product-catalogue' ),
-	        'is_tab' => true,
-			'tutorial_yt_id'	=> 'EbO_8lWApJk',
-	        'show_submit_button' => $this->show_submit_button( 'woocommerce' )
+	        'id'     				=> 'ewd-upcp-woocommerce-tab',
+	        'title'  				=> __( 'WooCommerce', 'ultimate-product-catalogue' ),
+	        'is_tab' 				=> true,
+			'tutorial_yt_id'		=> 'EbO_8lWApJk',
+	        'show_submit_button' 	=> $this->show_submit_button( 'woocommerce' ),
+			'icon'					=> 'cart'
 	      )
 	    );
 	    $sap->add_section(
@@ -684,15 +690,16 @@ class ewdupcpSettings {
 	      )
 	    );
 	
-	    // "WooCommerce" Tab
+	    // "SEO" Tab
 	    $sap->add_section(
 	      'ewd-upcp-settings',
 	      array(
-	        'id'     => 'ewd-upcp-seo-tab',
-	        'title'  => __( 'SEO', 'ultimate-product-catalogue' ),
-	        'is_tab' => true,
-			'tutorial_yt_id'	=> 'HnFkn3SsxPs',
-	        'show_submit_button' => $this->show_submit_button( 'seo' )
+	        'id'     				=> 'ewd-upcp-seo-tab',
+	        'title'  				=> __( 'SEO', 'ultimate-product-catalogue' ),
+	        'is_tab' 				=> true,
+			'tutorial_yt_id'		=> 'HnFkn3SsxPs',
+	        'show_submit_button' 	=> $this->show_submit_button( 'seo' ),
+			'icon'					=> 'search'
 	      )
 	    );
 	    $sap->add_section(
@@ -708,11 +715,12 @@ class ewdupcpSettings {
 	    $sap->add_section(
 	      'ewd-upcp-settings',
 	      array(
-	        'id'     => 'ewd-upcp-labelling-tab',
-	        'title'  => __( 'Labelling', 'ultimate-product-catalogue' ),
-	        'is_tab' => true,
-			'tutorial_yt_id'	=> '9EPwmF_TtvI',
-	        'show_submit_button' => $this->show_submit_button( 'labelling' )
+	        'id'     				=> 'ewd-upcp-labelling-tab',
+	        'title'  				=> __( 'Labelling', 'ultimate-product-catalogue' ),
+	        'is_tab' 				=> true,
+			'tutorial_yt_id'		=> '9EPwmF_TtvI',
+	        'show_submit_button' 	=> $this->show_submit_button( 'labelling' ),
+			'icon'					=> 'translation'
 	      )
 	    );
 	    $sap->add_section(
@@ -728,11 +736,12 @@ class ewdupcpSettings {
 	    $sap->add_section(
 	      'ewd-upcp-settings',
 	      array(
-	        'id'     => 'ewd-upcp-styling-tab',
-	        'title'  => __( 'Styling', 'ultimate-product-catalogue' ),
-	        'is_tab' => true,
-			'tutorial_yt_id'	=> 'lEljqjzWDFA',
-	        'show_submit_button' => $this->show_submit_button( 'styling' )
+	        'id'     				=> 'ewd-upcp-styling-tab',
+	        'title'  				=> __( 'Styling', 'ultimate-product-catalogue' ),
+	        'is_tab' 				=> true,
+			'tutorial_yt_id'		=> 'lEljqjzWDFA',
+	        'show_submit_button' 	=> $this->show_submit_button( 'styling' ),
+			'icon'					=> 'welcome-widgets-menus'
 	      )
 	    );
 	    $sap->add_section(
@@ -762,6 +771,28 @@ class ewdupcpSettings {
 		}
 
 		return $this->custom_fields;
+	}
+
+	/**
+	 * Returns all the product page tabs that currently are applicable
+	 * @since 5.3.0
+	 */
+	public function get_product_page_tabs() {
+
+		$tabs = array(
+			'details' => __( 'Details', 'ultimate-product-catalogue' ),
+			'additional_information' => __( 'Additional Information', 'ultimate-product-catalogue' )
+		);
+
+		if ( $this->get_setting( 'product-inquiry-form' ) ) { $tabs['contact'] = __( 'Contact', 'ultimate-product-catalogue' ); }
+		if ( $this->get_setting( 'product-reviews' ) ) { $tabs['reviews'] = __( 'Reviews', 'ultimate-product-catalogue' ); }
+		if ( $this->get_setting( 'product-faqs' ) ) { $tabs['faqs'] = __( 'FAQs', 'ultimate-product-catalogue' ); }
+
+		$custom_tabs = is_array( get_option( 'ewd-upcp-product-page-tabs' ) ) ? get_option( 'ewd-upcp-product-page-tabs' ) : array();
+
+		foreach ( $custom_tabs as $custom_tab ) { $tabs[ sanitize_title( $custom_tab->name ) ] = $custom_tab->name; }
+
+		return $tabs;
 	}
 
 	/**
@@ -889,20 +920,28 @@ class ewdupcpSettings {
 		$content = '';
 
 		$premium_features = '
-			<p><strong>' . __( 'The premium version also gives you access to the following features:', 'ultimate-product-catalogue' ) . '</strong></p>
-			<ul class="ewd-upcp-dashboard-new-footer-one-benefits">
-				<li>' . __( 'Unlimited Products', 'ultimate-product-catalogue' ) . '</li>
-				<li>' . __( 'Custom Fields', 'ultimate-product-catalogue' ) . '</li>
-				<li>' . __( 'WooCommerce Sync and Checkout', 'ultimate-product-catalogue' ) . '</li>
-				<li>' . __( 'Advanced Product Page Layouts', 'ultimate-product-catalogue' ) . '</li>
-				<li>' . __( 'Advanced Display and Styling Options', 'ultimate-product-catalogue' ) . '</li>
-				<li>' . __( 'Import/Export Products', 'ultimate-product-catalogue' ) . '</li>
-				<li>' . __( 'Product Page SEO Options', 'ultimate-product-catalogue' ) . '</li>
-				<li>' . __( 'Inquiry Form and Inquiry Cart', 'ultimate-product-catalogue' ) . '</li>
-				<li>' . __( 'Email Support', 'ultimate-product-catalogue' ) . '</li>
-			</ul>
-			<div class="ewd-upcp-dashboard-new-footer-one-buttons">
-				<a class="ewd-upcp-dashboard-new-upgrade-button" href="https://www.etoilewebdesign.com/license-payment/?Selected=UPCP&Quantity=1&utm_source=upcp_settings&utm_content=' . $section_and_perm_type . '" target="_blank">' . __( 'UPGRADE NOW', 'ultimate-product-catalogue' ) . '</a>
+			<div class="ewd-upcp-settings-preview-other-features">
+				<div id="ewd-upcp-dashboard-new-footer-one">
+					<div class="ewd-upcp-dashboard-new-footer-one-inside">
+						<div class="ewd-upcp-dashboard-new-footer-one-left">
+							<div class="ewd-upcp-dashboard-new-footer-one-title">' . __( 'The premium version also gives you access to the following features:', 'ultimate-product-catalogue' ) . '</div>
+							<ul class="ewd-upcp-dashboard-new-footer-one-benefits">
+								<li>' . __( 'Unlimited Products', 'ultimate-product-catalogue' ) . '</li>
+								<li>' . __( 'Custom Fields', 'ultimate-product-catalogue' ) . '</li>
+								<li>' . __( 'WooCommerce Sync and Checkout', 'ultimate-product-catalogue' ) . '</li>
+								<li>' . __( 'Advanced Product Page Layouts', 'ultimate-product-catalogue' ) . '</li>
+								<li>' . __( 'Advanced Display and Styling Options', 'ultimate-product-catalogue' ) . '</li>
+								<li>' . __( 'Import/Export Products', 'ultimate-product-catalogue' ) . '</li>
+								<li>' . __( 'Product Page SEO Options', 'ultimate-product-catalogue' ) . '</li>
+								<li>' . __( 'Inquiry Form and Inquiry Cart', 'ultimate-product-catalogue' ) . '</li>
+								<li>' . __( 'Email Support', 'ultimate-product-catalogue' ) . '</li>
+							</ul>
+						</div>
+						<div class="ewd-upcp-dashboard-new-footer-one-buttons">
+							<a class="ewd-upcp-dashboard-new-upgrade-button" href="https://www.etoilewebdesign.com/license-payment/?Selected=UPCP&Quantity=1&utm_source=upcp_settings&utm_content=' . $section_and_perm_type . '" target="_blank">' . __( 'UPGRADE NOW', 'ultimate-product-catalogue' ) . '</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		';
 

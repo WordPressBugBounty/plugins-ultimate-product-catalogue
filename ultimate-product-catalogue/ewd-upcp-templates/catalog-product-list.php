@@ -28,8 +28,6 @@
 
 		<?php $this->maybe_print_tags(); ?>
 
-		<?php $this->maybe_print_custom_fields(); ?>
-
 		<?php $this->maybe_print_cart_action_button( 'bottom' ); ?>
 
 	</div>

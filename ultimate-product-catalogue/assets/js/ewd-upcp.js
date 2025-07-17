@@ -5,6 +5,8 @@ jQuery(document).ready(function(){
 	
 	ewd_upcp_thumbnail_height();
 
+	ewd_upcp_tabbed_product_page_thumbnail_height();
+
 	jQuery('.ewd-upcp-sidebar-toggle').click(function(){
 		jQuery('.ewd-upcp-catalog-sidebar').toggleClass('ewd-upcp-catalog-sidebar-hidden');
 	});
@@ -89,6 +91,7 @@ jQuery(document).ready(function(){
 
 		adjustCatalogueHeight();
 		ewd_upcp_thumbnail_height();
+		ewd_upcp_tabbed_product_page_thumbnail_height();
 	});
 	
 });
@@ -278,6 +281,17 @@ function ewd_upcp_thumbnail_height() {
 	});
 }
 
+function ewd_upcp_tabbed_product_page_thumbnail_height() {
+
+	jQuery( '.ewd-upcp-tabbed-product-page .ewd-upcp-thumbnail-anchor' ).each( function() {
+
+		var this_thumbnail = jQuery( this );
+		var this_thumbnail_width = this_thumbnail.width();
+		var this_thumbnail_height = this_thumbnail_width * .8;
+		this_thumbnail.css( 'height', this_thumbnail_height+'px' );
+	});
+}
+
 var infinite_scroll_loading = false;
 jQuery( document ).ready( function() {
 
@@ -388,6 +402,16 @@ jQuery( document ).ready( function() {
 	} );
 
 	// Tabbed product tabs
+
+    jQuery( '.ewd-upcp-tabbed-product-page:not(.ewd-upcp-shop-style-product-page) .ewd-upcp-single-product-tab' ).each( function () {
+        
+        var this_tab = jQuery( this );
+        var this_tab_attr = this_tab.attr( 'data-tab' );
+        var this_menu_tab = this_tab.parent().find( '.ewd-upcp-single-product-tabs-menu .ewd-upcp-single-product-tabs-menu ul li[data-tab="'+this_tab_attr+'"]' );
+
+        this_menu_tab.after( this_tab );
+    } );
+
 	jQuery( '.ewd-upcp-single-product-menu-tab' ).on( 'click', function() {
 
 		jQuery( '.ewd-upcp-single-product-menu-tab' ).removeClass( 'ewd-upcp-single-product-menu-tab-selected' );
@@ -523,9 +547,12 @@ function ewd_upcp_set_click_handlers() {
 
 		jQuery( '.ewd-upcp-cart-item-count' ).html( +jQuery( '.ewd-upcp-cart-item-count' ).html() + 1 );
 
+		var quantity = jQuery( '.ewd-upcp-product-action-quantity select' ).length ? jQuery( '.ewd-upcp-product-action-quantity select' ).val() : 1;
+
 		var params = {
 			nonce: ewd_upcp_js.nonce,
 			product_id: jQuery( this ).data( 'product_id' ),
+			quantity: quantity,
 			action: 'ewd_upcp_add_to_cart'
 		};
 

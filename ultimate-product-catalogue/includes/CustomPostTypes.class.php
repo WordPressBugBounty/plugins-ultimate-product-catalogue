@@ -45,7 +45,11 @@ class ewdupcpCustomPostTypes {
 		add_filter( 'request', 										array( $this, 'orderby_custom_columns' ) );
 		//add_filter( 'restrict_manage_posts', 						array( $this, 'add_categories_dropdown' ) ); //@to-do: not working, add back in when you've got time to fix
 
-		// Sort the produts by custom ordering, save updated order
+		// Allow the price of a product to be edited in the Quick Edit box
+		add_action( 'quick_edit_custom_box',  						array( $this, 'quick_edit_price' ), 10, 2 );
+		add_action( 'save_post', 									array( $this, 'save_quick_edit' ) );
+
+		// Sort the products by custom ordering, save updated order
 		add_action( 'pre_get_posts', 								array( $this, 'sort_products_by_order' ) );
 		add_action( 'wp_ajax_ewd_upcp_update_product_order', 		array( $this, 'update_product_order' ) );
 
@@ -57,7 +61,7 @@ class ewdupcpCustomPostTypes {
 		add_action( 'create_' . EWD_UPCP_PRODUCT_TAG_TAXONOMY, 					array( $this, 'update_tag_data' ) );
 		add_action( 'edit_' . EWD_UPCP_PRODUCT_TAG_TAXONOMY, 					array( $this, 'update_tag_data' ) );
 
-		// Sort taxnomy tables by custom ordering, save updated order
+		// Sort taxonomy tables by custom ordering, save updated order
 		add_action( 'terms_clauses', array( $this, 'sort_categories_and_tags_by_order' ), 10, 2 );
 		add_action( 'wp_ajax_ewd_upcp_update_category_order', array( $this, 'update_category_and_tag_order' ) );
 		add_action( 'wp_ajax_ewd_upcp_update_tag_order', array( $this, 'update_category_and_tag_order' ) );
@@ -1534,6 +1538,41 @@ class ewdupcpCustomPostTypes {
 		return $vars;
 	}
 
+	/**
+	 * Add a select box to quick edit the product price
+	 * @since 5.3.0
+	 */
+	public function quick_edit_price( $column_name, $post_type ) {
+
+		if ( $column_name !== 'ewd_upcp_price' ) { return; }
+
+		?>
+
+			<fieldset class="inline-edit-col-right">
+    		    <div class="inline-edit-col">
+    		        <label>
+    		            <span class="title"><?php _e('Price', 'textdomain'); ?></span>
+    		            <span class="input-text-wrap">
+    		                <input type="text" name="ewd_upcp_product_price" class="ewd-upcp-quick-edit-price" value="">
+    		            </span>
+    		        </label>
+    		    </div>
+    		</fieldset>
+
+		<?php
+	}
+
+	/**
+	 * Saves a product's price after quick editing it
+	 * @since 5.3.0
+	 */
+	public function save_quick_edit( $post_id ) {
+		
+		if ( ! wp_verify_nonce( $_POST[ '_inline_edit' ], 'inlineeditnonce' ) ) { return; }
+		
+		if ( isset( $_POST['ewd_upcp_product_price'] ) ) { update_post_meta( $post_id, 'price', sanitize_text_field( $_POST['ewd_upcp_product_price'] ) ); }
+	}
+
 
 	/**
 	 * Add a select box for the Product's category for Product posts
@@ -1577,6 +1616,9 @@ class ewdupcpCustomPostTypes {
 		if ( ! empty( $_GET['page'] ) ) { return; }
 
 		if ( isset( $_GET['orderby'] ) ) { return; }
+
+		$pagenow = isset( $GLOBALS[ 'pagenow' ] ) ? $GLOBALS[ 'pagenow' ] : '';
+		if ( $pagenow != 'edit.php' ) { return; }
 		
 		$query->set( 'meta_key', 'order' );
 		$query->set( 'orderby', 'meta_value_num' );

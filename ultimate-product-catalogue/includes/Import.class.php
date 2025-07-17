@@ -15,22 +15,59 @@ class ewdupcpImport {
 	public $message;
 
 	public function __construct() {
-		add_action( 'admin_menu', array($this, 'register_install_screen' ));
+		add_action( 'admin_footer-edit.php', array( $this, 'print_button_and_modal' ) );
 
 		if ( isset( $_POST['ewdupcpImport'] ) ) { add_action( 'admin_init', array($this, 'import_products' )); }
 	}
 
-	public function register_install_screen() {
+	/**
+	 * Adds 'Export' button to products page
+	 * 
+	 * @since 5.3.0
+	 */
+	public function print_button_and_modal() {
+		global $post_type;
 		global $ewd_upcp_controller;
+
+		if ( ! isset( $post_type ) or $post_type != EWD_UPCP_PRODUCT_POST_TYPE ) { return; }
+
+		if ( ! $ewd_upcp_controller->permissions->check_permission( 'export' ) ) { return; }
+
+		?>
+
+		<button id='ewd-upcp-import-open' class='ewd-upcp-hidden button button-secondary'>
+			<?php _e( 'Import', 'ultimate-product-catalogue' ); ?>
+		</button>
+
+		<div id='ewd-upcp-import-modal' class='ewd-upcp-hidden'>
+
+			<div id='ewd-upcp-import-modal-inside'>
+
+				<div class='ewd-upcp-import-modal-close'>
+					<div class='ewd-upcp-import-modal-close-inside'><span class="dashicons dashicons-no-alt"></span></div>
+				</div>
+
+				<h2><?php _e( 'Import Products', 'ultimate-product-catalogue' ); ?></h2>
+
+				<form method='post' enctype="multipart/form-data">
+					
+					<?php wp_nonce_field( 'EWD_UPCP_Import', 'EWD_UPCP_Import_Nonce' );  ?>
 		
-		add_submenu_page( 
-			'edit.php?post_type=upcp_product', 
-			'Import Menu', 
-			'Import', 
-			$ewd_upcp_controller->settings->get_setting( 'access-role' ), 
-			'ewd-upcp-import', 
-			array( $this, 'display_import_screen' ) 
-		);
+					<p>
+						<label for="ewd_upcp_products_spreadsheet"><?php _e( 'Spreadsheet Containing Products', 'ultimate-product-catalogue' ) ?></label><br />
+						<input name="ewd_upcp_products_spreadsheet" type="file" value=""/>
+					</p>
+		
+					<input type='submit' name='ewdupcpImport' value='Import Products' class='button button-primary' />
+		
+				</form>
+
+			</div>
+
+		</div>
+		
+		<?php 
+
 	}
 
 	public function display_import_screen() {

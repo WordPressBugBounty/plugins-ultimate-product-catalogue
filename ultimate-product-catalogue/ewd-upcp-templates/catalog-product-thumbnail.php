@@ -16,9 +16,13 @@
 
 		<?php $this->maybe_print_rating(); ?>
 
-		<?php $this->print_title(); ?>
+		<div class='ewd-upcp-catalog-product-thumbnail-title-and-price-div'>
 
-		<?php $this->print_product_price(); ?>
+			<?php $this->print_title(); ?>
+
+			<?php $this->print_product_price(); ?>
+
+		</div>
 
 		<?php $this->maybe_print_categories(); ?>
 

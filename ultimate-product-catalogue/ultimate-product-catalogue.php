@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate Product Catalog
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-product-catalog/
  * Description: Add a product catalog to your site with blocks or shortcodes. Works with WooCommerce or standalone. Flexible and customizable, works with any theme.
- * Version: 5.2.22
+ * Version: 5.3.0
  * Author: Etoile Web Design
  * Author URI: https://www.etoilewebdesign.com/
  * Terms and Conditions: https://www.etoilewebdesign.com/plugin-terms-and-conditions/
@@ -62,7 +62,7 @@ class ewdupcpInit {
 		define( 'EWD_UPCP_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'EWD_UPCP_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 		define( 'EWD_UPCP_TEMPLATE_DIR', 'ewd-upcp-templates' );
-		define( 'EWD_UPCP_VERSION', '5.2.22' );
+		define( 'EWD_UPCP_VERSION', '5.3.0' );
 
 		define( 'EWD_UPCP_PRODUCT_POST_TYPE', 'upcp_product' );
 		define( 'EWD_UPCP_CATALOG_POST_TYPE', 'upcp_catalog' );
@@ -163,6 +163,8 @@ class ewdupcpInit {
 
 		add_action( 'admin_notices', 					array( $this, 'display_header_area' ) );
 		add_action( 'admin_notices', 					array( $this, 'maybe_display_helper_notice' ) );
+
+		add_action( 'admin_init',	 					array( $this, 'display_help_bubble' ) );
 
 		add_action( 'admin_enqueue_scripts', 			array( $this, 'enqueue_admin_assets' ), 10, 1 );
 		add_action( 'admin_enqueue_scripts', 			array( $this, 'register_assets' ) );
@@ -355,10 +357,10 @@ class ewdupcpInit {
 		global $ewd_upcp_controller;
 
 		wp_register_style( 'ewd-upcp-gridster', EWD_UPCP_PLUGIN_URL . '/assets/css/jquery.gridster.css', EWD_UPCP_VERSION );
-		wp_register_style( 'ewd-upcp-css', EWD_UPCP_PLUGIN_URL . '/assets/css/ewd-upcp.css', EWD_UPCP_VERSION );
 		wp_register_style( 'ewd-ulb-main-css', EWD_UPCP_PLUGIN_URL . '/assets/css/ewd-ulb-main.css', EWD_UPCP_VERSION );
 		wp_register_style( 'ewd-upcp-jquery-ui', EWD_UPCP_PLUGIN_URL . '/assets/css/ewd-upcp-jquery-ui.css', EWD_UPCP_VERSION );
 		wp_register_style( 'rrssb', EWD_UPCP_PLUGIN_URL . '/assets/css/rrssb-min.css', EWD_UPCP_VERSION );		
+		wp_register_style( 'ewd-upcp-css', EWD_UPCP_PLUGIN_URL . '/assets/css/ewd-upcp.css', EWD_UPCP_VERSION );
 
 		wp_register_script( 'ultimate-lightbox', EWD_UPCP_PLUGIN_URL . '/assets/js/ultimate-lightbox.js', array( 'jquery' ), EWD_UPCP_VERSION, true ); 
 		wp_register_script( 'ewd-upcp-gridster', EWD_UPCP_PLUGIN_URL . '/assets/js/jquery.gridster.js', array( 'jquery' ), EWD_UPCP_VERSION, true );
@@ -605,16 +607,16 @@ class ewdupcpInit {
 		?>
 		<div class="ewd-upcp-admin-header-menu">
 			<h2 class="nav-tab-wrapper">
-			<a id="ewd-upcp-dash-mobile-menu-open" href="#" class="menu-tab nav-tab"><?php _e("MENU", 'ultimate-product-catalogue'); ?><span id="ewd-upcp-dash-mobile-menu-down-caret">&nbsp;&nbsp;&#9660;</span><span id="ewd-upcp-dash-mobile-menu-up-caret">&nbsp;&nbsp;&#9650;</span></a>
+			<a id="ewd-upcp-dash-mobile-menu-open" href="#" class="menu-tab nav-tab"><span class="dashicons dashicons-menu"></span><?php _e("Menu", 'ultimate-product-catalogue'); ?><span id="ewd-upcp-dash-mobile-menu-down-caret">&nbsp;&nbsp;&#9660;</span><span id="ewd-upcp-dash-mobile-menu-up-caret">&nbsp;&nbsp;&#9650;</span></a>
 			<a id="dashboard-menu" href='admin.php?page=ewd-upcp-dashboard' class="menu-tab nav-tab <?php if ( $screen->id == 'tracking_page_ewd-upcp-dashboard' ) {echo 'nav-tab-active';}?>"><?php _e("Dashboard", 'ultimate-product-catalogue'); ?></a>
 			<a id="products-menu" href='edit.php?post_type=upcp_product' class="menu-tab nav-tab <?php if ( $screen->id == 'toplevel_page_upcp_product_page' ) {echo 'nav-tab-active';}?>"><?php _e("Products", 'ultimate-product-catalogue'); ?></a>
 			<a id="catalogs-menu" href='edit.php?post_type=upcp_catalog' class="menu-tab nav-tab <?php if ( $screen->id == 'upcp_catalog' ) {echo 'nav-tab-active';}?>"><?php _e("Catalogs", 'ultimate-product-catalogue'); ?></a>
 			<a id="categories-menu" href='edit-tags.php?taxonomy=upcp-product-category&post_type=upcp_product' class="menu-tab nav-tab <?php if ( $screen->id == 'toplevel_page_upcp-category' ) {echo 'nav-tab-active';}?>"><?php _e("Categories", 'ultimate-product-catalogue'); ?></a>
 			<a id="tags-menu" href='edit-tags.php?taxonomy=upcp-product-tag&post_type=upcp_product' class="menu-tab nav-tab <?php if ( $screen->id == 'toplevel_page_upcp-tag' ) {echo 'nav-tab-active';}?>"><?php _e("Tags", 'ultimate-product-catalogue'); ?></a>
-			<a id="export-menu" href='admin.php?page=ewd-upcp-export' class="menu-tab nav-tab <?php if ( $screen->id == 'ewd-upcp-export' ) {echo 'nav-tab-active';}?>"><?php _e("Export", 'ultimate-product-catalogue'); ?></a>
-			<a id="import-menu" href='admin.php?page=ewd-upcp-import' class="menu-tab nav-tab <?php if ( $screen->id == 'ewd-upcp-import' ) {echo 'nav-tab-active';}?>"><?php _e("Import", 'ultimate-product-catalogue'); ?></a>
+			<!-- <a id="export-menu" href='admin.php?page=ewd-upcp-export' class="menu-tab nav-tab <?php if ( $screen->id == 'ewd-upcp-export' ) {echo 'nav-tab-active';}?>"><?php _e("Export", 'ultimate-product-catalogue'); ?></a> -->
+			<!-- <a id="import-menu" href='admin.php?page=ewd-upcp-import' class="menu-tab nav-tab <?php if ( $screen->id == 'ewd-upcp-import' ) {echo 'nav-tab-active';}?>"><?php _e("Import", 'ultimate-product-catalogue'); ?></a> -->
 			<a id="custom-fields-menu" href='admin.php?page=ewd-upcp-custom-fields' class="menu-tab nav-tab <?php if ( $screen->id == 'ewd-upcp-custom-fields' ) {echo 'nav-tab-active';}?>"><?php _e("Custom Fields", 'ultimate-product-catalogue'); ?></a>
-			<a id="product-page-menu" href='admin.php?page=ewd-upcp-product-page' class="menu-tab nav-tab <?php if ( $screen->id == 'ewd-upcp-product-page' ) {echo 'nav-tab-active';}?>"><?php _e("Product Page", 'ultimate-product-catalogue'); ?></a>
+			<!-- <a id="product-page-menu" href='admin.php?page=ewd-upcp-product-page' class="menu-tab nav-tab <?php if ( $screen->id == 'ewd-upcp-product-page' ) {echo 'nav-tab-active';}?>"><?php _e("Product Page", 'ultimate-product-catalogue'); ?></a> -->
 			<a id="options-menu" href='edit.php?post_type=upcp_product&page=ewd-upcp-settings' class="menu-tab nav-tab <?php if ( $screen->id == 'ewd_upcp_page_ewd-upcp-settings' ) {echo 'nav-tab-active';}?>"><?php _e("Settings", 'ultimate-product-catalogue'); ?></a>
 			</h2>
 		</div>
@@ -666,6 +668,11 @@ class ewdupcpInit {
 		set_transient( 'ewd-helper-notice-dismissed', true, 3600*24*7 );
 
 		die();
+	}
+
+	public function display_help_bubble() {
+
+		ewdupcpHelper::display_help_button();
 	}
 
 	/**

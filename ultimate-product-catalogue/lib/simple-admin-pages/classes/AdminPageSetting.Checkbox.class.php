@@ -19,7 +19,7 @@
  * @package Simple Admin Pages
  */
 
-class sapAdminPageSettingCheckbox_2_6_19 extends sapAdminPageSetting_2_6_19 {
+class sapAdminPageSettingCheckbox_2_7_0 extends sapAdminPageSetting_2_7_0 {
 
 	//public $sanitize_callback = 'sanitize_text_field';
 

@@ -7,7 +7,7 @@
  * @package Simple Admin Pages
  */
 
-class sapAdminPageSection_2_6_19 {
+class sapAdminPageSection_2_7_0 {
 
 	// Page defaults
 	public $id; // unique id for this section
@@ -15,6 +15,7 @@ class sapAdminPageSection_2_6_19 {
 	public $tab; // optional id of the parent tab (if) for this section
 	public $title; // optional title to display above this section
 	public $description; // optional description of the section
+	public $icon; // section icon
 	public $is_tab = false; // whether this section should be a tab (parent) section
 	public $settings = array(); // Array of settings to display in this option set
 	public $rank; // optional ordering rank for this section

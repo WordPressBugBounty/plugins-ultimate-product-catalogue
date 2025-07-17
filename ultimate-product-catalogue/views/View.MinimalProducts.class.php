@@ -7,6 +7,16 @@
  */
 class ewdupcpViewMinimalProducts extends ewdupcpView {
 
+	// Shortcode attributes
+	public $catalogue_url;
+	public $product_ids;
+	public $catalogue_id;
+	public $category_id;
+	public $subcategory_id;
+	public $catalogue_search;
+	public $product_count;
+	public $products_wide;
+
 	// Array holding all view items to be displayed
 	public $items = array();
 

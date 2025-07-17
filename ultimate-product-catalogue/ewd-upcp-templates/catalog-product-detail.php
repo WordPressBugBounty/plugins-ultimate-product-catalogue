@@ -26,7 +26,11 @@
 
 		<?php $this->maybe_print_tags(); ?>
 
-		<?php $this->maybe_print_custom_fields(); ?>
+		<div class='ewd-upcp-catalog-product-detail-custom-fields'>
+
+			<?php $this->maybe_print_custom_fields(); ?>
+	
+		</div>
 
 	</div>
 

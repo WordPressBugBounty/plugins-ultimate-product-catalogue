@@ -1234,6 +1234,8 @@ class ewdupcpViewCatalog extends ewdupcpView {
 
 				$catalog_item->term = get_term( $catalog_item->id, EWD_UPCP_PRODUCT_CATEGORY_TAXONOMY );
 
+				if ( empty( $catalog_item->term ) or is_wp_error( $catalog_item->term ) ) { continue; }
+
 				$catalog_item->products = array();
 
 				foreach ( $products as $product ) {

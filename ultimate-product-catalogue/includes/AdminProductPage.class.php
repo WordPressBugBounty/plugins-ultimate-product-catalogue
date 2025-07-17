@@ -32,72 +32,30 @@ class ewdupcpAdminProductPage {
 	public function add_menu_page() {
 		global $ewd_upcp_controller;
 
-		add_submenu_page( 
-			'edit.php?post_type=upcp_product', 
-			_x( 'Product Page', 'Title of admin page that lets you edit your product page', 'ultimate-product-catalogue' ),
-			_x( 'Product Page', 'Title of the product page editor admin menu item', 'ultimate-product-catalogue' ), 
-			$ewd_upcp_controller->settings->get_setting( 'access-role' ), 
-			'ewd-upcp-product-page', 
-			array( $this, 'show_admin_product_page_editor_page' )
-		);
+		if ( $ewd_upcp_controller->settings->get_setting( 'product-page' ) == 'custom' or $ewd_upcp_controller->settings->get_setting( 'product-page' ) == 'large' ) {
+
+			add_submenu_page( 
+				'edit.php?post_type=upcp_product', 
+				_x( 'Product Page', 'Title of admin page that lets you edit your product page', 'ultimate-product-catalogue' ),
+				_x( 'Product Page', 'Title of the product page editor admin menu item', 'ultimate-product-catalogue' ), 
+				$ewd_upcp_controller->settings->get_setting( 'access-role' ), 
+				'ewd-upcp-product-page', 
+				array( $this, 'show_admin_product_page_editor_page' )
+			);
+		}
 	}
 
 	/**
-	 * Display the admin custom fields page
+	 * Display the admin product page screen
 	 * @since 5.0.0
 	 */
 	public function show_admin_product_page_editor_page() {
 		global $ewd_upcp_controller;
 
-		$product_page_permission = $ewd_upcp_controller->permissions->check_permission( 'product_page' );
-
-		if ( empty( $product_page_permission ) ) { ?> 
-
-			<div class='ewd-upcp-premium-locked'>
-				<a href="https://www.etoilewebdesign.com/license-payment/?Selected=UPCP&Quantity=1&utm_source=upcp_admin_product_page" target="_blank">Upgrade</a> to the premium version to use this feature
-			</div>
-
-			<?php 
-
-			return;
-
-		}
-
-		if ( ! empty( $_POST['ewd-upcp-product-tabs-submit'] ) ) {
-
-			$this->save_product_tabs();
-		}
-
 		if ( ! empty( $_POST['ewd-upcp-large-screen-custom-fields-submit'] ) ) {
 
 			$this->save_large_custom_product_page();
 		}
-
-		$tabs = array(
-			'details'					=> __( 'Product Details', 'ultimate-product-catalogue' ),
-			'additional_information'	=> __( 'Additional Information', 'ultimate-product-catalogue' ),
-		);
-
-		if ( ! empty( $ewd_upcp_controller->settings->get_setting( 'product-inquiry-form' ) ) ) {
-
-			$tabs['contact'] = __( 'Contact Us', 'ultimate-product-catalogue' );
-		}
-
-		if ( ! empty( $ewd_upcp_controller->settings->get_setting( 'product-reviews' ) ) ) {
-
-			$tabs['reviews'] = __( 'Customer Reviews', 'ultimate-product-catalogue' );
-		}
-
-		if ( ! empty( $ewd_upcp_controller->settings->get_setting( 'product-faqs' ) ) ) {
-
-			$tabs['faqs'] = __( 'Product FAQs', 'ultimate-product-catalogue' );
-		}
-
-		$custom_tabs = is_array( get_option( 'ewd-upcp-product-page-tabs' ) ) ? get_option( 'ewd-upcp-product-page-tabs' ) : array();
-
-		$tabs = array_merge( $tabs, $custom_tabs );
-
-		$starting_tab = get_option( 'ewd-upcp-product-page-starting-tab' );
 		
 		?>
 
@@ -107,109 +65,11 @@ class ewdupcpAdminProductPage {
 			</h1>
 
 			<select name='product-page-selector'>
-				<option value='tabbed'><?php _e( 'Tabs', 'ultimate-product-page' ); ?></option>
 				<option value='custom_large'><?php _e( 'Custom Page - Large Screen', 'ultimate-product-page' ); ?></option>
 				<option value='custom_mobile'><?php _e( 'Custom Page - Mobile', 'ultimate-product-page' ); ?></option>
 			</select>
 
 			<form id="ewd-upcp-additional-tabs-table" method="POST" action="">
-
-				<div class='ewd-upcp-product-page-type' data-page='tabbed'>
-
-					<div class='ewd-upcp-product-page-starting-tab'>
-
-						<label>
-							<?php _e( 'Starting Tab', 'ultimate-product-catalogue' ); ?>
-						</label>
-
-						<select name='ewd-upcp-starting-tab'>
-
-							<option value='details' <?php echo ( $starting_tab == 'details' ? 'selected' : '' ); ?>><?php _e( 'Product Details', 'ultimate-product-catalogue' ); ?></option>
-							<option value='additional_information' <?php echo ( $starting_tab == 'additional_information' ? 'selected' : '' ); ?>><?php _e( 'Additional Information', 'ultimate-product-catalogue' ); ?></option>
-
-							<?php if ( ! empty( $ewd_upcp_controller->settings->get_setting( 'product-inquiry-form' ) ) ) { ?>
-
-								<option value='contact' <?php echo ( $starting_tab == 'contact' ? 'selected' : '' ); ?>><?php _e( 'Contact Us', 'ultimate-product-catalogue' ); ?></option>
-
-							<?php } ?>
-
-							<?php if ( ! empty( $ewd_upcp_controller->settings->get_setting( 'product-reviews' ) ) ) { ?>
-
-								<option value='reviews' <?php echo ( $starting_tab == 'reviews' ? 'selected' : '' ); ?>><?php _e( 'Customer Reviews', 'ultimate-product-catalogue' ); ?></option>			
-		
-							<?php } ?>
-
-							<?php if ( ! empty( $ewd_upcp_controller->settings->get_setting( 'product-faqs' ) ) ) { ?>
-
-								<option value='faqs' <?php echo ( $starting_tab == 'faqs' ? 'selected' : '' ); ?>><?php _e( 'Product FAQs', 'ultimate-product-catalogue' ); ?></option>
-		
-							<?php } ?>
-
-							<?php foreach ( $custom_tabs as $custom_tab ) { ?>
-								
-								<option value='<?php echo esc_attr( sanitize_title( $custom_tab->name ) ); ?>' <?php echo ( $starting_tab == sanitize_title( $custom_tab->name ) ? 'selected' : '' ); ?>><?php echo esc_html( $custom_tab->name ); ?></option>
-							
-							<?php } ?>
-
-						</select>
-
-					</div>
-
-					<div class='ewd-upcp-product-page-custom-tabs'>
-
-						<h4>
-							<?php _e( 'Additional Tabs', 'ultimate-product-catalogue' ); ?>
-						</h4>
-
-						<table>
-
-							<thead>
-
-								<tr>
-
-									<th></th>
-									<th><?php _e( 'Tab Name', 'ultimate-product-catalogue' ); ?></th>
-									<th><?php _e( 'Content', 'ultimate-product-catalogue' ); ?></th>
-
-								</tr>
-
-							</thead>
-
-							<tbody>
-
-								<?php foreach ( $custom_tabs as $custom_tab ) { ?>
-
-									<tr>
-
-										<td class='ewd-upcp-delete-custom-tab'><?php _e( 'Delete', 'ultimate-product-catalogue' ); ?></td>
-										<td><input type='text' name='ewd_upcp_custom_tab_name[]' value='<?php echo esc_attr( $custom_tab->name ); ?>' /></td>
-										<td><textarea name='ewd_upcp_custom_tab_content[]'><?php echo esc_html( $custom_tab->content ); ?></textarea></td>
-
-									</tr>
-
-								<?php } ?>
-
-								<tr class='ewd-upcp-additional-tab-template ewd-upcp-hidden'>
-
-									<td class='ewd-upcp-delete-custom-tab'><?php _e( 'Delete', 'ultimate-product-catalogue' ); ?></td>
-									<td><input type='text' name='ewd_upcp_custom_tab_name[]' /></td>
-									<td><textarea name='ewd_upcp_custom_tab_content[]'></textarea></td>
-
-								</tr>
-
-								<tr class='ewd-upcp-additional-tab-add' colspan='3'>
-									<td><?php _e( 'Add', 'ultimate-product-catalogue' ); ?></td>
-								</tr>
-
-							</tbody>
-
-						</table>
-
-					</div>
-
-					<input type='submit' class='button button-primary' name='ewd-upcp-product-tabs-submit' value='<?php _e( 'Update Tabs', 'ultimate-product-catalogue' ); ?>' />
-
-				</div>
 
 				<?php 
 
@@ -382,7 +242,7 @@ class ewdupcpAdminProductPage {
 
 				?>
 
-				<div class='ewd-upcp-product-page-type ewd-upcp-hidden' data-page='custom_large'>
+				<div class='ewd-upcp-product-page-type' data-page='custom_large'>
 
 					<div class='ewd-upcp-custom-product-page-notice'>
 						<?php _e( 'Some users have reported problems using the admin area functions of this feature with FireFox and IE browsers. No issues reported yet with Chrome, or with any browser on the visitor\'s side.', 'ultimate-product-catalogue' ); ?>
@@ -582,31 +442,6 @@ class ewdupcpAdminProductPage {
 		}
 		
 		return $a->col - $b->col;
-	}
-
-	/**
-	 * Save the custom tabs and starting tab information when the form is submitted
-	 * @since 5.0.0
-	 */
-	public function save_product_tabs() {
-
-		update_option( 'ewd-upcp-product-page-starting-tab', sanitize_text_field( $_POST['ewd-upcp-starting-tab'] ) );
-
-		$custom_tab_names = is_array( $_POST['ewd_upcp_custom_tab_name'] ) ? array_map( 'sanitize_text_field', $_POST['ewd_upcp_custom_tab_name'] ) : array();
-
-		$custom_tabs = array();
-
-		foreach ( $custom_tab_names as $key => $custom_tab_name ) {
-
-			if ( empty( $custom_tab_name ) ) { continue; }
-
-			$custom_tabs[] = (object) array(
-				'name'		=> $custom_tab_name,
-				'content'	=> sanitize_textarea_field( $_POST['ewd_upcp_custom_tab_content'][ $key ] ),
-			);
-		}
-
-		update_option( 'ewd-upcp-product-page-tabs', $custom_tabs );
 	}
 
 	public function save_gridster_layout() {

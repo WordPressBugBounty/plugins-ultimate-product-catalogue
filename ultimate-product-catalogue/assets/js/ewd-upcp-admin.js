@@ -54,19 +54,19 @@ function SetTabDeleteHandlers() {
 jQuery(document).ready(function($){
 	$('#ewd-upcp-dash-mobile-menu-open').click(function(){
 		$('.ewd-upcp-admin-header-menu .nav-tab:nth-of-type(1n+2)').toggle();
-		$('#ewd-upcp-dash-mobile-menu-up-caret').toggle();
-		$('#ewd-upcp-dash-mobile-menu-down-caret').toggle();
+		//$('#ewd-upcp-dash-mobile-menu-up-caret').toggle();
+		//$('#ewd-upcp-dash-mobile-menu-down-caret').toggle();
 		return false;
 	});
 	$(function(){
 		$(window).resize(function(){
-			if($(window).width() > 785){
+			if($(window).width() > 1024){
 				$('.ewd-upcp-admin-header-menu .nav-tab:nth-of-type(1n+2)').show();
 			}
 			else{
 				$('.ewd-upcp-admin-header-menu .nav-tab:nth-of-type(1n+2)').hide();
-				$('#ewd-upcp-dash-mobile-menu-up-caret').hide();
-				$('#ewd-upcp-dash-mobile-menu-down-caret').show();
+				//$('#ewd-upcp-dash-mobile-menu-up-caret').hide();
+				//$('#ewd-upcp-dash-mobile-menu-down-caret').show();
 			}
 		}).resize();
 	});	
@@ -80,6 +80,68 @@ jQuery(document).ready(function($){
 		$('#ewd-upcp-dash-optional-table-up-caret').toggle();
 		$('#ewd-upcp-dash-optional-table-down-caret').toggle();
 	});
+});
+
+/***********************************
+ * IMPORT/EXPORT
+ ***********************************/
+
+jQuery( document ).ready( function(){
+
+	jQuery( '#ewd-upcp-export, #ewd-upcp-import-open' ).removeClass( 'ewd-upcp-hidden' ).insertAfter( jQuery( '#wpbody-content .wrap a:first' ) );
+
+	jQuery( '#ewd-upcp-import-open' ).on( 'click', function() {
+
+		jQuery( '#ewd-upcp-import-modal, #ewd-upcp-import-modal-background' ).removeClass( 'ewd-upcp-hidden' );
+	} );
+
+	jQuery( '#ewd-upcp-import-modal, .ewd-upcp-import-modal-close' ).on( 'click', function() {
+		
+		jQuery( '#ewd-upcp-import-modal' ).addClass( 'ewd-upcp-hidden' );
+	});
+
+	jQuery( '#ewd-upcp-import-modal-inside' ).on( 'click', function( event ) {
+
+		event.stopPropagation();
+	} );
+} );
+
+/***********************************
+ * QUICK EDIT PRICE
+ **********************************/
+
+jQuery(document).ready(function($){
+
+	jQuery( 'button.editinline' ).on( 'click', function() {
+
+		// we create a copy of the WP inline edit post function
+		var wp_inline_edit = inlineEditPost.edit;
+	
+		// and then we overwrite the function with our own code
+		inlineEditPost.edit = function( id ) {
+	
+			// "call" the original WP edit function
+			wp_inline_edit.apply( this, arguments );
+	
+			var post_id = 0;
+			if ( typeof( id ) == 'object' ) {
+				post_id = parseInt( this.getId( id ) );
+			} 
+	
+			if ( post_id > 0 ) {
+				// define the edit row
+				var edit_row = jQuery( '#edit-' + post_id );
+				var post_row = jQuery( '#post-' + post_id );
+	
+				// get the data
+				var price = jQuery( post_row ).find( '.column-ewd_upcp_price' ).first().text();
+	
+				// populate the data
+				jQuery( edit_row ).find( ':input[name="ewd_upcp_product_price"]' ).first().val( price );
+			}
+		};
+	} );
+
 });
 
 /***********************************************
@@ -157,7 +219,7 @@ function ewd_upcp_custom_field_delete_handlers() {
 
 	jQuery( '.ewd-upcp-custom-field-delete' ).off( 'click' ).on( 'click', function() {
 
-		jQuery( this ).parent().remove();
+		jQuery( this ).parent().parent().remove();
 
 	});
 }
@@ -168,11 +230,11 @@ jQuery( document ).ready( function() {
 
 		if ( jQuery( this ).is( ':checked' ) ) {
 
-			jQuery( this ).parent().parent().parent().parent().find( 'select[name="ewd_upcp_custom_field_filter_control_type"]' ).prop( 'disabled', false );
+			jQuery( this ).parent().parent().parent().parent().parent().find( '.ewd-upcp-custom-field-cell-filtering-control-type select[name="ewd_upcp_custom_field_filter_control_type"]' ).prop( 'disabled', false );
 		}
 		else {
 
-			jQuery( this ).parent().parent().parent().parent().find( 'select[name="ewd_upcp_custom_field_filter_control_type"]' ).prop( 'disabled', true );
+			jQuery( this ).parent().parent().parent().parent().parent().find( '.ewd-upcp-custom-field-cell-filtering-control-type select[name="ewd_upcp_custom_field_filter_control_type"]' ).prop( 'disabled', true );
 		}
 	});
 });
@@ -527,7 +589,7 @@ jQuery( document ).ready( function() {
 		cursor: 'move'
 	});
 
-	jQuery( '.ewd-upcp-catalog-sort-items-alphabetically' ).on( 'click', function( event ) { console.log( "Called" );
+	jQuery( '.ewd-upcp-catalog-sort-items-alphabetically' ).on( 'click', function( event ) {
 
 		jQuery( '.ewd-upcp-catalog-meta-items tbody' ).find( 'tr' ).sort( function( a, b ) {
 
@@ -536,7 +598,7 @@ jQuery( document ).ready( function() {
 		} ).appendTo( '.ewd-upcp-catalog-meta-items tbody' );
 	});
 
-	jQuery( '.ewd-upcp-catalog-sort-items-reverse-alphabetically' ).on( 'click', function( event ) { console.log( "Called" );
+	jQuery( '.ewd-upcp-catalog-sort-items-reverse-alphabetically' ).on( 'click', function( event ) {
 
 		jQuery( '.ewd-upcp-catalog-meta-items tbody' ).find( 'tr' ).sort( function( a, b ) {
 

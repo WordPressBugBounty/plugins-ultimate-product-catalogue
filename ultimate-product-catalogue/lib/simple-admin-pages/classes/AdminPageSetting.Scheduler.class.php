@@ -10,7 +10,7 @@
  * @package Simple Admin Pages
  */
 
-class sapAdminPageSettingScheduler_2_6_19 extends sapAdminPageSetting_2_6_19 {
+class sapAdminPageSettingScheduler_2_7_0 extends sapAdminPageSetting_2_7_0 {
 
 	public $sanitize_callback = 'sanitize_text_field';
 
@@ -310,7 +310,7 @@ class sapAdminPageSettingScheduler_2_6_19 extends sapAdminPageSetting_2_6_19 {
 
 		<fieldset <?php $this->print_conditional_data(); ?>>
 
-			<div class="sap-scheduler <?php echo ( $this->disabled ? 'disabled' : ''); ?>" id="<?php echo esc_attr( $this->id ); ?>">
+			<div class="sap-scheduler <?php echo ( $this->disabled ? 'disabled' : ''); ?>" id="<?php echo esc_attr( $this->id ); ?>" data-next_rule_id="<?php echo esc_attr( $this->get_next_rule_id() ); ?>">
 			<?php
 				foreach ( $this->value as $id => $rule ) {
 					echo $this->get_template( $id, $rule, true );
@@ -813,6 +813,19 @@ class sapAdminPageSettingScheduler_2_6_19 extends sapAdminPageSetting_2_6_19 {
 		}
 
 		return $output;
+	}
+
+	/**
+	 * Returns the next valid rule ID, so that rules always have unique IDs
+	 * @since 2.6.21
+	 */
+	public function get_next_rule_id() {
+
+		if ( empty( $this->value ) ) { return 0; }
+
+		if ( ! is_array( $this->value ) ) { return 0; }
+
+		return max( array_keys( $this->value ) ) + 1;
 	}
 
 }
