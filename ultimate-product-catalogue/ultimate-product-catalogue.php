@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate Product Catalog
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-product-catalog/
  * Description: Add a product catalog to your site with blocks or shortcodes. Works with WooCommerce or standalone. Flexible and customizable, works with any theme.
- * Version: 5.3.0
+ * Version: 5.3.1
  * Author: Etoile Web Design
  * Author URI: https://www.etoilewebdesign.com/
  * Terms and Conditions: https://www.etoilewebdesign.com/plugin-terms-and-conditions/
@@ -62,7 +62,7 @@ class ewdupcpInit {
 		define( 'EWD_UPCP_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'EWD_UPCP_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 		define( 'EWD_UPCP_TEMPLATE_DIR', 'ewd-upcp-templates' );
-		define( 'EWD_UPCP_VERSION', '5.3.0' );
+		define( 'EWD_UPCP_VERSION', '5.3.1' );
 
 		define( 'EWD_UPCP_PRODUCT_POST_TYPE', 'upcp_product' );
 		define( 'EWD_UPCP_CATALOG_POST_TYPE', 'upcp_catalog' );

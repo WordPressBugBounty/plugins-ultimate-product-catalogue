@@ -2,7 +2,7 @@
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce, products, catalogue, catalogs, catalogues, catalog plugin, woocommerce product catalog, woocommerce catalog, woocommerce checkout, woocommerce products
 Tested up to: 6.8
-Stable tag: 5.3.0
+Stable tag: 5.3.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate Link: https://www.etoilewebdesign.com/plugin-donations/
@@ -214,6 +214,10 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 5.3.1 (2025-07-18) =
+- **IMPORTANT NOTE from 5.3.0: Significant updates have been made to the styling of several layouts. We highly recommend that you install the update on a staging environment first and confirm that these new default layouts fit seamlessly with any existing catalogs, especially if you have customized your layout templates and/or CSS.**
+- Fixed issue with toggle switches not appearing correctly on product edit screen.
 
 = 5.3.0 (2025-07-17) =
 - **IMPORTANT NOTE: Significant updates have been made to the styling of several layouts. We highly recommend that you install the update on a staging environment first and confirm that these new default layouts fit seamlessly with any existing catalogs, especially if you have customized your layout templates and/or CSS.**
