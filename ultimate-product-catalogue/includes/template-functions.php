@@ -200,6 +200,8 @@ function ewd_upcp_load_view_files() {
 if ( ! function_exists( 'ewd_upcp_decode_infinite_table_setting' ) ) {
 function ewd_upcp_decode_infinite_table_setting( $values ) {
 	
+	if ( ! is_string(( $values ) ) ) { return array(); }
+
 	return is_array( json_decode( html_entity_decode( $values ) ) ) ? json_decode( html_entity_decode( $values ) ) : array();
 }
 }

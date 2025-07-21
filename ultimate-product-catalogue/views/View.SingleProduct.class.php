@@ -784,7 +784,7 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	 */
   	public function get_product_page_tabs() {
 
-  		return ewd_upcp_decode_infinite_table_setting( $this->get_option( 'custom-tabs' ) );
+  		return is_array( $this->get_option( 'custom-tabs' ) ) ? $this->get_option( 'custom-tabs' ) : ewd_upcp_decode_infinite_table_setting( $this->get_option( 'custom-tabs' ) );
   	}
 
 	/**

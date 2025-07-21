@@ -4198,6 +4198,8 @@ span.ewd-upcp-custom-field-range,
 }
 .ewd-upcp-tabbed-product-page:not(.ewd-upcp-shop-style-product-page) .ewd-upcp-single-product-tab {
 	display: flex;
+	flex-direction: column;
+	width: 100%;
 	float: none;
 	top: 0;
 	padding: 20px 0;
@@ -4209,6 +4211,12 @@ span.ewd-upcp-custom-field-range,
 .ewd-upcp-tabbed-product-page:not(.ewd-upcp-shop-style-product-page) .ewd-upcp-single-product-tab h4 {
 	margin: 0;
 	padding: 0;
+}
+.ewd-upcp-tabbed-product-page:not(.ewd-upcp-shop-style-product-page) .ewd-upcp-single-product-tab[data-tab="additional_information"] > div {
+	margin: 0 0 4px;;
+}
+.ewd-upcp-tabbed-product-page:not(.ewd-upcp-shop-style-product-page) .ewd-upcp-single-product-inquiry-form {
+	width: 100%;
 }
 
 
