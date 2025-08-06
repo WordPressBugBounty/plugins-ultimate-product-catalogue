@@ -2,7 +2,7 @@
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce, products, catalogue, catalogs, catalogues, catalog plugin, woocommerce product catalog, woocommerce catalog, woocommerce checkout, woocommerce products
 Tested up to: 6.8
-Stable tag: 5.3.2
+Stable tag: 5.3.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate Link: https://www.etoilewebdesign.com/plugin-donations/
@@ -113,13 +113,13 @@ Premium features include:
 
 [youtube https://www.youtube.com/watch?v=KNmruA5EVsA]
 
-For further information and purchasing options, please visit our <strong><a href="https://www.etoilewebdesign.com/plugins/ultimate-product-catalog/">WordPress product catalog</a></strong> homepage.
+For further information and purchasing options, please visit our [WordPress product catalog](https://www.etoilewebdesign.com/plugins/ultimate-product-catalog/) homepage.
 
-** We are pleased to offer a free 7-day trial of the premium version of the product catalog, which you can use to test out premium features, such as WooCommerce product sync and custom fields, before buying! **
+*We are pleased to offer a free 7-day trial of the premium version of the product catalog, which you can use to test out premium features, such as WooCommerce product sync and custom fields, before buying!*
 
 ### Customize Your Product Catalog with the Included Template System
 
-The Ultimate Product Catalog is built on a series of templates, such that everything that displays on the front end of the plugin can be customized by creating your own template files (to modify and/or overwrite the existing templates files). This gives you a powerful and non-destructive way to custmoize the look and functionality of the procuct catalog to your exact needs. More info about this can be found [in our documentation]https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/developer/). 
+The Ultimate Product Catalog is built on a series of templates, such that everything that displays on the front end of the plugin can be customized by creating your own template files (to modify and/or overwrite the existing templates files). This gives you a powerful and non-destructive way to customize the look and functionality of the procuct catalog to your exact needs. More info about this can be found [in our documentation]https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/developer/). 
 
 ### Product Catalog in Your Language
 
@@ -127,7 +127,7 @@ The Ultimate Product Catalog plugin comes translation ready, with many already a
 
 ### For Catalog Help and Support
 
-- [Ultimate Product Catalog documentation](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/)
+- [Ultimate Product Catalog documentation](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/)
 - Our FAQ pages [here](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/faq) and [here](https://wordpress.org/plugins/ultimate-product-catalogue/faq/)
 - [Ultimate Product Catalog installation guide and information about the walk-through](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/getting-started/install)
 - [Ultimate Product Catalog tutorial videos](https://www.youtube.com/playlist?list=PLEndQUuhlvSoTRGeY6nWXbxbhmgepTyLi)
@@ -153,7 +153,7 @@ For more info on installing and activating the plugin, and on the walk-through, 
 
 ### For help and support, please see:
 
-- [Ultimate Product Catalog documentation](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/)
+- [Ultimate Product Catalog documentation](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/)
 - Our FAQ pages [here](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/faq) and [here](https://wordpress.org/plugins/ultimate-product-catalogue/faq/)
 - [Ultimate Product Catalog installation guide and information about the walk-through](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/getting-started/install)
 - [Ultimate Product Catalog tutorial videos](https://www.youtube.com/playlist?list=PLEndQUuhlvSoTRGeY6nWXbxbhmgepTyLi)
@@ -206,7 +206,7 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 
 = For help and support, please see: =
 
-- [Ultimate Product Catalog documentation](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/)
+- [Ultimate Product Catalog documentation](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/)
 - Our FAQ pages [here](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/faq) and [here](https://wordpress.org/plugins/ultimate-product-catalogue/faq/)
 - [Ultimate Product Catalog installation guide and information about the walk-through](https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/getting-started/install)
 - [Ultimate Product Catalog tutorial videos](https://www.youtube.com/playlist?list=PLEndQUuhlvSoTRGeY6nWXbxbhmgepTyLi)
@@ -214,6 +214,9 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 5.3.3 (2025-08-06) =
+- Fix for the dropdown custom field control type having incorrect counts beside each option once any filtering option was selected.
 
 = 5.3.2 (2025-07-21) =
 - Fix for an error sometimes occurring when using custom tabs. 

@@ -1122,14 +1122,14 @@ function ewd_upcp_adjust_sidebar_counts( filter_counts ) {
 	// Custom Fields - dropdown
 	jQuery( '.ewd-upcp-catalog-sidebar-custom-field-div select option' ).each( function() {
 
-		if ( jQuery( this ).parent().data( 'custom_field_id' ) in filter_counts.custom_fields && jQuery( this ).val() in filter_counts.custom_fields[ jQuery( this ).parent().data( 'custom_field_id' ) ] ) {
+		if ( jQuery( this ).parent().parent().data( 'custom_field_id' ) in filter_counts.custom_fields && jQuery( this ).val() in filter_counts.custom_fields[ jQuery( this ).parent().parent().data( 'custom_field_id' ) ] ) {
 
 			jQuery( this ).removeClass( 'ewd-upcp-hidden' );
-
-			jQuery( this ).find( '.ewd-upcp-catalog-sidebar-custom-field-count' ).html( '(' + filter_counts.custom_fields[ jQuery( this ).parent().data( 'custom_field_id' ) ][ jQuery( this ).val() ] + ')' );
+			
+			jQuery( this ).find( '.ewd-upcp-catalog-sidebar-custom-field-count' ).html( '(' + filter_counts.custom_fields[ jQuery( this ).parent().parent().data( 'custom_field_id' ) ][ jQuery( this ).val() ] + ')' );
 		}
 		else {
-
+			
 			if ( jQuery( this ).val() == 'all' ) { return; }
 
 			jQuery( this ).find( '.ewd-upcp-catalog-sidebar-custom-field-count' ).html( '(0)' );
