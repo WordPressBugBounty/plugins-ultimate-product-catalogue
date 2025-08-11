@@ -2,7 +2,7 @@
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce, products, catalogue, catalogs, catalogues, catalog plugin, woocommerce product catalog, woocommerce catalog, woocommerce checkout, woocommerce products
 Tested up to: 6.8
-Stable tag: 5.3.3
+Stable tag: 5.3.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate Link: https://www.etoilewebdesign.com/plugin-donations/
@@ -214,6 +214,9 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 5.3.4 (2025-08-11) =
+- Updated sanitization to correct issue that was preventing certain types of affiliate links from saving/working in the Product Link field.
 
 = 5.3.3 (2025-08-06) =
 - Fix for the dropdown custom field control type having incorrect counts beside each option once any filtering option was selected.
