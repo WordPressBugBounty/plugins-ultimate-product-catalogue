@@ -729,8 +729,22 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
   	public function get_main_image_lightbox_class() {
 		global $ewd_upcp_controller;
 
-  		return $ewd_upcp_controller->settings->get_setting( 'product-image-lightbox' ) == 'no' ? '' :
-  			( ( $ewd_upcp_controller->settings->get_setting( 'product-page' ) == 'custom' or $ewd_upcp_controller->settings->get_setting( 'product-page' ) == 'large' ) ? 'ewd-ulb-lightbox' : 'ewd-ulb-open-lightbox' );
+		if ( $ewd_upcp_controller->settings->get_setting( 'product-image-lightbox' ) == 'no' ) {
+
+			return '';
+		}
+
+		if ( $ewd_upcp_controller->settings->get_setting( 'product-page' ) == 'custom' or $ewd_upcp_controller->settings->get_setting( 'product-page' ) == 'large' ) { 
+
+			return 'ewd-ulb-lightbox';
+		}
+
+		if ( ( sizeof( $this->product->images ) + sizeof( $this->product->videos ) ) < 1 ) {
+
+			return 'ewd-ulb-lightbox';
+		}
+
+  		return 'ewd-ulb-open-lightbox';
   	}
 
   	/**

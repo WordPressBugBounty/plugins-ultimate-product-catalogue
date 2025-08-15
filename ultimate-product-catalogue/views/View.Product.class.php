@@ -57,4 +57,13 @@ class ewdupcpViewProduct extends ewdupcpView {
   		else { $this->details_link = add_query_arg( 'singleproduct', $this->product->id, $this->catalog_url ); }
   	}
 
+  	/**
+	 * Returns the correct label for the product action button
+	 * @since 5.3.0
+	 */
+	public function get_action_button_label() {
+		global $ewd_upcp_controller;
+
+		return ( ! empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ) and ! empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-sync' ) ) ) ? $this->get_label( 'label-add-to-cart-button' ) : $this->get_label( 'label-inquire-button' );
+	}
 }

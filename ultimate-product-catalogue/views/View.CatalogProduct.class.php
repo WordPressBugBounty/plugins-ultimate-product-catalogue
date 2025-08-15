@@ -398,16 +398,6 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	}
 
 	/**
-	 * Returns the correct label for the product action button
-	 * @since 5.0.0
-	 */
-	public function get_action_button_label() {
-		global $ewd_upcp_controller;
-
-		return ( ! empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ) and ! empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-sync' ) ) ) ? $this->get_label( 'label-add-to-cart-button' ) : $this->get_label( 'label-inquire-button' );
-	}
-
-	/**
 	 * Returns the product description for the 'Detail' view, with read more if necessary
 	 * @since 5.0.0
 	 */

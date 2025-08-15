@@ -2154,6 +2154,7 @@ NEW
 	box-shadow: none;
 	cursor: initial;
 }
+.ewd-upcp-tabbed-product-page .ewd-upcp-single-product-main-image.ewd-ulb-lightbox:hover,
 .ewd-upcp-tabbed-product-page .ewd-upcp-single-product-main-image.ewd-ulb-open-lightbox:hover {
 	cursor: zoom-in;
 }
