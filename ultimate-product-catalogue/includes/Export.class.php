@@ -9,6 +9,7 @@ if ( !defined( 'ABSPATH' ) )
 
 if (!class_exists('ComposerAutoloaderInit4618f5c41cf5e27cc7908556f031e4d4')) { require_once EWD_UPCP_PLUGIN_DIR . '/lib/PHPSpreadsheet/vendor/autoload.php'; }
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 class ewdupcpExport {
@@ -89,6 +90,13 @@ class ewdupcpExport {
 			$column++;
 		}
 
+		foreach ( $number_names as $number ) {
+
+			$spreadsheet->getActiveSheet()->setCellValue( $column . '1', 'Video URL ' . $number );
+
+			$column++;
+		}
+
 		//start while loop to get data
 		$row_count = 2;
 
@@ -130,11 +138,25 @@ class ewdupcpExport {
 			}
 
 			$product_images = is_array( get_post_meta( $product->ID, 'product_images', true ) ) ? get_post_meta( $product->ID, 'product_images', true ) : array();
-			$product_images = array_slice( $product_images, 0, 5 );
+			$product_images = array_slice( $product_images, 0, 10 );
 
 			foreach ( $product_images as $product_image ) {
 
 				$spreadsheet->getActiveSheet()->setCellValue( $column . $row_count, $product_image->url );
+
+				$column++;
+			}
+
+			$col_index = Coordinate::columnIndexFromString( $column );
+			$col_index += ( 10 - sizeof( $product_images ) );
+			$column = Coordinate::stringFromColumnIndex( $col_index );
+
+			$product_videos = is_array( get_post_meta( $product->ID, 'product_videos', true ) ) ? get_post_meta( $product->ID, 'product_videos', true ) : array();
+			$product_videos = array_slice( $product_videos, 0, 10 );
+
+			foreach ( $product_videos as $product_video ) {
+
+				$spreadsheet->getActiveSheet()->setCellValue( $column . $row_count, $product_video->url );
 
 				$column++;
 			}

@@ -2,7 +2,7 @@
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce, products, catalogue, catalogs, catalogues, catalog plugin, woocommerce product catalog, woocommerce catalog, woocommerce checkout, woocommerce products
 Tested up to: 6.8
-Stable tag: 5.3.5
+Stable tag: 5.3.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate Link: https://www.etoilewebdesign.com/plugin-donations/
@@ -214,6 +214,9 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 5.3.5 (2025-09-15) =
+- YouTube video URLs can now be included in the export and import.
 
 = 5.3.5 (2025-08-15) =
 - Fixed an issue in which the lightbox on the product page would not open if a product had no additional images or videos.

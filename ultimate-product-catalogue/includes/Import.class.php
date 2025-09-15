@@ -131,6 +131,7 @@ class ewdupcpImport {
 	    
 	    // Get column names
 	    $additional_image_columns = array();
+		$product_video_columns = array();
 
 	    $highest_column = $sheet->getHighestColumn();
 	    $highest_column_index = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString( $highest_column );
@@ -161,6 +162,11 @@ class ewdupcpImport {
         	if ( strpos( $sheet->getCellByColumnAndRow( $column, 1 )->getValue(), 'Additional Image' ) !== FALSE ) {
 				
 				$additional_image_columns[] = $column;
+			}
+
+        	if ( strpos( $sheet->getCellByColumnAndRow( $column, 1 )->getValue(), 'Video URL' ) !== FALSE ) {
+				
+				$product_video_columns[] = $column;
 			}
 	    }
 
@@ -204,6 +210,7 @@ class ewdupcpImport {
 	        );
 
 	        $product_images = array();
+			$product_videos = array();
 
 	        foreach ( $product_data as $col_index => $value ) {
 
@@ -231,6 +238,30 @@ class ewdupcpImport {
 					);
 
 					$product_images[] = $product_image;
+            	}
+            	elseif ( in_array( $col_index, $product_video_columns ) ) {
+
+            		if ( empty( $value ) ) { continue; }
+
+            		if ( strtolower( substr( $value, 0, 4 ) ) == 'http' ) {
+			
+						$parsed = parse_url( $value );
+		
+						parse_str( $parsed['query'], $params );
+		
+						$video_id = sanitize_text_field( $params['v'] );
+					}
+					else {
+		
+						$video_id = sanitize_text_field( $value );
+					}
+
+					$product_video = (object) array(
+						'url'			=> $video_id,
+						'type'			=> 'youtube',
+					);
+
+					$product_videos[] = $product_video;
             	}
             	else {
 
@@ -313,6 +344,11 @@ class ewdupcpImport {
 	        	if ( ! empty( $product_images ) ) {
 
 	        		update_post_meta( $post_id, 'product_images', $product_images );
+	        	}
+
+	        	if ( ! empty( $product_videos ) ) {
+
+	        		update_post_meta( $post_id, 'product_videos', $product_videos );
 	        	}
 
 	        	foreach ( $product_custom_fields as $field_id => $field_value ) {
