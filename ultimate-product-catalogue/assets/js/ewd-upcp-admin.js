@@ -857,3 +857,18 @@ jQuery( document ).ready( function() {
 	jQuery( '.ewd-upcp-settings-preview' ).prevAll( '.sap-tutorial-toggle' ).hide();
 	jQuery( '.ewd-upcp-settings-preview .sap-tutorial-toggle' ).hide();
 });
+
+// NEW PLUGIN NOTICE
+
+jQuery( document ).ready( function( $ ) {
+
+  jQuery(document).on( 'click', '.ait-iat-new-plugin-notice .notice-dismiss', function( event ) {
+    var data = jQuery.param({
+      action: 'ewd_upcp_hide_new_plugin_notice',
+      plugin: 'ait_iat',
+      nonce: ewd_upcp_php_admin_data.nonce
+    });
+
+    jQuery.post( ajaxurl, data, function() {} );
+  });
+});

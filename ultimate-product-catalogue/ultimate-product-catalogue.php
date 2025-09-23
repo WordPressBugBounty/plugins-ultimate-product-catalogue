@@ -3,14 +3,14 @@
  * Plugin Name: Ultimate Product Catalog
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-product-catalog/
  * Description: Add a product catalog to your site with blocks or shortcodes. Works with WooCommerce or standalone. Flexible and customizable, works with any theme.
- * Version: 5.3.6
+ * Version: 5.3.7
  * Author: Etoile Web Design
  * Author URI: https://www.etoilewebdesign.com/
  * Terms and Conditions: https://www.etoilewebdesign.com/plugin-terms-and-conditions/
  * Text Domain: ultimate-product-catalogue
  * Domain Path: /languages/
  * WC requires at least: 7.1
- * WC tested up to: 10.1
+ * WC tested up to: 10.2
  */
 
 if ( ! defined( 'ABSPATH' ) )
@@ -62,7 +62,7 @@ class ewdupcpInit {
 		define( 'EWD_UPCP_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'EWD_UPCP_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 		define( 'EWD_UPCP_TEMPLATE_DIR', 'ewd-upcp-templates' );
-		define( 'EWD_UPCP_VERSION', '5.3.6' );
+		define( 'EWD_UPCP_VERSION', '5.3.7' );
 
 		define( 'EWD_UPCP_PRODUCT_POST_TYPE', 'upcp_product' );
 		define( 'EWD_UPCP_CATALOG_POST_TYPE', 'upcp_catalog' );
@@ -161,8 +161,9 @@ class ewdupcpInit {
 
 		add_action( 'plugins_loaded',        			array( $this, 'load_textdomain' ) );
 
-		add_action( 'admin_notices', 					array( $this, 'display_header_area' ) );
+		add_action( 'admin_notices', 					array( $this, 'display_header_area' ), 99 );
 		add_action( 'admin_notices', 					array( $this, 'maybe_display_helper_notice' ) );
+		add_action( 'admin_notices', 					array( $this, 'maybe_display_new_plugin_notice' ) );
 
 		add_action( 'admin_init',	 					array( $this, 'display_help_bubble' ) );
 
@@ -175,6 +176,7 @@ class ewdupcpInit {
 		add_filter( 'plugin_action_links',				array( $this, 'plugin_action_links' ), 10, 2);
 
 		add_action( 'wp_ajax_ewd_upcp_hide_helper_notice', array( $this, 'hide_helper_notice' ) );
+		add_action( 'wp_ajax_ewd_upcp_hide_new_plugin_notice', array( $this, 'hide_new_plugin_notice' ) );
 
 		add_action( 'before_woocommerce_init', array( $this, 'declare_wc_hpos' ) );
 	}
@@ -666,6 +668,54 @@ class ewdupcpInit {
 		}
 
 		set_transient( 'ewd-helper-notice-dismissed', true, 3600*24*7 );
+
+		die();
+	}
+
+	public function maybe_display_new_plugin_notice() {
+
+		$screen = get_current_screen();
+        if (!isset($screen->id) || strpos($screen->id, 'upcp_product_page_') === false) { return; }
+
+		if ( get_transient( 'ewd-upcp-ait-iat-plugin-notice-dismissed' ) ) { return; }
+
+		// October 17th, 2025
+		if ( time() > 1760759940 ) { return; }
+
+		?>
+
+		<div class='notice notice-error is-dismissible ait-iat-new-plugin-notice'>
+			
+			<div class='ewd-upcp-new-plugin-notice-img'>
+				<img src='<?php echo EWD_UPCP_PLUGIN_URL . '/assets/img/ait-iat-plugin-icon.png' ; ?>' />
+			</div>
+
+			<div class='ewd-upcp-new-plugin-notice-txt'>
+				<p><?php _e( 'Want to improve your search rankings? Try our new <strong>AI Image Alt Text</strong> plugin!', 'ultimate-product-catalogue' ); ?></p>
+				<p><?php echo sprintf( __( 'As a thank you to our customers, for a limited time you can get a <strong>free pro license</strong>! Try the <a target=\'_blank\' href=\'%s\'>free version</a> today or use code <code>early_adopter_pro</code> to <a target=\'_blank\' href=\'%s\'>get your pro version license</a>!', 'ultimate-product-catalogue' ), admin_url( 'plugin-install.php?tab=plugin-information&plugin=ai-image-alt-text' ), 'https://www.wpaiplugins.dev/wordpress-image-alt-text-ai-plugin/' ); ?></p>
+			</div>
+
+			<div class='ewd-upcp-clear'></div>
+
+		</div>
+
+		<?php 
+	}
+
+	public function hide_new_plugin_notice() {
+		global $ewd_upcp_controller;
+
+		// Authenticate request
+		if (
+			! check_ajax_referer( 'ewd-upcp-admin-js', 'nonce' )
+			||
+			! current_user_can( $ewd_upcp_controller->settings->get_setting( 'access-role' ) )
+		) {
+			ewdupcpHelper::admin_nopriv_ajax();
+
+		}
+
+		set_transient( 'ewd-upcp-ait-iat-plugin-notice-dismissed', true, 3600*24*7 );
 
 		die();
 	}

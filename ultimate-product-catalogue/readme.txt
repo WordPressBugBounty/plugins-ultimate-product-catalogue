@@ -2,7 +2,7 @@
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce, products, catalogue, catalogs, catalogues, catalog plugin, woocommerce product catalog, woocommerce catalog, woocommerce checkout, woocommerce products
 Tested up to: 6.8
-Stable tag: 5.3.6
+Stable tag: 5.3.7
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate Link: https://www.etoilewebdesign.com/plugin-donations/
@@ -215,7 +215,10 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 
 == Changelog ==
 
-= 5.3.5 (2025-09-15) =
+= 5.3.7 (2025-09-23) =
+- Fix for styling option that was not being applied on the front end.
+
+= 5.3.6 (2025-09-15) =
 - YouTube video URLs can now be included in the export and import.
 
 = 5.3.5 (2025-08-15) =
