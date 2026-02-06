@@ -319,6 +319,14 @@ class ewdupcpImport {
 	        			$category_term = get_term_by( 'name', $category_name, EWD_UPCP_PRODUCT_CATEGORY_TAXONOMY );
 
 	        			if ( $category_term ) { $category_ids[] = $category_term->term_id; }
+	        			elseif ( $ewd_upcp_controller->settings->get_setting( 'import-category-creation' ) and in_array( $category_name, $categories ) ) {
+
+	        				$new_term = wp_insert_term( $category_name, EWD_UPCP_PRODUCT_CATEGORY_TAXONOMY );
+
+        					if ( ! is_wp_error( $new_term ) && isset( $new_term['term_id'] ) ) {
+        					    $category_ids[] = $new_term['term_id'];
+        					}
+	        			}
 	        		}
 
 	        		if ( ! empty( $category_ids ) ) { wp_set_post_terms( $post_id, $category_ids, EWD_UPCP_PRODUCT_CATEGORY_TAXONOMY, true ); }

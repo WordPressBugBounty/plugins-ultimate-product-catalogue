@@ -3697,7 +3697,6 @@ span.ewd-upcp-custom-field-range,
 }
 
 
-.ewd-upcp-catalog-sidebar-clear-all,
 .ewd-upcp-sidebar-toggle {
 	width: 100%;
 	display: none;
@@ -3722,9 +3721,22 @@ span.ewd-upcp-custom-field-range,
 	background: #333;
 }
 .ewd-upcp-catalog-sidebar-clear-all {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	float: none;
+	height: 40px;
+	padding: 0;
 	margin: 0 0 24px;
 	background: transparent;
 	color: #111;
+	text-align: center;
+	border: 1px solid #111;
+	border-radius: 8px;
+	text-transform: none;
+	font-size: 19px;
+	transition: background .35s, color .35s;
 }
 .ewd-upcp-catalog-sidebar-clear-all:hover {
 	background: #111;
@@ -4000,10 +4012,10 @@ span.ewd-upcp-custom-field-range,
 }
 
 @media screen and (max-width: 768px) {
-  .ewd-upcp-catalog-sidebar,
-  .ewd-upcp-catalog-display {
-    width: 100%;
-  }
+	.ewd-upcp-catalog-sidebar,
+	.ewd-upcp-catalog-display {
+		width: 100%;
+	}
 	.ewd-upcp-sidebar-toggle {
 		display: flex;
 	}

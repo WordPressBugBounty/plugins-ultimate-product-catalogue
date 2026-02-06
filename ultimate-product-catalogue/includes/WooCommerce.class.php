@@ -841,7 +841,7 @@ class ewdupcpWooCommerce {
 
 			if ( empty( $field_value ) ) { continue; }
 
-			$values = explode( ',', $field_value );
+			$values = ! is_array( $field_value ) ? explode( ',', $field_value ) : $field_value;
 
 			foreach ( $values as $value ) {
 

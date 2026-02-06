@@ -134,7 +134,7 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	public function get_action_button_label() {
   		global $ewd_upcp_controller;
 
-  		return $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ? $ewd_upcp_controller->settings->get_setting( 'label-add-to-cart-button' ) : $ewd_upcp_controller->settings->get_setting( 'label-inquire-button' );
+  		return $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ? $this->get_label( 'label-add-to-cart-button' ) : $this->get_label( 'label-inquire-button' );
 	}
 
 	/**

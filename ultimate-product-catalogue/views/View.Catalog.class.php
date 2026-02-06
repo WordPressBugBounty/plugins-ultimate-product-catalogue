@@ -1195,9 +1195,43 @@ class ewdupcpViewCatalog extends ewdupcpView {
 
 		$products = is_array( $products ) ? $products : array();
 
-		$products = $this->filter_products( $products );
+		$products_for_display = $this->filter_products( $products );
 
-		$this->set_product_data( $products );
+		// Update the filtering for the sidebar, so that only shortcode params are used and $_GET params are ignored
+		$saved_filtering_categories    = $this->filtering_categories;
+		$saved_filtering_subcategories = $this->filtering_subcategories;
+		$saved_filtering_tags          = $this->filtering_tags;
+		$saved_filtering_custom_fields = $this->filtering_custom_fields;
+
+		$this->filtering_categories    = ! empty( $this->category ) ? array_map( 'intval', explode( ',', $this->category ) ) : array();
+		$this->filtering_subcategories = ! empty( $this->subcategory ) ? array_map( 'intval', explode( ',', $this->subcategory ) ) : array();
+		$this->filtering_tags          = ! empty( $this->tags ) ? array_map( 'intval', explode( ',', $this->tags ) ) : array();
+
+		$custom_field_pairs = array();
+		$custom_fields = ! empty( $this->custom_fields ) ? $this->custom_fields : array();
+
+		foreach ( $custom_fields as $custom_field ) {
+
+			$field_id = substr( $custom_field, 0, strpos( $custom_field, '=' ) );
+			$field_value = substr( $custom_field, strpos( $custom_field, '=' ) + 1 );
+
+			$custom_field_pairs[ $field_id ] = empty( $custom_field_pairs[ $field_id ] ) ? array( $field_value ) : array_merge( $custom_field_pairs[ $field_id ], array( $field_value ) );
+		}
+
+		$this->filtering_custom_fields = $custom_field_pairs;
+
+		// Filter for all products that should be displayed in the sidebar
+		$products_for_sidebar = $this->filter_products( $products );
+		$this->set_product_data( $products_for_sidebar );
+
+		// Restore the real filtering (so the UI shows selected items properly, and product display stays filtered)
+		$this->filtering_categories    = $saved_filtering_categories;
+		$this->filtering_subcategories = $saved_filtering_subcategories;
+		$this->filtering_tags          = $saved_filtering_tags;
+		$this->filtering_custom_fields = $saved_filtering_custom_fields;
+
+		//Restore the products to only those being displayed
+		$products = $products_for_display;
 
 		// verify there are items for overview mode, turn off otherwise
 		if ( ! empty( $this->overview_mode ) ) {
@@ -1712,20 +1746,21 @@ class ewdupcpViewCatalog extends ewdupcpView {
 		$this->filtering_categories 	= ! empty( $this->category ) ? ( ! empty( $this->filtering_categories ) ? array_intersect( $this->filtering_categories, explode( ',', $this->category ) ) : explode( ',', $this->category ) ) : $this->filtering_categories;
 		$this->filtering_subcategories 	= ! empty( $this->subcategory ) ? ( ! empty( $this->filtering_subcategories ) ? array_intersect( $this->filtering_subcategories, explode( ',', $this->subcategory ) ) : explode( ',', $this->subcategory ) ) : $this->filtering_subcategories;
 		$this->filtering_tags 			= ! empty( $this->tags ) ? ( ! empty( $this->filtering_tags ) ? array_intersect( $this->filtering_tags, explode( ',', $this->tags ) ) : explode( ',', $this->tags ) ) : $this->filtering_tags;
+		$this->filtering_custom_fields 	= ! empty( $this->custom_fields ) ? ( ! empty( $this->filtering_custom_fields ) ? array_intersect( $this->filtering_custom_fields, explode( ',', $this->custom_fields ) ) : explode( ',', $this->custom_fields ) ) : $this->filtering_custom_fields;
 
 		$this->filtering_text = $ewd_upcp_controller->settings->get_setting( 'product-search-without-accents') ? remove_accents( $this->filtering_text ) : $this->filtering_text;
 
-		$this->filtering_custom_fields = array();
-
-		$custom_fields =  ! empty( $this->custom_fields ) ? explode( ',', $this->custom_fields ) : array();
-
-		foreach ( $custom_fields as $custom_field ) {
+		$custom_field_pairs = array();
+		
+		foreach ( $this->filtering_custom_fields as $custom_field ) {
 
 			$field_id = substr( $custom_field, 0, strpos( $custom_field, '=' ) );
 			$field_value = substr( $custom_field, strpos( $custom_field, '=' ) + 1 );
 
-			$this->filtering_custom_fields[ $field_id ] = empty( $this->filtering_custom_fields[ $field_id ] ) ? array( $field_value ) : array_merge( $this->filtering_custom_fields[ $field_id ], array( $field_value ) );
+			$custom_field_pairs[ $field_id ] = empty( $custom_field_pairs[ $field_id ] ) ? array( $field_value ) : array_merge( $custom_field_pairs[ $field_id ], array( $field_value ) );
 		}
+
+		$this->filtering_custom_fields = $custom_field_pairs;
 
 		$this->orderby 				= ! empty( $this->orderby ) ? $this->orderby : '';
 		$this->order 	 			= ! empty( $this->order ) ? $this->order : 'ASC';

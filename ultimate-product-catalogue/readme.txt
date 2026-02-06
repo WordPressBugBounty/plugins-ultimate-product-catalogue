@@ -1,8 +1,8 @@
 === Ultimate Product Catalog ===
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce, products, catalogue, catalogs, catalogues, catalog plugin, woocommerce product catalog, woocommerce catalog, woocommerce checkout, woocommerce products
-Tested up to: 6.8
-Stable tag: 5.3.7
+Tested up to: 6.9
+Stable tag: 5.3.11
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate Link: https://www.etoilewebdesign.com/plugin-donations/
@@ -214,6 +214,22 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 5.3.11 (2026-02-03) =
+- New: When importing, top-level categories and tags that don't already exist are now automatically created.
+- Change: All filtering options are now loaded even when visiting a specific category or tag via URL parameter.
+- Fix: Removed a notice from the save_quick_edit action.
+
+= 5.3.10 (2025-12-09) =
+- Fix: Default label not being applied to the Add to Cart button on the product page.
+- Fix: Collapsible sidebar not expanding in certain instances.
+
+= 5.3.9 (2025-12-02) =
+- Added the ability to close an open tab on the product page by clicking on it.
+- Tested with WordPress 6.9 and WooCommerce 10.3.
+
+= 5.3.8 (2025-10-15) =
+- Fix: Clear All button was not displaying, even if enabled.
 
 = 5.3.7 (2025-09-23) =
 - Fix for styling option that was not being applied on the front end.

@@ -1568,7 +1568,7 @@ class ewdupcpCustomPostTypes {
 	 */
 	public function save_quick_edit( $post_id ) {
 		
-		if ( ! wp_verify_nonce( $_POST[ '_inline_edit' ], 'inlineeditnonce' ) ) { return; }
+		if ( empty( $_POST[ '_inline_edit' ] ) or ! wp_verify_nonce( $_POST[ '_inline_edit' ], 'inlineeditnonce' ) ) { return; }
 		
 		if ( isset( $_POST['ewd_upcp_product_price'] ) ) { update_post_meta( $post_id, 'price', sanitize_text_field( $_POST['ewd_upcp_product_price'] ) ); }
 	}

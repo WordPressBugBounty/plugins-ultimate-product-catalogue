@@ -398,7 +398,7 @@ jQuery( document ).ready( function() {
 
 		jQuery( this ).toggleClass( 'ewd-upcp-taxonomy-collapsible-children-hidden' );
 
-		jQuery( this ).parent().next().toggle( 'ewd-upcp-hidden' );
+		jQuery( this ).parent().next().toggleClass( 'ewd-upcp-hidden' );
 	} );
 
 	// Tabbed product tabs
@@ -414,13 +414,18 @@ jQuery( document ).ready( function() {
 
 	jQuery( '.ewd-upcp-single-product-menu-tab' ).on( 'click', function() {
 
-		jQuery( '.ewd-upcp-single-product-menu-tab' ).removeClass( 'ewd-upcp-single-product-menu-tab-selected' );
+		var has_class = jQuery( this ).hasClass( 'ewd-upcp-single-product-menu-tab-selected' );
 
-		jQuery( this ).addClass( 'ewd-upcp-single-product-menu-tab-selected' );
+		jQuery( '.ewd-upcp-single-product-menu-tab' ).removeClass( 'ewd-upcp-single-product-menu-tab-selected' );
 
 		jQuery( '.ewd-upcp-single-product-tab' ).addClass( 'ewd-upcp-hidden' );
 
-		jQuery( '.ewd-upcp-single-product-tab[data-tab="' + jQuery( this ).data( 'tab' ) + '"]' ).removeClass( 'ewd-upcp-hidden' );
+		if ( ! has_class ) {
+
+			jQuery( this ).addClass( 'ewd-upcp-single-product-menu-tab-selected' );
+
+			jQuery( '.ewd-upcp-single-product-tab[data-tab="' + jQuery( this ).data( 'tab' ) + '"]' ).removeClass( 'ewd-upcp-hidden' );
+		}
 	});
 
 	// Additional product image toggles
