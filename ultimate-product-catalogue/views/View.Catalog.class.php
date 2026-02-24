@@ -1198,37 +1198,45 @@ class ewdupcpViewCatalog extends ewdupcpView {
 		$products_for_display = $this->filter_products( $products );
 
 		// Update the filtering for the sidebar, so that only shortcode params are used and $_GET params are ignored
-		$saved_filtering_categories    = $this->filtering_categories;
-		$saved_filtering_subcategories = $this->filtering_subcategories;
-		$saved_filtering_tags          = $this->filtering_tags;
-		$saved_filtering_custom_fields = $this->filtering_custom_fields;
+		// only if not on overview mode
+		if ( empty( $this->overview_mode ) ) {
 
-		$this->filtering_categories    = ! empty( $this->category ) ? array_map( 'intval', explode( ',', $this->category ) ) : array();
-		$this->filtering_subcategories = ! empty( $this->subcategory ) ? array_map( 'intval', explode( ',', $this->subcategory ) ) : array();
-		$this->filtering_tags          = ! empty( $this->tags ) ? array_map( 'intval', explode( ',', $this->tags ) ) : array();
+			$saved_filtering_categories    = $this->filtering_categories;
+			$saved_filtering_subcategories = $this->filtering_subcategories;
+			$saved_filtering_tags          = $this->filtering_tags;
+			$saved_filtering_custom_fields = $this->filtering_custom_fields;
+	
+			$this->filtering_categories    = ! empty( $this->category ) ? array_map( 'intval', explode( ',', $this->category ) ) : array();
+			$this->filtering_subcategories = ! empty( $this->subcategory ) ? array_map( 'intval', explode( ',', $this->subcategory ) ) : array();
+			$this->filtering_tags          = ! empty( $this->tags ) ? array_map( 'intval', explode( ',', $this->tags ) ) : array();
+	
+			$custom_field_pairs = array();
+			$custom_fields = ! empty( $this->custom_fields ) ? $this->custom_fields : array();
+	
+			foreach ( $custom_fields as $custom_field ) {
+	
+				$field_id = substr( $custom_field, 0, strpos( $custom_field, '=' ) );
+				$field_value = substr( $custom_field, strpos( $custom_field, '=' ) + 1 );
+	
+				$custom_field_pairs[ $field_id ] = empty( $custom_field_pairs[ $field_id ] ) ? array( $field_value ) : array_merge( $custom_field_pairs[ $field_id ], array( $field_value ) );
+			}
+	
+			$this->filtering_custom_fields = $custom_field_pairs;
+	
+			// Filter for all products that should be displayed in the sidebar
+			$products_for_sidebar = $this->filter_products( $products );
+			$this->set_product_data( $products_for_sidebar );
 
-		$custom_field_pairs = array();
-		$custom_fields = ! empty( $this->custom_fields ) ? $this->custom_fields : array();
-
-		foreach ( $custom_fields as $custom_field ) {
-
-			$field_id = substr( $custom_field, 0, strpos( $custom_field, '=' ) );
-			$field_value = substr( $custom_field, strpos( $custom_field, '=' ) + 1 );
-
-			$custom_field_pairs[ $field_id ] = empty( $custom_field_pairs[ $field_id ] ) ? array( $field_value ) : array_merge( $custom_field_pairs[ $field_id ], array( $field_value ) );
+			// Restore the real filtering (so the UI shows selected items properly, and product display stays filtered)
+			$this->filtering_categories    = $saved_filtering_categories;
+			$this->filtering_subcategories = $saved_filtering_subcategories;
+			$this->filtering_tags          = $saved_filtering_tags;
+			$this->filtering_custom_fields = $saved_filtering_custom_fields;
 		}
+		else {
 
-		$this->filtering_custom_fields = $custom_field_pairs;
-
-		// Filter for all products that should be displayed in the sidebar
-		$products_for_sidebar = $this->filter_products( $products );
-		$this->set_product_data( $products_for_sidebar );
-
-		// Restore the real filtering (so the UI shows selected items properly, and product display stays filtered)
-		$this->filtering_categories    = $saved_filtering_categories;
-		$this->filtering_subcategories = $saved_filtering_subcategories;
-		$this->filtering_tags          = $saved_filtering_tags;
-		$this->filtering_custom_fields = $saved_filtering_custom_fields;
+			$this->set_product_data( $products_for_display );
+		}
 
 		//Restore the products to only those being displayed
 		$products = $products_for_display;
