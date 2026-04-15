@@ -17,3 +17,34 @@
 .ewd-upcp-helper-install-notice div img {
   max-height: 36px;
 }
+
+/* NEW PLUGIN NOTICE */
+
+.ait-aiaa-new-plugin-notice {
+  display: flex;
+  align-items: center;
+  min-height: 88px;
+  border-left-color: #5511f8;
+}
+.ewd-upcp-new-plugin-notice-img {
+  width: 64px;
+  height: 64px;
+  margin-right: 16px;
+}
+.ewd-upcp-new-plugin-notice-img img {
+  width: 64px;
+  height: 64px;
+}
+.ewd-upcp-new-plugin-notice-txt p {
+  margin: 2px 0;
+  padding: 0;
+}
+.ewd-upcp-new-plugin-notice-txt a {
+  color: #5511f8;
+  font-weight: bold;
+  text-decoration: none;
+}
+.ewd-upcp-new-plugin-notice-txt a:hover {
+  color: #7e56dc;
+  text-decoration: underline;
+}

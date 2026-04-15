@@ -2,7 +2,7 @@
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce, products, catalogue, catalogs, catalogues, catalog plugin, woocommerce product catalog, woocommerce catalog, woocommerce checkout, woocommerce products
 Tested up to: 6.9
-Stable tag: 5.3.12
+Stable tag: 5.3.13
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate Link: https://www.etoilewebdesign.com/plugin-donations/
@@ -214,6 +214,9 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 5.3.13 (2026-04-15) =
+- In-admin help, support, documentation and AI assistant all available now via the AIT AI Admin Assistance plugin.
 
 = 5.3.12 (2026-02-24) =
 - Fix: Overview mode displaying sub-categories from all categories and not just the selected one.
