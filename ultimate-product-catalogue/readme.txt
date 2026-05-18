@@ -1,8 +1,8 @@
 === Ultimate Product Catalog ===
 Contributors: Rustaurius
-Tags: catalog, product catalog, product, catalogue, woocommerce, products, catalogue, catalogs, catalogues, catalog plugin, woocommerce product catalog, woocommerce catalog, woocommerce checkout, woocommerce products
-Tested up to: 6.9
-Stable tag: 5.3.14
+Tags: catalog, product catalog, product, catalogue, woocommerce catalog
+Tested up to: 7.0
+Stable tag: 5.3.15
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate Link: https://www.etoilewebdesign.com/plugin-donations/
@@ -214,6 +214,9 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 5.3.15 (2026-05-18) =
+- Updates to be compatible with WordPress 7.0.
 
 = 5.3.14 (2026-04-17) =
 - Update to fix issue with in-admin help features not displaying correctly in certain instances.

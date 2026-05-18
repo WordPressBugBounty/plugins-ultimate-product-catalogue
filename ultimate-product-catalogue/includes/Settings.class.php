@@ -177,7 +177,7 @@ class ewdupcpSettings {
 		require_once( EWD_UPCP_PLUGIN_DIR . '/lib/simple-admin-pages/simple-admin-pages.php' );
 		$sap = sap_initialize_library(
 			$args = array(
-				'version'       => '2.7.0',
+				'version'       => '2.7.4',
 				'lib_url'       => EWD_UPCP_PLUGIN_URL . '/lib/simple-admin-pages/',
 				'theme'			=> 'purple',
 			)

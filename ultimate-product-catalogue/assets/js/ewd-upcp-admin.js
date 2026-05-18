@@ -507,6 +507,8 @@ jQuery( document ).ready( function() {
 	jQuery( '.ewd-upcp-catalog-meta-add-items-button' ).on( 'click', function(event) {
 
 		jQuery( '.ewd-upcp-add-items-background-div' ).removeClass( 'ewd-upcp-hidden' );
+
+		jQuery( '.ewd-upcp-add-items-background-div' ).prependTo( '.editor-editor-interface' );
 	});
 
 	jQuery( '.ewd-upcp-add-items-close-button' ).on( 'click', function(event) {

@@ -1302,7 +1302,7 @@ input:checked + .ewd-upcp-admin-switch-slider:before {
   top: 0;
   left: 0;
   background: rgba(0,0,0,.85);
-  z-index: 100;
+  z-index: 100001;
 }
 .ewd-upcp-add-items-close-button {
   position: absolute;

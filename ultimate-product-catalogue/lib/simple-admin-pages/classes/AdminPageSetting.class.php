@@ -16,7 +16,7 @@
  * @package Simple Admin Pages
  */
 
-abstract class sapAdminPageSetting_2_7_0 {
+abstract class sapAdminPageSetting_2_7_4 {
 
 	// Page defaults
 	public $id; // used in form fields and database to track and store setting
@@ -31,6 +31,8 @@ abstract class sapAdminPageSetting_2_7_0 {
 	public $conditional_on; // optional setting that this one is dependent on to diplay (ex. payment enabled for payment settings)
 	public $conditional_on_value; // the required value of the dependent setting, if enabled
 	public $conditional_display = true; // whether this setting should be displayed based on its conditional settings
+	public $min; // min value for a setting
+	public $max; // max value for a setting
 	
 
 	/**
@@ -225,10 +227,10 @@ abstract class sapAdminPageSetting_2_7_0 {
 
 		if ( $val === null ) {
 			$option_group_value = get_option( $this->page );
-			$val = isset( $option_group_value[ $this->id ] ) ? $option_group_value[ $this->id ] : '';
+			$val = isset( $option_group_value[ $this->id ] ) ? $option_group_value[ $this->id ] : null;
 		}
 
-		$this->value = $this->esc_value( $val );
+		$this->value = $val !== null ? $this->esc_value( $val ) : null;
 	}
 
 	/**

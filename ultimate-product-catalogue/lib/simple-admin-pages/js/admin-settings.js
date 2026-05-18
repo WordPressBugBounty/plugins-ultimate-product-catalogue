@@ -161,7 +161,7 @@ jQuery( document ).ready( function() {
         
         var this_tr = jQuery( this );
         var this_description = this_tr.find( 'td .description' );
-        var this_th = this_tr.find( 'th' );
+        var this_th = this_tr.find( '> th' );
 
         this_description.appendTo( this_th );
     } );

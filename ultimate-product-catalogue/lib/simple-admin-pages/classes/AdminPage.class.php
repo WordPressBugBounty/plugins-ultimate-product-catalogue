@@ -7,7 +7,7 @@
  * @package Simple Admin Pages
  */
 
-class sapAdminPage_2_7_0 {
+class sapAdminPage_2_7_4 {
 
 	public $title;
 	public $menu_title;
@@ -131,7 +131,7 @@ class sapAdminPage_2_7_0 {
 		}
 
 		// Get the current page/tab so we only update those settings
-		parse_str( sanitize_url( $_POST['_wp_http_referer'] ), $referrer );
+		parse_str( sanitize_url( wp_unslash( $_POST['_wp_http_referer'] ) ), $referrer );
 		$current_page = $this->get_current_page( $referrer );
 
 		// Use a new empty value so only values for settings that were added are
@@ -186,7 +186,7 @@ class sapAdminPage_2_7_0 {
 		}
 
 		if ( !current_user_can( $this->capability ) ) {
-			wp_die( __('You do not have sufficient permissions to access this page.') );
+			wp_die( esc_html__('You do not have sufficient permissions to access this page.', 'simple-admin-pages') );
 		}
 
 		$current_page = $this->get_current_page( $_GET );
