@@ -1,9 +1,7 @@
 jQuery(function($){
-	// This is a temporary addition. Remove along with UPCP_Main.php summer 2021
-	$('#the-list').find('[data-plugin="ultimate-product-catalogue/UPCP_Main.php"]').hide();
-
 	var $deactivateLink = $('#the-list').find('[data-slug="ultimate-product-catalogue"] span.deactivate a'),
 		$overlay        = $('#ewd-upcp-deactivate-survey-ultimate-product-catalogue'),
+		$cancelButton   = $('#ewd-upcp-deactivation-cancel'),
 		$form           = $overlay.find('form'),
 		formOpen        = false;
 	// Plugin listing table deactivate link.
@@ -12,6 +10,11 @@ jQuery(function($){
 		$overlay.css('display', 'table');
 		formOpen = true;
 		$form.find('.ewd-upcp-deactivate-survey-option:first-of-type input[type=radio]').focus();
+	});
+	// Exit the survey without deactivating or submitting the form
+	$cancelButton.on( 'click', function( event ) {
+	 	$overlay.css('display', 'none');
+	 	formOpen = false;
 	});
 	// Survey radio option selected.
 	$form.on('change', 'input[type=radio]', function(event) {

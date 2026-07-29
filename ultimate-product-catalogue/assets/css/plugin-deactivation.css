@@ -40,6 +40,11 @@
 	color: #999;
 	margin-right: 10px;
 }
+#ewd-upcp-deactivation-cancel {
+	display: inline-block;
+    float: right;
+    cursor: pointer;
+}
 .ewd-upcp-deactivate-survey-desc {
 	display: block;
 	font-weight: 600;

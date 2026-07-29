@@ -2,7 +2,7 @@
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce catalog
 Tested up to: 7.0
-Stable tag: 5.3.15
+Stable tag: 5.3.16
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate Link: https://www.etoilewebdesign.com/plugin-donations/
@@ -214,6 +214,10 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 5.3.16 (2026-07-29) =
+- Fixed a few PHP warnings.
+- Added a direct support option to the deactivation survey, making it easier to get help right away if you're uninstalling due to an issue.
 
 = 5.3.15 (2026-05-18) =
 - Updates to be compatible with WordPress 7.0.

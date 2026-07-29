@@ -1144,7 +1144,7 @@ class ewdupcpCustomPostTypes {
 
 		$product_images = array();
 
-		foreach ( $_POST['product_image_url'] as $key => $image_url ) {
+		foreach ( $images as $key => $image_url ) {
 
 			if ( empty( $image_url ) ) { continue; }
 
