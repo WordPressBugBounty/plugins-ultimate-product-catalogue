@@ -10,7 +10,7 @@
 			
 			<option value=''></option>
 
-			<?php if ( in_array( 'price', $this->get_option( 'product-sort' ) ) ) { ?>
+			<?php if ( $ewd_upcp_controller->settings->is_price_visible() && in_array( 'price', $this->get_option( 'product-sort' ) ) ) { ?>
 
 				<option value='price_asc'><?php echo esc_html( $this->get_label( 'label-price-ascending' ) ); ?></option>
 				<option value='price_desc'><?php echo esc_html( $this->get_label( 'label-price-descending' ) ); ?></option>

@@ -1,4 +1,4 @@
-<div <?php echo ewd_format_classes( $this->classes ); ?>>
+<div id='<?php echo esc_attr( $this->instance_id ); ?>' <?php echo ewd_format_classes( $this->classes ); ?> aria-busy='false'>
 
 	<?php $this->maybe_print_cart_form(); ?>
 
@@ -17,6 +17,8 @@
 	<?php $this->maybe_print_sidebar(); ?>
 
 	<div class='ewd-upcp-catalog-display'>
+
+		<div class='ewd-upcp-catalog-update-status' role='status' aria-live='polite' aria-atomic='true'></div>
 
 		<?php $this->maybe_print_thumbnail_display(); ?>
 

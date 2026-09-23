@@ -2,16 +2,18 @@
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce catalog
 Tested up to: 7.1
-Stable tag: 5.3.17
+Stable tag: 5.4.0
+Requires at least: 6.0
+Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate Link: https://www.etoilewebdesign.com/plugin-donations/
 
-Add a product catalog to your site with blocks or shortcodes. Works with WooCommerce or standalone. Flexible and customizable, works with any theme.
+Build a standalone product catalog with blocks or shortcodes, responsive filtering and search, plus optional WooCommerce integration.
 
 == Description ==
 
-The ultimate catalog plugin to showcase your products in a sleek and modern layout. Fully responsive and comes with a powerful feature set that is easy to customize.
+Create a flexible, responsive product catalog for showcasing products and helping visitors browse, filter and search. Ultimate Product Catalog works as a standalone catalog without WooCommerce, with optional features for WooCommerce integration, inquiries, product comparison and other advanced catalog workflows.
 
 👩‍💻 [Demo](https://www.etoilewebdesign.com/ultimate-product-catalogue-demo/) | 🌟 [Premium](https://www.etoilewebdesign.com/plugins/ultimate-product-catalog/) | ℹ️ [Support](https://www.etoilewebdesign.com/support-center/)
 
@@ -19,6 +21,7 @@ Comes with customizable **Gutenberg blocks** and **shortcodes**, so you can disp
 
 ### Key Features
 
+- Create a standalone product catalog without requiring WooCommerce.
 - 3 catalog layouts that can be dynamically viewed and switched by the user with no page reload.
 - Powerful product catalog filtering and sorting system, including for categories, sub-categories, price and product name. All handled in real time with asynchronous requests, so no page reloads. 
 - Dynamic product search that works with the filtering, so your customers can quickly find exactly what they're looking for in the catalog. 
@@ -71,9 +74,9 @@ The Ultimate Product Catalog is also a great solution for those who are running 
 
 The premium version offers full WooCommerce product integration, allowing you to sync all your products between the product catalog and your WooCommerce shop, and also allowing your customers to check out directly from the catalog.
 
-- WooCoommerce Sync: Ultimate Product Catalog products are exported to WooCommerce and WooCommerce products are imported into the catalog.
-- With WooCommerce Sync enabled, products edited in one plugin are also edited in the other.
-- WooCommerce Checkout: Allow people to add items in your product catalog directly to the WooCommerce shopping cart, and then check out and purchase the items.
+- WooCoommerce sync: Automatically connect products and product data between Ultimate Product Catalog and WooCommerce.
+- Connected product updates: Keep supported fields aligned for synchronized products. Products edited in one plugin are also edited in the other.
+- WooCommerce checkout: Allow people to add items in your product catalog directly to the WooCommerce shopping cart, and then check out and purchase the items.
 - Choose to display the number of items in the cart directly on all product catalog pages.
 - Choose to have the products in your catalog link directly to the WooCommerce product pages, for ultimate flexibility and customization.
 
@@ -170,6 +173,10 @@ Yes, you can use the [product-catalog] shortcode. For more info, see <a href="ht
 
 Yes, you can search for the Display Product Catalog block. Alternatively, you'll find it in its own block category/section called Ultimate Product Catalog. For more info, see <a href="https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/block-shortcodes/product-catalog-shortcode">here</a>.
 
+= Do I need WooCommerce to use Ultimate Product Catalog? =
+
+No. Ultimate Product Catalog works as a standalone product catalog. WooCommerce is optional. WooCommerce integration and checkout features are available with Premium.
+
 = Can I change the default layout of the catalog? =
 
 Yes, you can use the `starting_layout` shortcode attribute for this. For more info see <a href="https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/block-shortcodes/product-catalog-shortcode">here</a>. If you're using the block, there is a dropdown to select the starting layout. For more info, see <a href="https://doc.etoilewebdesign.com/plugins/ultimate-product-catalog/user/block-shortcodes/display-catalog-block">here</a>.
@@ -215,75 +222,17 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 
 == Changelog ==
 
-= 5.3.17 (2026-08-20) =
-- Compatibility with WordPress 7.1 and WooCommerce 11.0.
-
-= 5.3.16 (2026-07-29) =
-- Fixed a few PHP warnings.
-- Added a direct support option to the deactivation survey, making it easier to get help right away if you're uninstalling due to an issue.
-
-= 5.3.15 (2026-05-18) =
-- Updates to be compatible with WordPress 7.0.
-
-= 5.3.14 (2026-04-17) =
-- Update to fix issue with in-admin help features not displaying correctly in certain instances.
-
-= 5.3.13 (2026-04-15) =
-- In-admin help, support, documentation and AI assistant all available now via the AIT AI Admin Assistance plugin.
-
-= 5.3.12 (2026-02-24) =
-- Fix: Overview mode displaying sub-categories from all categories and not just the selected one.
-
-= 5.3.11 (2026-02-03) =
-- New: When importing, top-level categories and tags that don't already exist are now automatically created.
-- Change: All filtering options are now loaded even when visiting a specific category or tag via URL parameter.
-- Fix: Removed a notice from the save_quick_edit action.
-
-= 5.3.10 (2025-12-09) =
-- Fix: Default label not being applied to the Add to Cart button on the product page.
-- Fix: Collapsible sidebar not expanding in certain instances.
-
-= 5.3.9 (2025-12-02) =
-- Added the ability to close an open tab on the product page by clicking on it.
-- Tested with WordPress 6.9 and WooCommerce 10.3.
-
-= 5.3.8 (2025-10-15) =
-- Fix: Clear All button was not displaying, even if enabled.
-
-= 5.3.7 (2025-09-23) =
-- Fix for styling option that was not being applied on the front end.
-
-= 5.3.6 (2025-09-15) =
-- YouTube video URLs can now be included in the export and import.
-
-= 5.3.5 (2025-08-15) =
-- Fixed an issue in which the lightbox on the product page would not open if a product had no additional images or videos.
-
-= 5.3.4 (2025-08-11) =
-- Updated sanitization to correct issue that was preventing certain types of affiliate links from saving/working in the Product Link field.
-
-= 5.3.3 (2025-08-06) =
-- Fix for the dropdown custom field control type having incorrect counts beside each option once any filtering option was selected.
-
-= 5.3.2 (2025-07-21) =
-- Fix for an error sometimes occurring when using custom tabs. 
-- **IMPORTANT NOTE from 5.3.0: Significant updates have been made to the styling of several layouts. We highly recommend that you install the update on a staging environment first and confirm that these new default layouts fit seamlessly with any existing catalogs, especially if you have customized your layout templates and/or CSS.**
-
-= 5.3.1 (2025-07-18) =
-- **IMPORTANT NOTE from 5.3.0: Significant updates have been made to the styling of several layouts. We highly recommend that you install the update on a staging environment first and confirm that these new default layouts fit seamlessly with any existing catalogs, especially if you have customized your layout templates and/or CSS.**
-- Fixed issue with toggle switches not appearing correctly on product edit screen.
-
-= 5.3.0 (2025-07-17) =
-- **IMPORTANT NOTE: Significant updates have been made to the styling of several layouts. We highly recommend that you install the update on a staging environment first and confirm that these new default layouts fit seamlessly with any existing catalogs, especially if you have customized your layout templates and/or CSS.**
-- Refresh of the catalog page design, including the filtering area and the default layout. 
-- Refresh of the tabbed product page layout/design.
-- Redesign of the plugin admin.
-- Added: Ability to update the price of a product via the quick edit.
-- Added: Option to hide specific tabs from the tabbed layout.
-- Added: Ability to select a quantity when using the WooCommerce add to cart button on a product page.
-- Changed: Moved import and export features directly to the Products screen in the admin.
-- Changed: If a product has no additional images, no thumbnails will display on the product page (in the past, it would display a thumbnail of the main image). 
-- Fixed: Product schema was missing priceCurrency attribute.
-- Fixed: Several deprecated notices.
+= 5.4.0 (2026-09-23) =
+- **IMPORTANT NOTE: This is a major update with several big changes. We suggest testing this update in a staging environment before updating your live environment. Or wait a few days before updating in the event that an issue is identified that requires a fix/new update.**
+- Improved catalog filtering and discovery reliability across categories, sub-categories, search, sorting, pagination and AJAX updates, including clearer handling of failed catalog requests.
+- Improved the catalog browsing and filtering experience on mobile devices.
+- Improved WooCommerce integration safety and clarified supported synchronization behavior to reduce unintended changes to WooCommerce data.
+- Hardened permissions and security for administrative actions, product imports and role/capability handling.
+- Improved compatibility and regression protection for existing 5.x catalogs, shortcodes, blocks, templates, layouts, settings and Premium configurations.
 
 [See changelog for all versions](https://www.etoilewebdesign.com/changelogs/ultimate-product-catalogue.txt).
+
+== Upgrade Notice ==
+
+= 5.4.0 =
+This update includes substantial catalog reliability, security, Premium Helper and WooCommerce integration changes. If your site uses the Premium Helper, WooCommerce synchronization, template overrides or extensive custom CSS, we recommend testing the update on a staging site before updating your production site.

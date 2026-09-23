@@ -32,7 +32,7 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 		$this->set_variables();
 
 		$this->set_catalog_links();
-	} 
+	}
 
 	/**
 	 * Render the view and enqueue required stylesheets
@@ -43,20 +43,21 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 		$this->view = $view;
 
 		$this->classes = $this->get_classes();
-		
+
 		ob_start();
 
-		if ( $view == 'thumbnail' ) { $template = $this->find_template( 'catalog-product-thumbnail' ); }
-		elseif ( $view == 'list' ) { $template = $this->find_template( 'catalog-product-list' ); }
-		elseif ( $view == 'detail' ) { $template = $this->find_template( 'catalog-product-detail' ); }
-		elseif ( $view == 'minimal' ) { $template = $this->find_template( 'minimal-product' ); }
-		
-		if ( $template ) {
-			include( $template );
-		}
-		$output = ob_get_clean();
+		if ( $view == 'thumbnail' ) {
+			$template = $this->find_template( 'catalog-product-thumbnail' ); } elseif ( $view == 'list' ) {
+			$template = $this->find_template( 'catalog-product-list' ); } elseif ( $view == 'detail' ) {
+				$template = $this->find_template( 'catalog-product-detail' ); } elseif ( $view == 'minimal' ) {
+				$template = $this->find_template( 'minimal-product' ); }
 
-		return apply_filters( 'ewd_upcp_catalog_product_output_' . $view, $output, $this );
+				if ( $template ) {
+					include $template;
+				}
+				$output = ob_get_clean();
+
+				return apply_filters( 'ewd_upcp_catalog_product_output_' . $view, $output, $this );
 	}
 
 	/**
@@ -67,16 +68,19 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	public function maybe_print_cart_action_button( $location ) {
 		global $ewd_upcp_controller;
 
-		if ( $location == 'top' and ( $this->style != 'main-minimalist' and $this->style != 'contemporary' and $this->style != 'showcase' ) ) { return; }
+		if ( $location == 'top' and ( $this->style != 'main-minimalist' and $this->style != 'contemporary' and $this->style != 'showcase' ) ) {
+			return; }
 
-		if ( $location == 'bottom' and ( $this->style == 'main-minimalist' or $this->style == 'contemporary' or $this->style == 'showcase' ) ) { return; }
+		if ( $location == 'bottom' and ( $this->style == 'main-minimalist' or $this->style == 'contemporary' or $this->style == 'showcase' ) ) {
+			return; }
 
-		if ( ( empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ) or empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-sync' ) ) ) and empty( $ewd_upcp_controller->settings->get_setting( 'product-inquiry-cart' ) ) ) { return; }
-		
+		if ( ( empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ) or empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-sync' ) ) ) and empty( $ewd_upcp_controller->settings->get_setting( 'product-inquiry-cart' ) ) ) {
+			return; }
+
 		$template = $this->find_template( 'catalog-product-cart-action-button' );
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -88,12 +92,13 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	public function maybe_print_product_comparison_button() {
 		global $ewd_upcp_controller;
 
-		if ( empty( $ewd_upcp_controller->settings->get_setting( 'product-comparison' ) ) ) { return; }
-		
+		if ( empty( $ewd_upcp_controller->settings->get_setting( 'product-comparison' ) ) ) {
+			return; }
+
 		$template = $this->find_template( 'catalog-product-product-comparison-button' );
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -105,12 +110,15 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	public function maybe_print_sale_flag() {
 		global $ewd_upcp_controller;
 
-		if ( $this->product->current_price == $this->product->regular_price ) { return; }
-		
+		if ( ! $ewd_upcp_controller->settings->is_price_visible() ) {
+			return; }
+		if ( $this->product->current_price == $this->product->regular_price ) {
+			return; }
+
 		$template = $this->find_template( 'catalog-product-sale-flag' );
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -122,12 +130,15 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	public function maybe_print_sale_price() {
 		global $ewd_upcp_controller;
 
-		if ( $this->product->current_price == $this->product->regular_price ) { return; }
-		
+		if ( ! $ewd_upcp_controller->settings->is_price_visible() ) {
+			return; }
+		if ( $this->product->current_price == $this->product->regular_price ) {
+			return; }
+
 		$template = $this->find_template( 'catalog-product-sale-price' );
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -138,13 +149,14 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	 */
 	public function print_image() {
 		global $ewd_upcp_controller;
-		
-		if ( $ewd_upcp_controller->settings->get_setting( 'styling-catalog-skin' ) == 'main-hover' ) { $template = $this->find_template( 'catalog-product-image-hover' ); }
-		else { $template = $this->find_template( 'catalog-product-image' ); }
-		
-		if ( $template ) {
-			include( $template );
-		}
+
+		if ( $ewd_upcp_controller->settings->get_setting( 'styling-catalog-skin' ) == 'main-hover' ) {
+			$template = $this->find_template( 'catalog-product-image-hover' ); } else {
+			$template = $this->find_template( 'catalog-product-image' ); }
+
+			if ( $template ) {
+				include $template;
+			}
 	}
 
 	/**
@@ -155,12 +167,13 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	public function maybe_print_rating() {
 		global $ewd_upcp_controller;
 
-		if ( empty( $ewd_upcp_controller->settings->get_setting( 'catalog-display-reviews' ) ) ) { return; }
-		
+		if ( empty( $ewd_upcp_controller->settings->get_setting( 'catalog-display-reviews' ) ) ) {
+			return; }
+
 		$template = $this->find_template( 'catalog-product-rating' );
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -170,13 +183,13 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	 * @since 5.0.0
 	 */
 	public function print_title() {
-		
+
 		$template = $this->find_template( 'catalog-product-title' );
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
-	}	
+	}
 
 	/**
 	 * Print the product's content
@@ -184,11 +197,11 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	 * @since 5.0.0
 	 */
 	public function print_content() {
-		
+
 		$template = $this->find_template( 'catalog-product-content' );
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -198,11 +211,11 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	 * @since 5.0.0
 	 */
 	public function print_description_content() {
-		
+
 		$template = $this->find_template( 'catalog-product-decription-content' );
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -214,8 +227,9 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	public function maybe_print_categories() {
 		global $ewd_upcp_controller;
 
-		if ( empty( $ewd_upcp_controller->settings->get_setting( 'display-categories-in-product-thumbnail' ) ) or empty( $this->product->categories ) ) { return; }
-		
+		if ( empty( $ewd_upcp_controller->settings->get_setting( 'display-categories-in-product-thumbnail' ) ) or empty( $this->product->categories ) ) {
+			return; }
+
 		$this->print_categories();
 	}
 
@@ -225,11 +239,11 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	 * @since 5.0.0
 	 */
 	public function print_categories() {
-		
+
 		$template = $this->find_template( 'catalog-product-categories' );
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -241,8 +255,9 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	public function maybe_print_subcategories() {
 		global $ewd_upcp_controller;
 
-		if ( empty( $ewd_upcp_controller->settings->get_setting( 'display-categories-in-product-thumbnail' ) ) or empty( $this->product->subcategories ) ) { return; }
-		
+		if ( empty( $ewd_upcp_controller->settings->get_setting( 'display-categories-in-product-thumbnail' ) ) or empty( $this->product->subcategories ) ) {
+			return; }
+
 		$this->print_subcategories();
 	}
 
@@ -252,11 +267,11 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	 * @since 5.0.0
 	 */
 	public function print_subcategories() {
-		
+
 		$template = $this->find_template( 'catalog-product-subcategories' );
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -268,8 +283,9 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	public function maybe_print_tags() {
 		global $ewd_upcp_controller;
 
-		if ( empty( $ewd_upcp_controller->settings->get_setting( 'display-tags-in-product-thumbnail' ) ) or empty( $this->product->tags ) ) { return; }
-		
+		if ( empty( $ewd_upcp_controller->settings->get_setting( 'display-tags-in-product-thumbnail' ) ) or empty( $this->product->tags ) ) {
+			return; }
+
 		$this->print_tags();
 	}
 
@@ -279,11 +295,11 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	 * @since 5.0.0
 	 */
 	public function print_tags() {
-		
+
 		$template = $this->find_template( 'catalog-product-tags' );
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -299,9 +315,11 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 
 		foreach ( $custom_fields as $custom_field ) {
 
-			if ( ! in_array( $this->view, $custom_field->displays ) ) { continue; }
+			if ( ! in_array( $this->view, $custom_field->displays ) ) {
+				continue; }
 
-			if ( $ewd_upcp_controller->settings->get_setting( 'hide-blank-custom-fields' ) and empty( $this->product->custom_fields[ $custom_field->id ] ) )  { continue; }
+			if ( $ewd_upcp_controller->settings->get_setting( 'hide-blank-custom-fields' ) and empty( $this->product->custom_fields[ $custom_field->id ] ) ) {
+				continue; }
 
 			$this->print_custom_field( $custom_field );
 		}
@@ -314,13 +332,14 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	 */
 	public function maybe_print_hover_style() {
 		global $ewd_upcp_controller;
-		
-		if ( $ewd_upcp_controller->settings->get_setting( 'styling-catalog-skin' ) != 'main-hover' ) { return; } 
+
+		if ( $ewd_upcp_controller->settings->get_setting( 'styling-catalog-skin' ) != 'main-hover' ) {
+			return; }
 
 		$template = $this->find_template( 'catalog-product-hover' );
 
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -336,7 +355,7 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 		$template = $this->find_template( 'catalog-product-custom-field' );
 
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -346,11 +365,15 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	 * @since 5.0.0
 	 */
 	public function print_product_price() {
-		
+		global $ewd_upcp_controller;
+
+		if ( ! $ewd_upcp_controller->settings->is_price_visible() ) {
+			return; }
+
 		$template = $this->find_template( 'catalog-product-price' );
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 	}
 
@@ -359,33 +382,33 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	 *
 	 * @since 5.0.0
 	 */
-  	public function get_categories_label() {
-  		global $ewd_upcp_controller;
+	public function get_categories_label() {
+		global $ewd_upcp_controller;
 
-  		return $ewd_upcp_controller->settings->get_setting( 'label-categories' ) ? $ewd_upcp_controller->settings->get_setting( 'label-categories' ) : ( sizeOf( $this->product->categories ) == 1 ? __( 'Category:', 'ultimate-products' ) : __( 'Categories:', 'ultimate-products' ) );
-  	}
+		return $ewd_upcp_controller->settings->get_setting( 'label-categories' ) ? $ewd_upcp_controller->settings->get_setting( 'label-categories' ) : ( sizeOf( $this->product->categories ) == 1 ? __( 'Category:', 'ultimate-products' ) : __( 'Categories:', 'ultimate-products' ) );
+	}
 
-  	/**
+	/**
 	 * Returns the sub-category label, based on the label or number of category terms
 	 *
 	 * @since 5.0.0
 	 */
-  	public function get_subcategories_label() {
-  		global $ewd_upcp_controller;
+	public function get_subcategories_label() {
+		global $ewd_upcp_controller;
 
-  		return $ewd_upcp_controller->settings->get_setting( 'label-subcategories' ) ? $ewd_upcp_controller->settings->get_setting( 'label-subcategories' ) : ( sizeOf( $this->product->subcategories ) == 1 ? __( 'Sub-Category:', 'ultimate-products' ) : __( 'Sub-Categories:', 'ultimate-products' ) );
-  	}
+		return $ewd_upcp_controller->settings->get_setting( 'label-subcategories' ) ? $ewd_upcp_controller->settings->get_setting( 'label-subcategories' ) : ( sizeOf( $this->product->subcategories ) == 1 ? __( 'Sub-Category:', 'ultimate-products' ) : __( 'Sub-Categories:', 'ultimate-products' ) );
+	}
 
-  	/**
+	/**
 	 * Returns the tag label, based on the label or number of tag terms
 	 *
 	 * @since 5.0.0
 	 */
-  	public function get_tags_label() {
-  		global $ewd_upcp_controller;
+	public function get_tags_label() {
+		global $ewd_upcp_controller;
 
-  		return $ewd_upcp_controller->settings->get_setting( 'label-tags' ) ? $ewd_upcp_controller->settings->get_setting( 'label-tags' ) : ( sizeOf( $this->product->tags ) == 1 ? __( 'Tag:', 'ultimate-products' ) : __( 'Tags:', 'ultimate-products' ) );
-  	}
+		return $ewd_upcp_controller->settings->get_setting( 'label-tags' ) ? $ewd_upcp_controller->settings->get_setting( 'label-tags' ) : ( sizeOf( $this->product->tags ) == 1 ? __( 'Tag:', 'ultimate-products' ) : __( 'Tags:', 'ultimate-products' ) );
+	}
 
 	/**
 	 * Get the target for product details links
@@ -423,9 +446,9 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 		$template = $this->find_template( 'catalog-product-read-more' );
 
 		ob_start();
-		
+
 		if ( $template ) {
-			include( $template );
+			include $template;
 		}
 
 		$output = ob_get_clean();
@@ -444,7 +467,7 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 			$classes,
 			array(
 				'ewd-upcp-catalog-product-div',
-				'ewd-upcp-catalog-product-' . $this->view			
+				'ewd-upcp-catalog-product-' . $this->view,
 			)
 		);
 

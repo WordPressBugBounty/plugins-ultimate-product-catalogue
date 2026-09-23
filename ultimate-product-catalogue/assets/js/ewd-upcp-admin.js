@@ -874,3 +874,22 @@ jQuery( document ).ready( function( $ ) {
     jQuery.post( ajaxurl, data, function() {} );
   });
 });
+
+// Read-only progress polling. WP-Cron performs synchronization independently.
+jQuery( document ).ready( function( $ ) {
+	var $status = $( '.ewd-upcp-woocommerce-sync-status' );
+	if ( ! $status.length ) { return; }
+	function refreshStatus() {
+		$.post( ajaxurl, {
+			action: 'ewd_upcp_run_woocommerce_sync_batch',
+			nonce: ewd_upcp_php_admin_data.nonce
+		} ).done( function( response ) {
+			if ( response && response.success && response.data ) {
+				$status.text( response.data.message );
+			}
+		} ).always( function() {
+			window.setTimeout( refreshStatus, 10000 );
+		} );
+	}
+	refreshStatus();
+} );

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<ruleset name="UPCP new first-party code">
+	<description>WordPress Core standards for UPCP-MF-001 first-party changes. Only established class and file naming styles are excluded; inherited violations are removed by the changed-line baseline scanner.</description>
+
+	<arg name="extensions" value="php" />
+	<arg name="colors" />
+
+	<file>includes/HelperCompatibility.class.php</file>
+	<file>includes/SpreadsheetRuntime.class.php</file>
+	<file>includes/WooCommerce.class.php</file>
+	<file>ewd-upcp-templates/catalog-sidebar-price-filter.php</file>
+	<file>ewd-upcp-templates/catalog-sidebar-sort.php</file>
+	<file>ewd-upcp-templates/catalog-sidebar-toggle.php</file>
+	<file>ewd-upcp-templates/catalog-sidebar.php</file>
+	<file>ewd-upcp-templates/catalog.php</file>
+	<file>ewd-upcp-templates/minimal-product.php</file>
+	<file>includes/AdminProductPage.class.php</file>
+	<file>includes/Ajax.class.php</file>
+	<file>includes/CustomPostTypes.class.php</file>
+	<file>includes/Dashboard.class.php</file>
+	<file>includes/DeactivationSurvey.class.php</file>
+	<file>includes/Import.class.php</file>
+	<file>includes/InstallationWalkthrough.class.php</file>
+	<file>includes/Permissions.class.php</file>
+	<file>includes/Product.class.php</file>
+	<file>includes/SEO.class.php</file>
+	<file>includes/Settings.class.php</file>
+	<file>ultimate-product-catalogue.php</file>
+	<file>views/View.Catalog.class.php</file>
+	<file>views/View.CatalogProduct.class.php</file>
+	<file>views/View.SingleProduct.class.php</file>
+	<file>views/View.class.php</file>
+
+	<rule ref="WordPress-Core">
+		<exclude name="PEAR.NamingConventions.ValidClassName.StartWithCapital" />
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+	</rule>
+</ruleset>

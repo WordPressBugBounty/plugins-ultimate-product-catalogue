@@ -16,6 +16,4 @@
 
 	<?php } ?>
 
-	<?php $this->maybe_print_taxonomy_description(); ?>
-
 </div>

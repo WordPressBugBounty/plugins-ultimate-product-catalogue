@@ -172,6 +172,14 @@ font-size: 1.2em;
 .ewd-upcp-sidebar-toggle:hover {
 background: #555;
 }
+.ewd-upcp-sidebar-toggle:focus-visible {
+	outline: 3px solid currentColor;
+	outline-offset: 3px;
+}
+.ewd-upcp-catalog-update-status {
+	min-height: 1.5em;
+	margin-bottom: 8px;
+}
 .ewd-upcp-sidebar-toggle-downcaret:after {
 	font-size: .8em;
 	content: " ▼";
@@ -1972,7 +1980,7 @@ NEW PERCENTAGE-BASED CATALOG PAGE
 /*****************************************************
 PRICE AND CUSTOM FIELD SLIDER INPUTS AND REFINEMENTS
 *****************************************************/
-#ewd-upcp-price-range span,
+.ewd-upcp-price-range span,
 .ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs span {
 	position: relative;
 	float: left;
@@ -2001,7 +2009,7 @@ input[name="ewd-upcp-custom-field-slider-max"] {
 	height: 32px;
 	padding: 8px;
 }
-#ewd-upcp-price-range,
+.ewd-upcp-price-range,
 span.ewd-upcp-custom-field-range,
 .ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs {
 	clear: both;
@@ -2830,24 +2838,24 @@ SIDEBAR
 	margin-bottom: 3px;
 }
 
-#ewd-upcp-price-filter {
+.ewd-upcp-price-filter-slider {
 	width: calc(100% - 20px);
 	margin: 4px 0 0 10px;
 }
-#ewd-upcp-price-range,
+.ewd-upcp-price-range,
 .ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs {
 	margin: 12px 0 25px;
 }
-#ewd-upcp-price-range span,
+.ewd-upcp-price-range span,
 .ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs span {
 	width: calc(50% - 10px);
 }
-#ewd-upcp-price-range span.ewd-upcp-price-slider-divider,
+.ewd-upcp-price-range span.ewd-upcp-price-slider-divider,
 .ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs span.ewd-upcp-custom-field-slider-divider {
 	width: 20px;
 	text-align: center;
 }
-#ewd-upcp-price-range input,
+.ewd-upcp-price-range input,
 .ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs input {
 	margin-right: 4px;
 	width: calc(100% - 20px);
@@ -3627,7 +3635,7 @@ BLOCK PATTERNS
 	display: flex;
 	align-items: center;
 }
-#ewd-upcp-price-filter,
+.ewd-upcp-price-filter-slider,
 .ewd-upcp-catalog-sidebar-custom-field-slider {
 	border: none !important;
 	width: calc(100% - 20px);
@@ -3659,7 +3667,7 @@ BLOCK PATTERNS
 	background: #111;
 	border-radius: 100%;
 }
-#ewd-upcp-price-range, 
+.ewd-upcp-price-range,
 span.ewd-upcp-custom-field-range,
 .ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs {
 	display: flex;
@@ -3667,7 +3675,7 @@ span.ewd-upcp-custom-field-range,
 	float: none;
 	margin: 12px 0 0;
 }
-#ewd-upcp-price-range span, 
+.ewd-upcp-price-range span,
 .ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs span {
 	display: flex;
 	width: auto;
@@ -3675,7 +3683,7 @@ span.ewd-upcp-custom-field-range,
 	font-weight: normal;
 	color: #111;
 }
-#ewd-upcp-price-range input, 
+.ewd-upcp-price-range input,
 .ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs input[type="text"] {
 	display: block;
 	border: none;
@@ -3686,11 +3694,11 @@ span.ewd-upcp-custom-field-range,
 	font-weight: normal;
 	width: 100px;
 }
-#ewd-upcp-price-range span:last-of-type input, 
+.ewd-upcp-price-range span:last-of-type input,
 .ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs span:last-of-type input {
 	text-align: right;
 }
-#ewd-upcp-price-range span.ewd-upcp-price-slider-divider,
+.ewd-upcp-price-range span.ewd-upcp-price-slider-divider,
 .ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs span.ewd-upcp-custom-field-slider-divider {
 	width: 20px;
 	text-align: initial;

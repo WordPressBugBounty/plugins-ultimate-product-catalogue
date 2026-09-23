@@ -4,10 +4,10 @@
 		<?php echo esc_html( $this->get_label( 'label-price-filter' ) ); ?>
 	</span>
 
-	<div id='ewd-upcp-price-filter'></div>
+	<div class='ewd-upcp-price-filter-slider'></div>
 
-	<div id='ewd-upcp-price-range'>
-		
+	<div class='ewd-upcp-price-range'>
+
 		<span>
 			
 			<input type='text' value='<?php echo esc_attr( $this->sidebar_min_price ); ?>' name='ewd-upcp-price-slider-min' <?php echo ( $this->get_option( 'disable-slider-filter-text-inputs' ) ? 'disabled' : '' ); ?> data-min_price='<?php echo esc_attr( $this->sidebar_min_price ); ?>' />

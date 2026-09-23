@@ -99,7 +99,7 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	public function maybe_print_price() {
 		global $ewd_upcp_controller;
 
-		if ( ! empty( $ewd_upcp_controller->settings->get_setting( 'disable-product-page-price' ) ) ) { return; }
+		if ( ! $ewd_upcp_controller->settings->is_price_visible( 'single' ) ) { return; }
 		
 		$template = $this->find_template( 'single-product-price' );
 		
@@ -118,7 +118,7 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 
 		if ( $this->product->current_price == $this->product->regular_price ) { return; }
 
-		if ( ! empty( $ewd_upcp_controller->settings->get_setting( 'disable-product-page-price' ) ) ) { return; }
+		if ( ! $ewd_upcp_controller->settings->is_price_visible( 'single' ) ) { return; }
 		
 		$template = $this->find_template( 'catalog-product-sale-price' );
 		
@@ -853,11 +853,14 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 
 		$woocommerce_id = get_post_meta( $this->product->id, 'woocommerce_id', true );
 
-		if ( empty( $woocommerce_id ) ) { return 1; }
+		if ( empty( $woocommerce_id ) || ! function_exists( 'wc_get_product' ) ) { return 1; }
 
 		$product = wc_get_product( $woocommerce_id );
 
-		return min( $product->get_stock_quantity(), 10 );
+		if ( ! $product ) { return 1; }
+
+		$maximum = $product->get_max_purchase_quantity();
+		return $maximum < 0 ? 10 : max( 1, min( $maximum, 10 ) );
 	}
 
 	/**
@@ -874,13 +877,16 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	    	'name' 				=> $this->product->name,
 	    	'image' 			=> $this->product->get_main_image_url(),
 	    	'url'				=> $this->details_link,
-	    	'offers'			=> array(
-	    		'type'				=> 'Offer',
-	    		'price'				=> $this->product->current_price,
-	    		'priceCurrency'		=> apply_filters( 'ewd_upcp_currency', 'USD' ),
-	    		'url'				=> $this->details_link,
-	    	)
 	    );
+
+		if ( $ewd_upcp_controller->settings->is_price_visible( 'single' ) ) {
+			$schema_object['offers'] = array(
+				'@type'         => 'Offer',
+				'price'         => $this->product->current_price,
+				'priceCurrency' => apply_filters( 'ewd_upcp_currency', 'USD' ),
+				'url'           => $this->details_link,
+			);
+		}
 
 	    $ewd_upcp_controller->schema_product_data = $schema_object; 
 	}

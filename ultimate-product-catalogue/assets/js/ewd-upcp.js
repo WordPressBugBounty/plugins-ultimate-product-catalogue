@@ -7,8 +7,22 @@ jQuery(document).ready(function(){
 
 	ewd_upcp_tabbed_product_page_thumbnail_height();
 
-	jQuery('.ewd-upcp-sidebar-toggle').click(function(){
-		jQuery('.ewd-upcp-catalog-sidebar').toggleClass('ewd-upcp-catalog-sidebar-hidden');
+	jQuery('.ewd-upcp-sidebar-toggle').on( 'click', function(){
+		var $button = jQuery( this );
+		var $sidebar = jQuery( '#' + $button.attr( 'aria-controls' ) );
+		var expanded = $button.attr( 'aria-expanded' ) === 'true';
+
+		$sidebar.toggleClass( 'ewd-upcp-catalog-sidebar-hidden', expanded );
+		$button.attr( 'aria-expanded', expanded ? 'false' : 'true' );
+	});
+
+	jQuery( '.ewd-upcp-catalog-sidebar' ).on( 'keydown', function( event ) {
+		if ( event.key !== 'Escape' ) { return; }
+
+		var $sidebar = jQuery( this );
+		var $button = jQuery( '[aria-controls="' + $sidebar.attr( 'id' ) + '"]' );
+		$sidebar.addClass( 'ewd-upcp-catalog-sidebar-hidden' );
+		$button.attr( 'aria-expanded', 'false' ).trigger( 'focus' );
 	});
 
 	var thumbContainerWidth = 0,thumbContainerHeight = 0,thumbHolderWidth = 0,thumbImageWidth = 0,thumbImageHeight = 0,numberOfImages = 0;
@@ -298,9 +312,9 @@ jQuery( document ).ready( function() {
 	// Filtering triggers
 	jQuery( 'input[name="ewd-upcp-search"]' ).on( 'keyup', ewd_upcp_display_clear_all_reset_page_and_update_catalog );
 
-	jQuery( 'input[name="ewd-upcp-price-slider-min"], input[name="ewd-upcp-price-slider-max"]' ).on( 'keyup, change', ewd_upcp_display_clear_all_reset_page_and_update_catalog );
+	jQuery( 'input[name="ewd-upcp-price-slider-min"], input[name="ewd-upcp-price-slider-max"]' ).on( 'keyup change', ewd_upcp_display_clear_all_reset_page_and_update_catalog );
 
-	jQuery( 'input[name="ewd-upcp-custom-field-slider-min"], input[name="ewd-upcp-custom-field-slider-max"]' ).on( 'keyup, change', ewd_upcp_display_clear_all_reset_page_and_update_catalog );
+	jQuery( 'input[name="ewd-upcp-custom-field-slider-min"], input[name="ewd-upcp-custom-field-slider-max"]' ).on( 'keyup change', ewd_upcp_display_clear_all_reset_page_and_update_catalog );
 
 	jQuery( '.ewd-upcp-catalog-sidebar input[type="checkbox"], .ewd-upcp-catalog-sidebar input[type="radio"]' ).on( 'click', ewd_upcp_display_clear_all_reset_page_and_update_catalog );
 
@@ -308,10 +322,11 @@ jQuery( document ).ready( function() {
 
 	// View switching
 	jQuery( '.ewd-upcp-toggle-icon' ).on( 'click', function() { 
+		var $catalog = jQuery( this ).closest( '.ewd-upcp-catalog-div' );
 
-		jQuery( '.ewd-upcp-catalog-view' ).addClass( 'ewd-upcp-hidden' );
+		$catalog.find( '.ewd-upcp-catalog-view' ).addClass( 'ewd-upcp-hidden' );
 
-		jQuery( '.ewd-upcp-' + jQuery( this ).data( 'view' ) + '-view' ).removeClass( 'ewd-upcp-hidden' );
+		$catalog.find( '.ewd-upcp-' + jQuery( this ).data( 'view' ) + '-view' ).removeClass( 'ewd-upcp-hidden' );
 
 		ewd_upcp_thumbnail_height();
 
@@ -320,29 +335,30 @@ jQuery( document ).ready( function() {
 
 	// Pagination
 	jQuery( '.pagination-links a' ).on( 'click', function() {
+		var $catalog = jQuery( this ).closest( '.ewd-upcp-catalog-div' );
 
 		if ( jQuery( this ).hasClass( 'disabled' ) ) { return; }
 
-		if ( jQuery( this ).hasClass( 'first-page' ) ) { jQuery( 'input[name="catalog-current-page"]' ).val( 1 ); }
-		if ( jQuery( this ).hasClass( 'prev-page' ) ) { jQuery( 'input[name="catalog-current-page"]' ).val( Math.max( 1, jQuery( 'input[name="catalog-current-page"]' ).val() - 1 ) ); }
-		if ( jQuery( this ).hasClass( 'next-page' ) ) { jQuery( 'input[name="catalog-current-page"]' ).val( Math.min( jQuery( '.ewd-upcp-pagination' ).data( 'max_pages' ), +jQuery( 'input[name="catalog-current-page"]' ).val() + 1 ) ); }
-		if ( jQuery( this ).hasClass( 'last-page' ) ) { jQuery( 'input[name="catalog-current-page"]' ).val( jQuery( '.ewd-upcp-pagination' ).data( 'max_pages' ) ); }
+		if ( jQuery( this ).hasClass( 'first-page' ) ) { $catalog.find( 'input[name="catalog-current-page"]' ).val( 1 ); }
+		if ( jQuery( this ).hasClass( 'prev-page' ) ) { $catalog.find( 'input[name="catalog-current-page"]' ).val( Math.max( 1, $catalog.find( 'input[name="catalog-current-page"]' ).val() - 1 ) ); }
+		if ( jQuery( this ).hasClass( 'next-page' ) ) { $catalog.find( 'input[name="catalog-current-page"]' ).val( Math.min( $catalog.find( '.ewd-upcp-pagination' ).data( 'max_pages' ), +$catalog.find( 'input[name="catalog-current-page"]' ).val() + 1 ) ); }
+		if ( jQuery( this ).hasClass( 'last-page' ) ) { $catalog.find( 'input[name="catalog-current-page"]' ).val( $catalog.find( '.ewd-upcp-pagination' ).data( 'max_pages' ) ); }
 
-		jQuery( '.pagination-links a' ).removeClass( 'disabled' );
+		$catalog.find( '.pagination-links a' ).removeClass( 'disabled' );
 
-		if ( jQuery( 'input[name="catalog-current-page"]' ).val() == 1 ) {
+		if ( $catalog.find( 'input[name="catalog-current-page"]' ).val() == 1 ) {
 
-			jQuery( '.pagination-links a.first-page, .pagination-links a.prev-page' ).addClass( 'disabled' );
+			$catalog.find( '.pagination-links a.first-page, .pagination-links a.prev-page' ).addClass( 'disabled' );
 		}
 
-		if ( jQuery( 'input[name="catalog-current-page"]' ).val() == jQuery( '.ewd-upcp-pagination' ).data( 'max_pages' ) ) {
+		if ( $catalog.find( 'input[name="catalog-current-page"]' ).val() == $catalog.find( '.ewd-upcp-pagination' ).data( 'max_pages' ) ) {
 
-			jQuery( '.pagination-links a.next-page, .pagination-links a.last-page' ).addClass( 'disabled' );
+			$catalog.find( '.pagination-links a.next-page, .pagination-links a.last-page' ).addClass( 'disabled' );
 		}
 
-		jQuery( '.ewd-upcp-pagination .current-page' ).html( jQuery( 'input[name="catalog-current-page"]' ).val() );
+		$catalog.find( '.ewd-upcp-pagination .current-page' ).html( $catalog.find( 'input[name="catalog-current-page"]' ).val() );
 
-		ewd_upcp_update_catalog();
+		ewd_upcp_update_catalog( $catalog );
 	});
 
 	// Infinite scroll pagination
@@ -350,42 +366,41 @@ jQuery( document ).ready( function() {
 
 		if ( ! ewd_upcp_php_data.infinite_scroll ) { return; }
 
-		if ( infinite_scroll_loading ) { return; }
+		jQuery( '.ewd-upcp-catalog-div' ).each( function() {
+			var $catalog = jQuery( this );
+			var $display = $catalog.find( '.ewd-upcp-catalog-display' );
+			if ( $catalog.data( 'infinite-scroll-loading' ) || $catalog.data( 'filtering-running' ) ) { return; }
+			if ( $catalog.find( 'input[name="catalog-current-page"]' ).val() == $catalog.find( 'input[name="catalog-max-page"]' ).val() ) { return; }
+			if ( $display.position() == undefined ) { return; }
+			if ( ( $display.position().top + $display.outerHeight( true ) ) >= ( jQuery( window ).height() + jQuery( window ).scrollTop() ) ) { return; }
 
-		if ( filtering_running ) { return; }
-
-		if ( jQuery( 'input[name="catalog-current-page"]' ).val() == jQuery( 'input[name="catalog-max-page"]' ).val() ) { return; }
-
-		if ( jQuery( '.ewd-upcp-catalog-display' ).position() == undefined ) { return; }
-
-		if ( ( jQuery( '.ewd-upcp-catalog-display' ).position().top + jQuery( '.ewd-upcp-catalog-display' ).outerHeight( true ) ) >= ( jQuery( window ).height() + jQuery( window ).scrollTop() )  ) { return; }
-				
-		jQuery( 'input[name="catalog-current-page"]' ).val( Math.min( jQuery( 'input[name="catalog-max-page"]' ).val(), +jQuery( 'input[name="catalog-current-page"]' ).val() + 1 ) );
-					
-		infinite_scroll_loading = true;
-
-		ewd_upcp_update_catalog();
+			$catalog.find( 'input[name="catalog-current-page"]' ).val( Math.min( $catalog.find( 'input[name="catalog-max-page"]' ).val(), +$catalog.find( 'input[name="catalog-current-page"]' ).val() + 1 ) );
+			$catalog.data( 'infinite-scroll-loading', true );
+			infinite_scroll_loading = true;
+			ewd_upcp_update_catalog( $catalog, true );
+		} );
 	});
 
 	// Clear all button clicked
 	jQuery( '.ewd-upcp-catalog-sidebar-clear-all' ).on( 'click', function() {
+		var $catalog = jQuery( this ).closest( '.ewd-upcp-catalog-div' );
 		clearingFilters = true;
 
-		jQuery( 'input[name="ewd-upcp-search"], input[name="ewd-upcp-search-mobile"]' ).val( '' );
+		$catalog.find( 'input[name="ewd-upcp-search"], input[name="ewd-upcp-search-mobile"]' ).val( '' );
 
-		jQuery( '#ewd-upcp-price-range input[name="ewd-upcp-price-slider-min"]' ).val( jQuery( '#ewd-upcp-price-range input[name="ewd-upcp-price-slider-min"]' ).data( 'min_price' ) );
-		jQuery( '#ewd-upcp-price-range input[name="ewd-upcp-price-slider-max"]' ).val( jQuery( '#ewd-upcp-price-range input[name="ewd-upcp-price-slider-max"]' ).data( 'max_price' ) );
+		$catalog.find( '.ewd-upcp-price-range input[name="ewd-upcp-price-slider-min"]' ).val( $catalog.find( '.ewd-upcp-price-range input[name="ewd-upcp-price-slider-min"]' ).data( 'min_price' ) );
+		$catalog.find( '.ewd-upcp-price-range input[name="ewd-upcp-price-slider-max"]' ).val( $catalog.find( '.ewd-upcp-price-range input[name="ewd-upcp-price-slider-max"]' ).data( 'max_price' ) );
 
-		jQuery( '.ewd-upcp-catalog-sidebar-category input, .ewd-upcp-catalog-sidebar-subcategory input, .ewd-upcp-catalog-sidebar-tag input, .ewd-upcp-catalog-sidebar-custom-field input' ).prop( 'checked', false );
-		jQuery( '.ewd-upcp-catalog-sidebar-categories select, .ewd-upcp-catalog-sidebar-subcategories select, .ewd-upcp-catalog-sidebar-tags select, .ewd-upcp-catalog-sidebar-custom-field-div select' ).val( 'all' );
+		$catalog.find( '.ewd-upcp-catalog-sidebar-category input, .ewd-upcp-catalog-sidebar-subcategory input, .ewd-upcp-catalog-sidebar-tag input, .ewd-upcp-catalog-sidebar-custom-field input' ).prop( 'checked', false );
+		$catalog.find( '.ewd-upcp-catalog-sidebar-categories select, .ewd-upcp-catalog-sidebar-subcategories select, .ewd-upcp-catalog-sidebar-tags select, .ewd-upcp-catalog-sidebar-custom-field-div select' ).val( 'all' );
 
 		ewd_upcp_setup_sliders();
 
 		clearingFilters = false;
 
-		jQuery( '.ewd-upcp-catalog-sidebar-clear-all' ).addClass( 'ewd-upcp-hidden' );
+		$catalog.find( '.ewd-upcp-catalog-sidebar-clear-all' ).addClass( 'ewd-upcp-hidden' );
 
-		ewd_upcp_reset_page_and_update_catalog();
+		ewd_upcp_reset_page_and_update_catalog( $catalog );
 	} );
 
 	// Collapsible sidebar content 
@@ -548,11 +563,16 @@ function ewd_upcp_set_click_handlers() {
 
 	jQuery( '.ewd-upcp-product-action-button' ).off( 'click' ).on( 'click', function() {
 
-		jQuery( '.ewd-upcp-catalog-cart' ).removeClass( 'ewd-upcp-hidden' );
-
-		jQuery( '.ewd-upcp-cart-item-count' ).html( +jQuery( '.ewd-upcp-cart-item-count' ).html() + 1 );
-
-		var quantity = jQuery( '.ewd-upcp-product-action-quantity select' ).length ? jQuery( '.ewd-upcp-product-action-quantity select' ).val() : 1;
+		var button = jQuery( this );
+		if ( button.data( 'cart-pending' ) ) { return; }
+		var selector = button.closest( '.ewd-upcp-single-product-action-button-container' ).find( '.ewd-upcp-product-action-quantity select' );
+		var quantity = selector.length ? selector.val() : 1;
+		var status = button.next( '.ewd-upcp-cart-status' );
+		if ( ! status.length ) {
+			status = jQuery( '<span class="ewd-upcp-cart-status" role="status"></span>' ).insertAfter( button );
+		}
+		status.text( '' );
+		button.data( 'cart-pending', true ).attr( 'aria-busy', 'true' );
 
 		var params = {
 			nonce: ewd_upcp_js.nonce,
@@ -562,7 +582,21 @@ function ewd_upcp_set_click_handlers() {
 		};
 
 		var data = jQuery.param( params );
-    	jQuery.post( ajaxurl, data, function( response ) {} );
+		jQuery.post( ajaxurl, data, null, 'json' ).done( function( response ) {
+			if ( ! response || ! response.success ) {
+				status.text( response && response.data && response.data.message ? response.data.message : ewd_upcp_js.cart_error );
+				return;
+			}
+			jQuery( '.ewd-upcp-catalog-cart' ).removeClass( 'ewd-upcp-hidden' );
+			jQuery( '.ewd-upcp-cart-item-count' ).each( function() {
+				jQuery( this ).text( ( parseInt( jQuery( this ).text(), 10 ) || 0 ) + 1 );
+			} );
+			status.text( ewd_upcp_js.cart_added );
+		} ).fail( function() {
+			status.text( ewd_upcp_js.cart_error );
+		} ).always( function() {
+			button.removeData( 'cart-pending' ).removeAttr( 'aria-busy' );
+		} );
 	});
 
 	jQuery( '.ewd-upcp-clear-cart' ).off( 'click' ).on( 'click', function() {
@@ -596,92 +630,57 @@ function ewd_upcp_adjust_thumbnail_heights() {
 }
 
 function ewd_upcp_setup_sliders() {
+	jQuery( '.ewd-upcp-catalog-div' ).each( function() {
+		var $catalog = jQuery( this );
+		var $priceSlider = $catalog.find( '.ewd-upcp-price-filter-slider' );
+		var $priceMin = $catalog.find( 'input[name="ewd-upcp-price-slider-min"]' );
+		var $priceMax = $catalog.find( 'input[name="ewd-upcp-price-slider-max"]' );
 
-	var min_price = jQuery( 'input[name="ewd-upcp-price-slider-min"]' ).length ? Math.floor( jQuery( 'input[name="ewd-upcp-price-slider-min"]' ).val() ) : 0;
-	var max_price = jQuery( 'input[name="ewd-upcp-price-slider-max"]' ).length ? Math.ceil( jQuery( 'input[name="ewd-upcp-price-slider-max"]' ).val() ) : 10000000;
-
-	jQuery( '#ewd-upcp-price-filter' ).slider( {
-
-		range: true,
-
-		min: min_price,
-		max: max_price,
-
-		values: [ min_price, max_price ],
-
-		change: function( event, ui ) {
-			let minHandleIdx = 0;
-			let maxHandleIdx = 1;
-
-			let $min = jQuery( 'input[name="ewd-upcp-price-slider-min"]' );
-			let $max = jQuery( 'input[name="ewd-upcp-price-slider-max"]' );
-
-			if( minHandleIdx == ui.handleIndex && $min.val() != ui.values[ minHandleIdx ] ) {
-				$min.val( ui.value ).trigger('change');
-			}
-
-			if( maxHandleIdx == ui.handleIndex && $max.val() != ui.values[ maxHandleIdx ] ) {
-				$max.val( ui.value ).trigger('change');
-			}
+		if ( $priceSlider.length ) {
+			var minPrice = $priceMin.length ? Math.floor( $priceMin.val() ) : 0;
+			var maxPrice = $priceMax.length ? Math.ceil( $priceMax.val() ) : 10000000;
+			$priceSlider.slider( {
+				range: true,
+				min: minPrice,
+				max: maxPrice,
+				values: [ minPrice, maxPrice ],
+				change: function( event, ui ) {
+					var $target = 0 === ui.handleIndex ? $priceMin : $priceMax;
+					if ( $target.val() != ui.value ) {
+						$target.val( ui.value ).trigger( 'change' );
+					}
+				}
+			} );
+			$priceMin.on( 'keyup', function() { $priceSlider.slider( 'values', 0, jQuery( this ).val() ); } );
+			$priceMax.on( 'keyup', function() { $priceSlider.slider( 'values', 1, jQuery( this ).val() ); } );
 		}
+
+		$catalog.find( '.ewd-upcp-catalog-sidebar-custom-field-slider' ).each( function() {
+			var $slider = jQuery( this );
+			var customFieldId = $slider.data( 'custom_field_id' );
+			var selectorMin = 'input[name="ewd-upcp-custom-field-slider-min"][data-custom_field_id="' + customFieldId + '"]';
+			var selectorMax = 'input[name="ewd-upcp-custom-field-slider-max"][data-custom_field_id="' + customFieldId + '"]';
+			var $min = $catalog.find( selectorMin );
+			var $max = $catalog.find( selectorMax );
+			var minValue = Math.floor( $min.data( 'custom_field_minimum' ) );
+			var maxValue = Math.ceil( $max.data( 'custom_field_maximum' ) );
+
+			$slider.slider( {
+				range: true,
+				min: minValue,
+				max: maxValue,
+				values: [ minValue, maxValue ],
+				change: function( event, ui ) {
+					var $target = 0 === ui.handleIndex ? $min : $max;
+					if ( $target.val() != ui.value ) {
+						$target.val( ui.value ).trigger( 'change' );
+					}
+				}
+			} );
+			$min.on( 'keyup', function() { $slider.slider( 'values', 0, jQuery( this ).val() ); } );
+			$max.on( 'keyup', function() { $slider.slider( 'values', 1, jQuery( this ).val() ); } );
+		} );
 	} );
-
-    jQuery( 'input[name="ewd-upcp-price-slider-min"]' ).on( 'keyup', function() {
-
-    	jQuery( '#ewd-upcp-price-filter' ).slider( 'values', 0, jQuery(this).val() );
-    });
-
-    jQuery( 'input[name="ewd-upcp-price-slider-max"]' ).on( 'keyup', function() {
-
-    	jQuery( '#ewd-upcp-price-filter' ).slider( 'values', 1, jQuery(this).val() );
-    });
-
-    jQuery( '.ewd-upcp-catalog-sidebar-custom-field-slider' ).each( function() {
-    	var custom_field_id = jQuery( this ).data( 'custom_field_id' );
-
-    	var min_value = Math.floor( jQuery( 'input[name="ewd-upcp-custom-field-slider-min"][data-custom_field_id="' + custom_field_id + '"]' ).data( 'custom_field_minimum' ) );
-    	var max_value = Math.ceil( jQuery( 'input[name="ewd-upcp-custom-field-slider-max"][data-custom_field_id="' + custom_field_id + '"]' ).data( 'custom_field_maximum' ) );
-
-    	jQuery( '.ewd-upcp-catalog-sidebar-custom-field-slider[data-custom_field_id="' + custom_field_id + '"]' ).slider( {
-
-    		range: true,
-
-    		min: min_value,
-    		max: max_value,
-
-    		values: [ min_value, max_value ],
-
-			change: function( event, ui ) {
-				let minHandleIdx = 0;
-				let maxHandleIdx = 1;
-
-				let $min = jQuery( 'input[name="ewd-upcp-custom-field-slider-min"][data-custom_field_id="' + custom_field_id + '"]' );
-				let $max = jQuery( 'input[name="ewd-upcp-custom-field-slider-max"][data-custom_field_id="' + custom_field_id + '"]' );
-
-				if( minHandleIdx == ui.handleIndex && $min.val() != ui.value ) {
-					$min.val( ui.value ).trigger('change');
-				}
-
-				if( maxHandleIdx == ui.handleIndex && $max.val() != ui.value ) {
-					$max.val( ui.value ).trigger('change');
-				}
-			}
-    	});
-    });
-
-    jQuery( 'input[name="ewd-upcp-custom-field-slider-min"]' ).on( 'keyup', function() {
-
-    	var custom_field_id = jQuery( this ).data( 'custom_field_id' );
-
-    	jQuery( 'input[name="ewd-upcp-custom-field-slider-min"][data-custom_field_id="' + custom_field_id + '"]' ).slider( 'values', 0, jQuery( this ).val() );
-    });
-
-    jQuery( 'input[name="ewd-upcp-custom-field-slider-max"]' ).on( 'keyup', function() {
-
-    	var custom_field_id = jQuery( this ).data( 'custom_field_id' );
-
-    	jQuery( 'input[name="ewd-upcp-custom-field-slider-max"][data-custom_field_id="' + custom_field_id + '"]' ).slider( 'values', 1, jQuery( this ).val() );
-    });
 }
 
 function ewd_upcp_setup_custom_product_page() {
@@ -719,127 +718,153 @@ function ewd_upcp_setup_custom_product_page() {
 	jQuery( '.ewd-upcp-custom-product-page' ).removeClass( 'ewd-upcp-hidden' );
 }
 
-function ewd_upcp_display_clear_all_reset_page_and_update_catalog() {
+function ewd_upcp_get_catalog_root( source ) {
+	var $source = source && source.jquery ? source : jQuery( source || [] );
+	var $catalog = $source.hasClass( 'ewd-upcp-catalog-div' ) ? $source : $source.closest( '.ewd-upcp-catalog-div' );
 
-	jQuery( '.ewd-upcp-catalog-sidebar-clear-all' ).removeClass( 'ewd-upcp-hidden' );
-
-	ewd_upcp_reset_page_and_update_catalog();
+	return $catalog.length ? $catalog.first() : jQuery( '.ewd-upcp-catalog-div' ).first();
 }
 
-function ewd_upcp_reset_page_and_update_catalog() {
+function ewd_upcp_display_clear_all_reset_page_and_update_catalog( event ) {
+	var $catalog = ewd_upcp_get_catalog_root( event && event.currentTarget ? event.currentTarget : event );
+
+	$catalog.find( '.ewd-upcp-catalog-sidebar-clear-all' ).removeClass( 'ewd-upcp-hidden' );
+
+	ewd_upcp_reset_page_and_update_catalog( $catalog );
+}
+
+function ewd_upcp_reset_page_and_update_catalog( catalog ) {
+	var $catalog = ewd_upcp_get_catalog_root( catalog );
 
 	// Do not trigger AJAX while we are reseting filters
 	if( clearingFilters ) {
 		return;
 	}
 
-	jQuery( 'input[name="catalog-current-page"]' ).val( 1 );
+	$catalog.find( 'input[name="catalog-current-page"]' ).val( 1 );
+	$catalog.data( 'infinite-scroll-loading', false );
 
-	jQuery( '.ewd-upcp-pagination .current-page' ).html( '1' );
+	$catalog.find( '.ewd-upcp-pagination .current-page' ).html( '1' );
 
-	jQuery( '.pagination-links a.first-page, .pagination-links a.prev-page' ).addClass( 'disabled' );
+	$catalog.find( '.pagination-links a.first-page, .pagination-links a.prev-page' ).addClass( 'disabled' );
 
-	jQuery( '.pagination-links a.next-page, .pagination-links a.last-page' ).removeClass( 'disabled' );
+	$catalog.find( '.pagination-links a.next-page, .pagination-links a.last-page' ).removeClass( 'disabled' );
 
-	ewd_upcp_update_catalog();
+	ewd_upcp_update_catalog( $catalog );
 }
 
-var request_count = 0;
-function ewd_upcp_update_catalog() {
+function ewd_upcp_update_catalog( catalog, appendResults ) {
+	var $catalog = ewd_upcp_get_catalog_root( catalog );
+	var requestCount = ( $catalog.data( 'request-count' ) || 0 ) + 1;
+	var previousRequest = $catalog.data( 'catalog-request' );
+	var infiniteLoading = true === appendResults;
+	var $status = $catalog.find( '.ewd-upcp-catalog-update-status' );
 
-	request_count = request_count + 1;
+	if ( previousRequest && previousRequest.readyState !== 4 ) {
+		previousRequest.abort();
+	}
 
+	$catalog.data( 'request-count', requestCount );
+	$catalog.data( 'infinite-scroll-loading', infiniteLoading );
+	$catalog.data( 'filtering-running', true );
+	$catalog.attr( 'aria-busy', 'true' );
+	$status.text( ewd_upcp_php_data.updating_results_label );
 	filtering_running = true;
 
-	if ( infinite_scroll_loading ) {
+	var data = ewd_upcp_get_request_string_and_set_history( $catalog, requestCount );
+	var request = jQuery.post( ajaxurl, data );
+	$catalog.data( 'catalog-request', request );
 
-		jQuery( '.ewd-upcp-thumbnail-view, .ewd-upcp-list-view, .ewd-upcp-detail-view' ).append( '<h3 class="ewd-upcp-inifinite-scroll-updating">' + ewd_upcp_php_data.updating_results_label + '</h3>' );
-	}
-	else {
-
-		jQuery( '.ewd-upcp-thumbnail-view, .ewd-upcp-list-view, .ewd-upcp-detail-view' ).html( '<h3>' + ewd_upcp_php_data.updating_results_label + '</h3>' );
-	}
-
-	var data = ewd_upcp_get_request_string_and_set_history();
-	
-	jQuery.post( ajaxurl, data, function( response ) {
-		
-		if ( response.data.request_count != request_count ) { return; } 
-
-		if ( infinite_scroll_loading ) {
-				
-			jQuery( '.ewd-upcp-inifinite-scroll-updating' ).remove();
-
-			//If results exist, don't add the 'No Results Found' text
-			var no_result_text = jQuery( '.ewd-upcp-catalog-product-div' ).length ? '' : ewd_upcp_php_data.no_results_found_label;
-
-			jQuery( '.ewd-upcp-thumbnail-view' ).append( response.data.thumbnail_view ? response.data.thumbnail_view : no_result_text );
-			jQuery( '.ewd-upcp-list-view' ).append( response.data.list_view ? response.data.list_view : no_result_text );
-			jQuery( '.ewd-upcp-detail-view' ).append( response.data.detail_view ? response.data.detail_view : no_result_text );
+	request.done( function( response ) {
+		if ( $catalog.data( 'request-count' ) !== requestCount || $catalog.data( 'catalog-request' ) !== request ) {
+			return;
 		}
-		else {
-				
-			jQuery( '.ewd-upcp-thumbnail-view' ).html( response.data.thumbnail_view ? response.data.thumbnail_view : ewd_upcp_php_data.no_results_found_label );
-			jQuery( '.ewd-upcp-list-view' ).html( response.data.list_view ? response.data.list_view : ewd_upcp_php_data.no_results_found_label );
-			jQuery( '.ewd-upcp-detail-view' ).html( response.data.detail_view ? response.data.detail_view : ewd_upcp_php_data.no_results_found_label );
+		if ( ! response || ! response.success || ! response.data || response.data.request_count != requestCount ) {
+			$status.text( ewd_upcp_php_data.update_error_label );
+			return;
 		}
 
-		ewd_upcp_adjust_sidebar_counts( response.data.filters );
+		if ( infiniteLoading ) {
+			var noResultText = $catalog.find( '.ewd-upcp-catalog-product-div' ).length ? '' : ewd_upcp_php_data.no_results_found_label;
+			$catalog.find( '.ewd-upcp-thumbnail-view' ).append( response.data.thumbnail_view ? response.data.thumbnail_view : noResultText );
+			$catalog.find( '.ewd-upcp-list-view' ).append( response.data.list_view ? response.data.list_view : noResultText );
+			$catalog.find( '.ewd-upcp-detail-view' ).append( response.data.detail_view ? response.data.detail_view : noResultText );
+		} else {
+			$catalog.find( '.ewd-upcp-thumbnail-view' ).html( response.data.thumbnail_view ? response.data.thumbnail_view : ewd_upcp_php_data.no_results_found_label );
+			$catalog.find( '.ewd-upcp-list-view' ).html( response.data.list_view ? response.data.list_view : ewd_upcp_php_data.no_results_found_label );
+			$catalog.find( '.ewd-upcp-detail-view' ).html( response.data.detail_view ? response.data.detail_view : ewd_upcp_php_data.no_results_found_label );
+		}
 
+		ewd_upcp_adjust_sidebar_counts( response.data.filters, $catalog );
 		ewd_upcp_set_click_handlers();
-			
 		ewd_upcp_thumbnail_height();
-
 		ewd_upcp_adjust_thumbnail_heights();
+		$status.empty();
+	} );
 
+	request.fail( function( xhr, textStatus ) {
+		if ( $catalog.data( 'request-count' ) !== requestCount || $catalog.data( 'catalog-request' ) !== request ) {
+			return;
+		}
+		if ( 'abort' !== textStatus ) {
+			$status.text( ewd_upcp_php_data.update_error_label );
+		}
+	} );
+
+	request.always( function() {
+		if ( $catalog.data( 'catalog-request' ) !== request ) { return; }
+
+		$catalog.data( 'filtering-running', false );
+		$catalog.data( 'infinite-scroll-loading', false );
+		$catalog.attr( 'aria-busy', 'false' );
 		filtering_running = false;
-		
 		infinite_scroll_loading = false;
-	});
+	} );
 }
 
-function ewd_upcp_get_request_string_and_set_history() {
+function ewd_upcp_get_request_string_and_set_history( catalog, requestCount ) {
+	var $catalog = ewd_upcp_get_catalog_root( catalog );
 
 	var categories = [];
 	var subcategories = [];
 	var tags = [];
 	var custom_fields = [];
 
-	var id = jQuery( 'input[name="catalog-id"]' ).val();
-	var excluded_views = jQuery('input[name="catalog-excluded-views"]').val();
-	var current_page = jQuery( 'input[name="catalog-current-page"]' ).val();	
-	var orderby = jQuery( 'input[name="catalog-order-by"]' ).val();
-	var order = jQuery( 'input[name="catalog-order"]' ).val();
-	var products_per_page = jQuery( 'input[name="catalog-product-per-page"]' ).val();
-	var ajax_url = jQuery( 'input[name="catalog-base-url"]' ).val();
+	var id = $catalog.find( 'input[name="catalog-id"]' ).val();
+	var excluded_views = $catalog.find( 'input[name="catalog-excluded-views"]' ).val();
+	var current_page = $catalog.find( 'input[name="catalog-current-page"]' ).val();
+	var orderby = $catalog.find( 'input[name="catalog-order-by"]' ).val();
+	var order = $catalog.find( 'input[name="catalog-order"]' ).val();
+	var products_per_page = $catalog.find( 'input[name="catalog-product-per-page"]' ).val();
+	var ajax_url = $catalog.find( 'input[name="catalog-base-url"]' ).val();
 
-	var default_search_text = jQuery( 'input[name="catalog-default-search-text"]' ).val();
+	var default_search_text = $catalog.find( 'input[name="catalog-default-search-text"]' ).val();
 
-	var orderby_select_value = jQuery( 'select[name="ewd-upcp-sort-by"]' ).val();
+	var orderby_select_value = $catalog.find( 'select[name="ewd-upcp-sort-by"]' ).val();
 
 	orderby = orderby_select_value ? orderby_select_value.substring( 0, orderby_select_value.indexOf( '_' ) ) : orderby;
 	order = orderby_select_value ? orderby_select_value.substring( orderby_select_value.indexOf( '_' ) + 1 ) : order;
-	
-	var min_price = jQuery( '#ewd-upcp-price-range input[name="ewd-upcp-price-slider-min"]' ).val();
-	var max_price = jQuery( '#ewd-upcp-price-range input[name="ewd-upcp-price-slider-max"]' ).val();
+
+	var min_price = $catalog.find( '.ewd-upcp-price-range input[name="ewd-upcp-price-slider-min"]' ).val();
+	var max_price = $catalog.find( '.ewd-upcp-price-range input[name="ewd-upcp-price-slider-max"]' ).val();
 
 	min_price = min_price != undefined ? min_price : 0;
 	max_price = max_price != undefined ? max_price : 1000000;
 
-	jQuery( '.ewd-upcp-catalog-sidebar-category input:checked' ).each( function() { categories.push( jQuery( this ).val() ); } );
-	jQuery( '.ewd-upcp-catalog-sidebar-categories select' ).each( function() { if ( jQuery( this ).val() != "all" ) { categories.push( jQuery( this ).val() ); } } );
+	$catalog.find( '.ewd-upcp-catalog-sidebar-category input:checked' ).each( function() { categories.push( jQuery( this ).val() ); } );
+	$catalog.find( '.ewd-upcp-catalog-sidebar-categories select' ).each( function() { if ( jQuery( this ).val() != "all" ) { categories.push( jQuery( this ).val() ); } } );
 
-	jQuery( '.ewd-upcp-catalog-sidebar-subcategory input:checked' ).each(function() { subcategories.push( jQuery( this ).val() ); } );
-	jQuery( '.ewd-upcp-catalog-sidebar-subcategories select' ).each( function() { if ( jQuery( this ).val() != "all" ) { subcategories.push( jQuery( this ).val() ); } } );
+	$catalog.find( '.ewd-upcp-catalog-sidebar-subcategory input:checked' ).each(function() { subcategories.push( jQuery( this ).val() ); } );
+	$catalog.find( '.ewd-upcp-catalog-sidebar-subcategories select' ).each( function() { if ( jQuery( this ).val() != "all" ) { subcategories.push( jQuery( this ).val() ); } } );
 
-	jQuery( '.ewd-upcp-catalog-sidebar-tag input:checked' ).each( function() { tags.push( jQuery( this ).val() ); } );
-	jQuery( '.ewd-upcp-catalog-sidebar-tags select' ).each( function() { if ( jQuery( this ).val() != "all" ) { tags.push( jQuery( this ).val() ); } } );
+	$catalog.find( '.ewd-upcp-catalog-sidebar-tag input:checked' ).each( function() { tags.push( jQuery( this ).val() ); } );
+	$catalog.find( '.ewd-upcp-catalog-sidebar-tags select' ).each( function() { if ( jQuery( this ).val() != "all" ) { tags.push( jQuery( this ).val() ); } } );
 
-	jQuery( '.ewd-upcp-catalog-sidebar-custom-field input:checked' ).each( function() { 
+	$catalog.find( '.ewd-upcp-catalog-sidebar-custom-field input:checked' ).each( function() {
 
 		custom_fields.push( jQuery( this ).prop( 'name' ) + '=' + jQuery( this ).val() ); 
 	} );
-	jQuery( '.ewd-upcp-catalog-sidebar-custom-field-div select' ).each( function() {
+	$catalog.find( '.ewd-upcp-catalog-sidebar-custom-field-div select' ).each( function() {
 
 		if ( jQuery( this ).val() != "all" ) {
 
@@ -847,23 +872,23 @@ function ewd_upcp_get_request_string_and_set_history() {
 		} 
 	} );
 
-	jQuery( '.ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs' ).each( function() {
+	$catalog.find( '.ewd-upcp-catalog-sidebar-custom-field-slider-text-inputs' ).each( function() {
 
 		var custom_field_id = jQuery( this ).find('input').eq(0).data( 'custom_field_id' );
 	
 		var selector_min = 'input[name="ewd-upcp-custom-field-slider-min"][data-custom_field_id="' + custom_field_id + '"]';
 		var selector_max = 'input[name="ewd-upcp-custom-field-slider-max"][data-custom_field_id="' + custom_field_id + '"]';
 
-		var selected_min = jQuery( selector_min ).val();
-		var selected_max = jQuery( selector_max ).val();
+		var selected_min = $catalog.find( selector_min ).val();
+		var selected_max = $catalog.find( selector_max ).val();
 
-		if ( selected_min != jQuery( selector_min ).data( 'custom_field_minimum' ) || selected_max != jQuery( selector_max ).data( 'custom_field_maximum' ) ) {
+		if ( selected_min != $catalog.find( selector_min ).data( 'custom_field_minimum' ) || selected_max != $catalog.find( selector_max ).data( 'custom_field_maximum' ) ) {
 			custom_fields.push( custom_field_id + "=" + selected_min );
 			custom_fields.push( custom_field_id + "=" + selected_max );
 		}
 	});
 
-	var product_name = jQuery('.prod-cat-sidebar').css('display') != "none" ? jQuery( 'input[name="ewd-upcp-search"]' ).val() : jQuery( 'input[name="ewd-upcp-search-mobile"]' ).val();
+	var product_name = $catalog.find('.prod-cat-sidebar').css('display') != "none" ? $catalog.find( 'input[name="ewd-upcp-search"]' ).val() : $catalog.find( 'input[name="ewd-upcp-search-mobile"]' ).val();
 
 	if ( product_name == undefined || product_name == default_search_text ) { product_name = ''; }
 
@@ -875,19 +900,19 @@ function ewd_upcp_get_request_string_and_set_history() {
 	}
 	else { 
 
-		url.searchParams.delete('prod_name'); 
+		url.searchParams.delete('prod_name');
 	}
 
-	if ( ! ewd_upcp_php_data.price_filtering_disabled && min_price != jQuery( '#ewd-upcp-price-range input[name="ewd-upcp-price-slider-min"]' ).data( 'min_price' ) ) {
+	if ( ! ewd_upcp_php_data.price_filtering_disabled && min_price != $catalog.find( '.ewd-upcp-price-range input[name="ewd-upcp-price-slider-min"]' ).data( 'min_price' ) ) {
 
 		url.searchParams.set( 'min_price', min_price );
 	}
 	else { 
 
-		url.searchParams.delete('min_price'); 
+		url.searchParams.delete('min_price');
 	}
 
-	if ( ! ewd_upcp_php_data.price_filtering_disabled && max_price != jQuery( '#ewd-upcp-price-range input[name="ewd-upcp-price-slider-max"]' ).data( 'max_price' ) ) {
+	if ( ! ewd_upcp_php_data.price_filtering_disabled && max_price != $catalog.find( '.ewd-upcp-price-range input[name="ewd-upcp-price-slider-max"]' ).data( 'max_price' ) ) {
 
 		url.searchParams.set( 'max_price', max_price );
 	}
@@ -929,7 +954,21 @@ function ewd_upcp_get_request_string_and_set_history() {
 	}
 	else { 
 
-		url.searchParams.delete('custom_fields'); 
+		url.searchParams.delete('custom_fields');
+	}
+
+	if ( parseInt( current_page, 10 ) > 1 ) {
+		url.searchParams.set( 'current_page', parseInt( current_page, 10 ) );
+	} else {
+		url.searchParams.delete( 'current_page' );
+	}
+
+	if ( orderby ) {
+		url.searchParams.set( 'orderby', orderby );
+		url.searchParams.set( 'order', order );
+	} else {
+		url.searchParams.delete( 'orderby' );
+		url.searchParams.delete( 'order' );
 	}
 
 	window.history.replaceState( null, null, url );
@@ -951,7 +990,7 @@ function ewd_upcp_get_request_string_and_set_history() {
 		subcategory: subcategories.join( ',' ),
 		tags: tags.join( ',' ),
 		custom_fields: custom_fields.join( ',' ),
-		request_count: request_count,
+		request_count: requestCount,
 		action: 'ewd_upcp_update_catalog'
 	};
 
@@ -960,26 +999,27 @@ function ewd_upcp_get_request_string_and_set_history() {
 	return data;
 }
 
-function ewd_upcp_adjust_sidebar_counts( filter_counts ) {
+function ewd_upcp_adjust_sidebar_counts( filter_counts, catalog ) {
+	var $catalog = ewd_upcp_get_catalog_root( catalog );
 
 	// Pagination
-	jQuery( '.ewd-upcp-pagination .product-count' ).html( filter_counts.products );
+	$catalog.find( '.ewd-upcp-pagination .product-count' ).html( filter_counts.products );
 
-	jQuery( '.ewd-upcp-pagination' ).data( 'max_pages', filter_counts.max_pages );
+	$catalog.find( '.ewd-upcp-pagination' ).data( 'max_pages', filter_counts.max_pages );
 
-	jQuery( '.ewd-upcp-pagination .total-pages' ).html( filter_counts.max_pages );
+	$catalog.find( '.ewd-upcp-pagination .total-pages' ).html( filter_counts.max_pages );
 
 	if ( filter_counts.max_pages <= 1 ) {
 
-		jQuery( '.ewd-upcp-pagination' ).addClass( 'ewd-upcp-hidden' );
+		$catalog.find( '.ewd-upcp-pagination' ).addClass( 'ewd-upcp-hidden' );
 	}
 	else {
 
-		jQuery( '.ewd-upcp-pagination' ).removeClass( 'ewd-upcp-hidden' );
+		$catalog.find( '.ewd-upcp-pagination' ).removeClass( 'ewd-upcp-hidden' );
 	}
 
 	// Categories - checkbox or radio
-	jQuery( '.ewd-upcp-catalog-sidebar-category' ).each( function() {
+	$catalog.find( '.ewd-upcp-catalog-sidebar-category' ).each( function() {
 
 		if ( jQuery( this ).data( 'taxonomy_id' ) in filter_counts.categories ) {
 
@@ -999,7 +1039,7 @@ function ewd_upcp_adjust_sidebar_counts( filter_counts ) {
 	});
 
 	// Categories - dropdown
-	jQuery( 'select[name="ewd-upcp-catalog-sidebar-categories-dropdown"] option' ).each( function() {
+	$catalog.find( 'select[name="ewd-upcp-catalog-sidebar-categories-dropdown"] option' ).each( function() {
 
 		if ( jQuery( this ).val() in filter_counts.categories ) {
 
@@ -1021,7 +1061,7 @@ function ewd_upcp_adjust_sidebar_counts( filter_counts ) {
 	});
 
 	// Sub-Categories - checkbox or radio
-	jQuery( '.ewd-upcp-catalog-sidebar-subcategory' ).each( function() {
+	$catalog.find( '.ewd-upcp-catalog-sidebar-subcategory' ).each( function() {
 
 		if ( jQuery( this ).data( 'taxonomy_id' ) in filter_counts.subcategories ) {
 
@@ -1041,7 +1081,7 @@ function ewd_upcp_adjust_sidebar_counts( filter_counts ) {
 	});
 
 	// Sub-Categories - dropdown
-	jQuery( 'select[name="ewd-upcp-catalog-sidebar-subcategories-dropdown"] option' ).each( function() {
+	$catalog.find( 'select[name="ewd-upcp-catalog-sidebar-subcategories-dropdown"] option' ).each( function() {
 
 		if ( jQuery( this ).val() in filter_counts.subcategories ) {
 
@@ -1063,7 +1103,7 @@ function ewd_upcp_adjust_sidebar_counts( filter_counts ) {
 	});
 
 	// Tags - checkbox or radio
-	jQuery( '.ewd-upcp-catalog-sidebar-tag' ).each( function() {
+	$catalog.find( '.ewd-upcp-catalog-sidebar-tag' ).each( function() {
 
 		if ( jQuery( this ).data( 'taxonomy_id' ) in filter_counts.tags ) {
 
@@ -1083,7 +1123,7 @@ function ewd_upcp_adjust_sidebar_counts( filter_counts ) {
 	});
 
 	// Tags - dropdown
-	jQuery( 'select[name="ewd-upcp-catalog-sidebar-tags-dropdown"] option' ).each( function() {
+	$catalog.find( 'select[name="ewd-upcp-catalog-sidebar-tags-dropdown"] option' ).each( function() {
 
 		if ( jQuery( this ).val() in filter_counts.tags ) {
 
@@ -1105,7 +1145,7 @@ function ewd_upcp_adjust_sidebar_counts( filter_counts ) {
 	});
 
 	// Custom Fields - checkbox or radio
-	jQuery( '.ewd-upcp-catalog-sidebar-custom-field' ).each( function() {
+	$catalog.find( '.ewd-upcp-catalog-sidebar-custom-field' ).each( function() {
 
 		if ( jQuery( this ).data( 'custom_field_id' ) in filter_counts.custom_fields && jQuery( this ).data( 'value' ) in filter_counts.custom_fields[ jQuery( this ).data( 'custom_field_id' ) ] ) {
 
@@ -1125,7 +1165,7 @@ function ewd_upcp_adjust_sidebar_counts( filter_counts ) {
 	});
 
 	// Custom Fields - dropdown
-	jQuery( '.ewd-upcp-catalog-sidebar-custom-field-div select option' ).each( function() {
+	$catalog.find( '.ewd-upcp-catalog-sidebar-custom-field-div select option' ).each( function() {
 
 		if ( jQuery( this ).parent().parent().data( 'custom_field_id' ) in filter_counts.custom_fields && jQuery( this ).val() in filter_counts.custom_fields[ jQuery( this ).parent().parent().data( 'custom_field_id' ) ] ) {
 

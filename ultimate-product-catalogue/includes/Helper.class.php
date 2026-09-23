@@ -262,8 +262,6 @@ class ewdupcpHelper {
 
     if ( ! ewdupcpHelper::should_button_display() ) { return; }
 
-    ewdupcpHelper::enqueue_scripts();
-
     $page_details = self::get_page_details();
 
     ?>
@@ -326,6 +324,8 @@ class ewdupcpHelper {
   }
 
   public static function enqueue_scripts() {
+
+    if ( self::aiaa_is_active() || ! self::should_button_display() ) { return; }
 
     wp_enqueue_style( 'ewd-upcp-admin-helper-button', EWD_UPCP_PLUGIN_URL . '/assets/css/ewd-upcp-helper-button.css', array(), EWD_UPCP_VERSION );
 

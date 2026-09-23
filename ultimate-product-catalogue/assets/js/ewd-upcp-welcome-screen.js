@@ -75,6 +75,8 @@ jQuery(document).ready(function() {
 		var color_scheme = jQuery('input[name="color_scheme"]:checked').val();
 		var product_links = jQuery('input[name="product_links"]:checked').val();
 		var product_search = jQuery.map( jQuery( 'input[name="product_search\\[\\]"]:checked' ), function( n, i ) { return n.value; } ).join( ',' );
+		var hide_all_prices = jQuery( 'input[name="hide_all_prices"]:checked' ).val();
+		var catalog_only_visibility = jQuery( 'input[name="catalog_only_visibility"]:checked' ).val();
 
 		var params = {};
 
@@ -84,6 +86,8 @@ jQuery(document).ready(function() {
 		params.color_scheme    = color_scheme;
 		params.product_links   = product_links;
 		params.product_search  = product_search;
+		params.hide_all_prices = hide_all_prices;
+		params.catalog_only_visibility = catalog_only_visibility;
 
 		var data = jQuery.param( params );
 		jQuery.post(ajaxurl, data, function(response) {
