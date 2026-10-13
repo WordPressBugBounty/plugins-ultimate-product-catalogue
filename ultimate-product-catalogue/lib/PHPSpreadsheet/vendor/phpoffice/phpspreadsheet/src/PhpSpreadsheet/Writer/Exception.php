@@ -1,9 +1,8 @@
 <?php
 
-namespace PhpOffice\PhpSpreadsheet\Writer;
+namespace EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Writer;
 
-use PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
-
+use EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
 class Exception extends PhpSpreadsheetException
 {
 }

@@ -147,6 +147,9 @@ if ( ! class_exists( 'ewdupcpAJAX' ) ) {
 		public function clear_cart() {
 			global $ewd_upcp_controller;
 			global $woocommerce;
+			if ( ! $ewd_upcp_controller->permissions->check_permission( 'premium' ) || ( ! $ewd_upcp_controller->settings->get_setting( 'product-inquiry-cart' ) && ! $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ) ) {
+				wp_send_json_error( array( 'message' => __( 'This catalog action is currently unavailable.', 'ultimate-product-catalogue' ) ), 403 );
+			}
 
 			// Authenticate request
 			if ( ! check_ajax_referer( 'ewd-upcp-js', 'nonce' ) ) {
@@ -170,6 +173,9 @@ if ( ! class_exists( 'ewdupcpAJAX' ) ) {
 		public function add_to_cart() {
 			global $ewd_upcp_controller;
 			global $woocommerce;
+			if ( ! $ewd_upcp_controller->permissions->check_permission( 'premium' ) || ( ! $ewd_upcp_controller->settings->get_setting( 'product-inquiry-cart' ) && ! $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ) ) {
+				wp_send_json_error( array( 'message' => __( 'This catalog action is currently unavailable.', 'ultimate-product-catalogue' ) ), 403 );
+			}
 
 			// Authenticate request
 			if ( ! check_ajax_referer( 'ewd-upcp-js', 'nonce' ) ) {
@@ -184,7 +190,8 @@ if ( ! class_exists( 'ewdupcpAJAX' ) ) {
 
 			if ( ! empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ) && ! empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-sync' ) ) ) {
 
-				$woocommerce_id = absint( get_post_meta( $product_id, 'woocommerce_id', true ) );
+				$mapped_product = $ewd_upcp_controller->woocommerce->get_checkout_product( $product_id );
+				$woocommerce_id = $mapped_product ? $mapped_product->get_id() : 0;
 				$added = false;
 				try {
 					if ( is_object( $woocommerce ) && $woocommerce_id ) {

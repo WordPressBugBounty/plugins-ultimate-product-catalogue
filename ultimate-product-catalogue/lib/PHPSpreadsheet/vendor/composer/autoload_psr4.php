@@ -6,13 +6,14 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'ZipStream\\' => array($vendorDir . '/maennchen/zipstream-php/src'),
-    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
-    'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
-    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
-    'PhpOffice\\PhpSpreadsheet\\' => array($vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet'),
-    'MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
-    'Matrix\\' => array($vendorDir . '/markbaker/matrix/classes/src'),
-    'Composer\\Pcre\\' => array($vendorDir . '/composer/pcre/src'),
-    'Complex\\' => array($vendorDir . '/markbaker/complex/classes/src'),
+    'EwdUpcpVendor\\ZipStream\\' => array($vendorDir . '/maennchen/zipstream-php/src'),
+    'EwdUpcpVendor\\Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'EwdUpcpVendor\\Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
+    'EwdUpcpVendor\\Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
+    'EwdUpcpVendor\\PhpOffice\\PhpSpreadsheet\\' => array($vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet'),
+    'EwdUpcpVendor\\MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
+    'EwdUpcpVendor\\Matrix\\' => array($vendorDir . '/markbaker/matrix/classes/src'),
+    'EwdUpcpVendor\\HTMLPurifier\\' => array($vendorDir . '/ezyang/htmlpurifier/library/HTMLPurifier'),
+    'EwdUpcpVendor\\Composer\\Pcre\\' => array($vendorDir . '/composer/pcre/src'),
+    'EwdUpcpVendor\\Complex\\' => array($vendorDir . '/markbaker/complex/classes/src'),
 );

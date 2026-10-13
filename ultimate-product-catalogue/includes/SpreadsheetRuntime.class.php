@@ -24,20 +24,20 @@ if ( ! class_exists( 'ewdupcpSpreadsheetRuntime' ) ) {
 				return false;
 			}
 
-			$composer_initializer = 'ComposerAutoloaderInitEwdUpcpSpreadsheet1306';
-			$spreadsheet_loaded   = class_exists( '\\PhpOffice\\PhpSpreadsheet\\IOFactory' );
+			$composer_initializer = 'ComposerAutoloaderInitEwdUpcpSpreadsheet1307';
+			$spreadsheet_loaded   = class_exists( '\\EwdUpcpVendor\\PhpOffice\\PhpSpreadsheet\\IOFactory' );
 
 			if ( ! $spreadsheet_loaded && ! class_exists( $composer_initializer, false ) ) {
 				require_once $autoload;
 			}
 
-			if ( ! class_exists( '\\PhpOffice\\PhpSpreadsheet\\IOFactory' ) ) {
+			if ( ! class_exists( '\\EwdUpcpVendor\\PhpOffice\\PhpSpreadsheet\\IOFactory' ) ) {
 				self::$trusted = false;
 				return false;
 			}
 
 			$expected   = realpath( EWD_UPCP_PLUGIN_DIR . '/lib/PHPSpreadsheet/vendor/phpoffice/phpspreadsheet' );
-			$reflection = new ReflectionClass( '\\PhpOffice\\PhpSpreadsheet\\IOFactory' );
+			$reflection = new ReflectionClass( '\\EwdUpcpVendor\\PhpOffice\\PhpSpreadsheet\\IOFactory' );
 			$loaded     = realpath( $reflection->getFileName() );
 
 			if ( ! $expected || ! $loaded || 0 !== strpos( strtolower( $loaded ), strtolower( $expected . DIRECTORY_SEPARATOR ) ) ) {
@@ -50,7 +50,7 @@ if ( ! class_exists( 'ewdupcpSpreadsheetRuntime' ) ) {
 			$packages       = isset( $installed['packages'] ) ? $installed['packages'] : $installed;
 
 			foreach ( is_array( $packages ) ? $packages : array() as $package ) {
-				if ( isset( $package['name'], $package['version'] ) && 'phpoffice/phpspreadsheet' === $package['name'] && '1.30.6' === $package['version'] ) {
+				if ( isset( $package['name'], $package['version'] ) && 'phpoffice/phpspreadsheet' === $package['name'] && '1.30.7' === $package['version'] ) {
 					self::$trusted = true;
 					return true;
 				}
@@ -66,7 +66,7 @@ if ( ! class_exists( 'ewdupcpSpreadsheetRuntime' ) ) {
 				return;
 			}
 
-			echo '<div class="notice notice-error"><p>' . esc_html__( 'Ultimate Product Catalog import is disabled because the pinned PhpSpreadsheet 1.30.6 runtime could not be loaded safely. Resolve the plugin class conflict before importing files.', 'ultimate-product-catalogue' ) . '</p></div>';
+			echo '<div class="notice notice-error"><p>' . esc_html__( 'Ultimate Product Catalog import/export is disabled because the patched PhpSpreadsheet runtime could not be loaded safely. Resolve the plugin class conflict before importing files.', 'ultimate-product-catalogue' ) . '</p></div>';
 		}
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Psr\SimpleCache;
+namespace EwdUpcpVendor\Psr\SimpleCache;
 
 /**
  * Exception interface for invalid cache arguments.

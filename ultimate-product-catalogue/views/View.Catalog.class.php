@@ -132,8 +132,8 @@ class ewdupcpViewCatalog extends ewdupcpView {
 		$this->add_custom_styling();
 
 		if ( ! empty( $this->selected_product_id ) ) {
-			$template = $this->find_template( 'catalog-single-product' ); } elseif ( ! empty( $this->comparison_products ) ) {
-			$template = $this->find_template( 'product-comparison' ); } elseif ( ! empty( $_POST['ewd_upcp_submit_cart'] ) ) {
+			$template = $this->find_template( 'catalog-single-product' ); } elseif ( $this->can_compare() && ! empty( $this->comparison_products ) ) {
+			$template = $this->find_template( 'product-comparison' ); } elseif ( $this->can_inquire() && ! empty( $_POST['ewd_upcp_submit_cart'] ) ) {
 				$template = $this->find_template( 'catalog-inquiry-form' ); } elseif ( ! empty( $this->overview_mode ) ) {
 				$template = $this->find_template( 'catalog-overview' ); } else {
 					$template = $this->find_template( 'catalog' ); }
@@ -180,7 +180,7 @@ class ewdupcpViewCatalog extends ewdupcpView {
 	public function maybe_print_product_comparison_form() {
 		global $ewd_upcp_controller;
 
-		if ( empty( $ewd_upcp_controller->settings->get_setting( 'product-comparison' ) ) ) {
+		if ( ! $this->can_compare() ) {
 			return; }
 
 		$template = $this->find_template( 'catalog-product-comparison' );
@@ -470,6 +470,9 @@ class ewdupcpViewCatalog extends ewdupcpView {
 	 * @since 5.0.0
 	 */
 	public function print_product_comparison() {
+		if ( ! $this->can_compare() ) {
+			return;
+		}
 
 		$template = $this->find_template( 'product-comparison' );
 
@@ -484,6 +487,9 @@ class ewdupcpViewCatalog extends ewdupcpView {
 	 * @since 5.0.0
 	 */
 	public function print_product_comparison_products() {
+		if ( ! $this->can_compare() ) {
+			return;
+		}
 
 		$template = $this->find_template( 'product-comparison-product' );
 
@@ -1059,8 +1065,24 @@ class ewdupcpViewCatalog extends ewdupcpView {
 	 *
 	 * @since 5.0.0
 	 */
+	/** Authorize paid routes independently of their controls and request parameters. */
+	private function can_compare() {
+		global $ewd_upcp_controller;
+		return $ewd_upcp_controller->permissions->check_permission( 'premium' )
+			&& $ewd_upcp_controller->settings->get_setting( 'product-comparison' );
+	}
+
+	private function can_inquire() {
+		global $ewd_upcp_controller;
+		return $ewd_upcp_controller->permissions->check_permission( 'premium' )
+			&& $ewd_upcp_controller->settings->get_setting( 'product-inquiry-cart' );
+	}
+
 	public function get_inquiry_form() {
 		global $ewd_upcp_controller;
+		if ( ! $this->can_inquire() ) {
+			return '';
+		}
 
 		if ( $ewd_upcp_controller->settings->get_setting( 'product-inquiry-plugin' ) == 'cf7' ) {
 			return $this->get_contact_form_7_inquiry_form(); } else {
@@ -1074,6 +1096,9 @@ class ewdupcpViewCatalog extends ewdupcpView {
 	 */
 	public function get_contact_form_7_inquiry_form() {
 		global $ewd_upcp_controller;
+		if ( ! $this->can_inquire() ) {
+			return '';
+		}
 
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 
@@ -1095,6 +1120,9 @@ class ewdupcpViewCatalog extends ewdupcpView {
 	 */
 	public function get_wp_forms_inquiry_form() {
 		global $ewd_upcp_controller;
+		if ( ! $this->can_inquire() ) {
+			return '';
+		}
 
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 
@@ -1161,7 +1189,7 @@ class ewdupcpViewCatalog extends ewdupcpView {
 	public function set_items() {
 
 		if ( ! empty( $this->selected_product_id ) ) {
-			$this->set_single_product(); } elseif ( ! empty( $this->comparison_products ) ) {
+			$this->set_single_product(); } elseif ( $this->can_compare() && ! empty( $this->comparison_products ) ) {
 			$this->set_comparison_products(); } else {
 				$this->set_standard_catalog_items(); }
 	}
@@ -1190,6 +1218,10 @@ class ewdupcpViewCatalog extends ewdupcpView {
 	 * @since 5.0.0
 	 */
 	public function set_comparison_products() {
+		if ( ! $this->can_compare() ) {
+			$this->comparison_products = array();
+			return;
+		}
 
 		$args = array(
 			'post_type'      => EWD_UPCP_PRODUCT_POST_TYPE,
@@ -1408,6 +1440,8 @@ class ewdupcpViewCatalog extends ewdupcpView {
 
 			$control_types[ $custom_field->id ] = $custom_field->filter_control_type;
 		}
+		// Runtime-only fallback: unavailable definitions cannot filter Free products.
+		$this->filtering_custom_fields = array_intersect_key( $this->filtering_custom_fields, $control_types );
 
 		$product_objects = array();
 
@@ -1447,6 +1481,12 @@ class ewdupcpViewCatalog extends ewdupcpView {
 			if ( ! empty( $this->filtering_custom_fields ) ) {
 
 				foreach ( $this->filtering_custom_fields as $field_id => $field_values ) {
+					if ( empty( $field_values ) ) {
+						continue;
+					}
+					if ( ! isset( $product->custom_fields[ $field_id ] ) ) {
+						continue 2;
+					}
 
 					if (
 						$control_types[ $field_id ] == 'slider'
@@ -1831,6 +1871,7 @@ class ewdupcpViewCatalog extends ewdupcpView {
 	 * @since 5.0.0
 	 */
 	public function set_request_parameters() {
+		$this->comparison_products = array();
 
 		$raw_get      = wp_unslash( $_GET );
 		$request      = self::normalize_request_state( $raw_get );
@@ -1847,7 +1888,7 @@ class ewdupcpViewCatalog extends ewdupcpView {
 			$this->selected_product_id = ! empty( $post ) ? $post->ID : false;
 		}
 
-		if ( ! empty( $post_data['comparison_products'] ) ) {
+		if ( $this->can_compare() && ! empty( $post_data['comparison_products'] ) ) {
 
 			$this->comparison_products = is_array( $post_data['comparison_products'] )
 				? array_values( array_filter( array_map( 'absint', array_filter( $post_data['comparison_products'], 'is_scalar' ) ) ) )
@@ -2036,7 +2077,7 @@ class ewdupcpViewCatalog extends ewdupcpView {
 	public function enqueue_assets() {
 		global $ewd_upcp_controller;
 
-		if ( $ewd_upcp_controller->settings->get_setting( 'product-page' ) != 'custom' or $ewd_upcp_controller->settings->get_setting( 'product-page' ) != 'large' ) {
+		if ( in_array( $ewd_upcp_controller->settings->get_setting( 'product-page' ), array( 'custom', 'large' ), true ) ) {
 
 			wp_enqueue_style( 'ewd-upcp-gridster' );
 		}
@@ -2044,7 +2085,7 @@ class ewdupcpViewCatalog extends ewdupcpView {
 		wp_enqueue_style( 'ewd-upcp-css' );
 		wp_enqueue_style( 'ewd-upcp-jquery-ui' );
 
-		if ( $ewd_upcp_controller->settings->get_setting( 'no' ) != 'no' ) {
+		if ( 'no' !== $ewd_upcp_controller->settings->get_setting( 'product-image-lightbox' ) || $ewd_upcp_controller->settings->get_setting( 'lightbox-mode' ) ) {
 
 			wp_enqueue_style( 'ewd-ulb-main-css' );
 			wp_enqueue_script( 'ultimate-lightbox' );

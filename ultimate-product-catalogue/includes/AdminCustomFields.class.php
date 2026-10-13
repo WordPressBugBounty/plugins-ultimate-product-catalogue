@@ -43,9 +43,15 @@ class ewdupcpAdminCustomFields {
 
 		if ( empty( $custom_fields_permission ) ) { ?> 
 
-			<div class='ewd-upcp-premium-locked'>
-				<a href="https://www.etoilewebdesign.com/license-payment/?Selected=UPCP&Quantity=1&utm_source=upcp_custom_fields" target="_blank">Upgrade</a> to the premium version to use this feature
-			</div>
+					<div class="notice notice-warning inline"><p>
+						<?php
+						printf(
+							/* translators: %s: Premium upgrade link. */
+							esc_html__( '%s to the premium version to use this feature.', 'ultimate-product-catalogue' ),
+							'<a href="' . esc_url( 'https://www.etoilewebdesign.com/license-payment/?Selected=UPCP&Quantity=1&utm_source=upcp_custom_fields' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Upgrade', 'ultimate-product-catalogue' ) . '</a>'
+						);
+						?>
+					</p></div>
 
 			<?php 
 
@@ -84,6 +90,7 @@ class ewdupcpAdminCustomFields {
 			<?php do_action( 'ewd_upcp_custom_fields_table_top' ); ?>
 
 			<form id="ewd-upcp-custom-fields-table" method="POST" action="">
+				<?php wp_nonce_field( 'ewd_upcp_custom_fields', 'ewd_upcp_custom_fields_nonce' ); ?>
 
 				<div id='ewd-upcp-custom-fields-table-div'>
 
@@ -211,15 +218,16 @@ class ewdupcpAdminCustomFields {
 			<?php do_action( 'ewd_upcp_custom_fields_table_bottom' ); ?>
 		</div>
 
-		<?php
-	}
+			<?php
+		}
 
-	/**
-	 * Save the custom fields when the form is submitted
-	 * @since 5.0.0
-	 */
-	public function save_custom_fields() {
-
+		/** Save only authorized, nonce-protected custom field configuration. */
+		public function save_custom_fields() {
+			global $ewd_upcp_controller;
+			if ( ! current_user_can( $ewd_upcp_controller->settings->get_setting( 'access-role' ) ) || ! $ewd_upcp_controller->permissions->check_permission( 'custom_fields' ) ) {
+				return;
+			}
+			check_admin_referer( 'ewd_upcp_custom_fields', 'ewd_upcp_custom_fields_nonce' );
 		$custom_fields = json_decode( stripslashes( sanitize_text_field( $_POST['ewd-upcp-custom-field-save-values'] ) ) );
 
 		if ( ! empty( $_POST['ewd-upcp-custom-field-save-values'] ) ) {

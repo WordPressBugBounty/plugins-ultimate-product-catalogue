@@ -168,6 +168,8 @@ if ( ! class_exists( 'ewdupcpSEO' ) ) {
 		 */
 		public function change_canonical_url( $str ) {
 			global $ewd_upcp_controller;
+			if ( ! $ewd_upcp_controller->permissions->check_permission( 'seo' ) ) {
+				return $str; }
 
 			if ( ! empty( get_query_var( 'single_product' ) ) ) {
 
@@ -186,6 +188,8 @@ if ( ! class_exists( 'ewdupcpSEO' ) ) {
 		 */
 		public function change_description( $str ) {
 			global $ewd_upcp_controller;
+			if ( ! $ewd_upcp_controller->permissions->check_permission( 'seo' ) ) {
+				return $str; }
 
 			if ( ! empty( $_GET['singleproduct'] ) ) {
 				$selected_product_id = intval( $_GET['singleproduct'] ); }
@@ -210,6 +214,8 @@ if ( ! class_exists( 'ewdupcpSEO' ) ) {
 		 */
 		public function change_title( $str ) {
 			global $ewd_upcp_controller;
+			if ( ! $ewd_upcp_controller->permissions->check_permission( 'seo' ) ) {
+				return $str; }
 
 			if ( ! empty( $_GET['singleproduct'] ) ) {
 				$selected_product_id = intval( $_GET['singleproduct'] ); }

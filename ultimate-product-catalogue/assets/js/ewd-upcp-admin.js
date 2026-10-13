@@ -88,7 +88,31 @@ jQuery(document).ready(function($){
 
 jQuery( document ).ready( function(){
 
-	jQuery( '#ewd-upcp-export, #ewd-upcp-import-open' ).removeClass( 'ewd-upcp-hidden' ).insertAfter( jQuery( '#wpbody-content .wrap a:first' ) );
+	jQuery( '#ewd-upcp-export-open, #ewd-upcp-import-open' ).removeClass( 'ewd-upcp-hidden' ).insertAfter( jQuery( '#wpbody-content .wrap a:first' ) );
+
+	var exportModal = jQuery( '#ewd-upcp-export-modal' );
+	var exportOpener = jQuery( '#ewd-upcp-export-open' );
+	function closeExport() {
+		exportModal.addClass( 'ewd-upcp-hidden' );
+		exportOpener.trigger( 'focus' );
+	}
+	exportOpener.on( 'click', function() {
+		exportModal.removeClass( 'ewd-upcp-hidden' );
+		exportModal.find( 'select' ).trigger( 'focus' );
+	} );
+	exportModal.on( 'click', function( event ) {
+		if ( event.target === this ) { closeExport(); }
+	} );
+	exportModal.find( '.ewd-upcp-transfer-modal-close' ).on( 'click', closeExport );
+	exportModal.on( 'keydown', function( event ) {
+		if ( event.key === 'Escape' ) { event.preventDefault(); closeExport(); }
+		if ( event.key !== 'Tab' ) { return; }
+		var controls = exportModal.find( 'button, select, input:not([type="hidden"]), a[href]' ).filter( ':visible' );
+		var first = controls.first()[0];
+		var last = controls.last()[0];
+		if ( event.shiftKey && event.target === first ) { event.preventDefault(); last.focus(); }
+		else if ( ! event.shiftKey && event.target === last ) { event.preventDefault(); first.focus(); }
+	} );
 
 	jQuery( '#ewd-upcp-import-open' ).on( 'click', function() {
 

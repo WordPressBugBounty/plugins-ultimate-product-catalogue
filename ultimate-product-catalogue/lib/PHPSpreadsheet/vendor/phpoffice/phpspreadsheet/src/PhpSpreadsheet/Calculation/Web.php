@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpOffice\PhpSpreadsheet\Calculation;
+namespace EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Calculation;
 
 /**
  * @deprecated 1.18.0

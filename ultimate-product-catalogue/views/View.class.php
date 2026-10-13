@@ -97,6 +97,10 @@ class ewdupcpView extends ewdupcpBase {
 
 	public function get_option( $option_name ) {
 		global $ewd_upcp_controller;
+		$capability = ewdupcpSettings::setting_capability( $option_name );
+		if ( $capability && ! $ewd_upcp_controller->permissions->check_permission( $capability ) ) {
+			return $ewd_upcp_controller->settings->get_setting( $option_name );
+		}
 
 		return ! empty( $this->$option_name ) ? $this->$option_name : $ewd_upcp_controller->settings->get_setting( $option_name );
 	}

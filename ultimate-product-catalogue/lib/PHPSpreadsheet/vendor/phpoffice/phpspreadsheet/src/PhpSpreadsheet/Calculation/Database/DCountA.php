@@ -1,10 +1,9 @@
 <?php
 
-namespace PhpOffice\PhpSpreadsheet\Calculation\Database;
+namespace EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Calculation\Database;
 
-use PhpOffice\PhpSpreadsheet\Calculation\Information\ExcelError;
-use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Counts;
-
+use EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Calculation\Information\ExcelError;
+use EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Calculation\Statistical\Counts;
 class DCountA extends DatabaseAbstract
 {
     /**
@@ -38,9 +37,6 @@ class DCountA extends DatabaseAbstract
         if ($field === null) {
             return ExcelError::VALUE();
         }
-
-        return Counts::COUNTA(
-            self::getFilteredColumn($database, $field, $criteria)
-        );
+        return Counts::COUNTA(self::getFilteredColumn($database, $field, $criteria));
     }
 }

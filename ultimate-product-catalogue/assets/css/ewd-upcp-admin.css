@@ -1462,17 +1462,76 @@ input:checked + .ewd-upcp-admin-switch-slider:before {
 
 /* IMPORT AND EXPORT BUTTONS */
 
-#ewd-upcp-export {
+#ewd-upcp-export-open {
 	position: relative;
 	display: inline-block;
 	width: auto;
 	margin: 0 8px;
 	top: -3px;
 	vertical-align: top;
+	min-height: 32px;
+	max-height: 32px;
+	line-height: 1;
+}
+.ewd-upcp-transfer-modal,
+.ewd-upcp-transfer-modal * {
+	box-sizing: border-box;
+}
+.ewd-upcp-transfer-modal {
+	position: fixed;
+	z-index: 9999;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	inset: 0;
+	background: rgba(0,0,0,0.75);
+}
+.ewd-upcp-transfer-modal-inside {
+	position: relative;
+	background: #fff;
+	width: 80%;
+	max-width: 600px;
+	max-height: 80vh;
+	overflow-y: auto;
+	padding: 20px 24px;
+	border-radius: 8px;
+}
+.ewd-upcp-transfer-modal-inside h2 {
+	margin: 0 40px 24px 0;
+}
+.ewd-upcp-transfer-modal-close {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	width: 32px;
+	height: 32px;
+	border: 0;
+	border-radius: 8px;
+	background: #f3f3f3;
+	cursor: pointer;
+}
+.ewd-upcp-transfer-modal-close:focus-visible {
+	outline: 2px solid #2271b1;
+}
+.ewd-upcp-license-status form:first-of-type {
+	margin-bottom: 32px;
+}
+.ewd-upcp-license-status input[name="key"] {
+	min-height: 32px;
+	margin: 0 12px 0 0;
+}
+.ewd-upcp-license-status .button {
+	min-height: 32px;
+}
+.ewd-upcp-license-status input[name="key"], .ewd-upcp-license-status button[name="ewd_upgrade_to_full"] {
+	height: 40px;
 }
 #ewd-upcp-import-open {
 	position: relative;
 	top: -3px;
+	min-height: 32px;
+	max-height: 32px;
+	line-height: 1;
 }
 #ewd-upcp-import-modal,
 #ewd-upcp-import-modal * {

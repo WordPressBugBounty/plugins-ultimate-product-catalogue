@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpOffice\PhpSpreadsheet\Chart;
+namespace EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Chart;
 
 /**
  * Created by PhpStorm.

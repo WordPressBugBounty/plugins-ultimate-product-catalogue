@@ -57,7 +57,9 @@ if ( ! class_exists( 'ewdupcpDashboard' ) ) {
 		public function display_dashboard_screen() {
 			global $ewd_upcp_controller;
 
-			$permission = $ewd_upcp_controller->permissions->check_permission( 'premium' );
+			$permission   = $ewd_upcp_controller->permissions->check_permission( 'premium' );
+			$contract     = apply_filters( 'ewd_upcp_entitlement_contract', array() );
+			$trial_active = $permission && isset( $contract['effective_status'] ) && 'trial' === $contract['effective_status'];
 
 			$args = array(
 				'post_type'      => EWD_UPCP_CATALOG_POST_TYPE,
@@ -69,9 +71,30 @@ if ( ! class_exists( 'ewdupcpDashboard' ) ) {
 			?>
 
 		<div id="ewd-upcp-dashboard-content-area">
+			<?php
+			$entitlement_tags           = wp_kses_allowed_html( 'post' );
+			$entitlement_tags['form']   = array(
+				'method' => true,
+				'action' => true,
+			);
+			$entitlement_tags['input']  = array(
+				'type'         => true,
+				'name'         => true,
+				'value'        => true,
+				'autocomplete' => true,
+				'class'        => true,
+			);
+			$entitlement_tags['button'] = array(
+				'type'  => true,
+				'name'  => true,
+				'value' => true,
+				'class' => true,
+			);
+			echo wp_kses( apply_filters( 'ewd_upcp_dashboard_entitlement_card', '' ), $entitlement_tags );
+			?>
 		
 			<?php
-			if ( ! $permission or get_option( 'EWD_UPCP_Trial_Happening' ) == 'Yes' ) {
+			if ( ! $permission or $trial_active ) {
 				$premium_info  = '<div class="ewd-upcp-dashboard-visit-our-site">';
 				$premium_info .= sprintf( __( '<a href="%s" target="_blank">Visit our website</a> to learn how to upgrade or get a free trial of the premium version.' ), 'https://www.etoilewebdesign.com/premium-upgrade-instructions/?utm_source=upcp_dashboard&utm_content=visit_our_site_link' );
 				$premium_info .= '</div>';
@@ -143,8 +166,8 @@ if ( ! class_exists( 'ewdupcpDashboard' ) ) {
 				</table>
 			</div>
 
-				<?php if ( ! $permission or get_option( 'EWD_UPCP_Trial_Happening' ) == 'Yes' ) { ?>
-				<div class="ewd-upcp-dashboard-get-premium-and-trial<?php echo get_option( 'EWD_UPCP_Trial_Happening' ) == 'Yes' ? ' trial-happening' : ''; ?>">
+				<?php if ( ! $permission or $trial_active ) { ?>
+				<div class="ewd-upcp-dashboard-get-premium-and-trial<?php echo $trial_active ? ' trial-happening' : ''; ?>">
 					<div id="ewd-upcp-dashboard-new-footer-one">
 						<div class="ewd-upcp-dashboard-new-footer-one-inside">
 							<div class="ewd-upcp-dashboard-new-footer-one-left">
@@ -172,7 +195,7 @@ if ( ! class_exists( 'ewdupcpDashboard' ) ) {
 							</div>
 						</div>
 					</div>
-					<?php if ( get_option( 'EWD_UPCP_Trial_Happening' ) == 'Yes' ) { ?>
+					<?php if ( $trial_active ) { ?>
 						<div class="ewd-upcp-dashboard-trial-container">
 							<?php do_action( 'ewd_trial_happening', 'UPCP' ); ?>
 						</div>
@@ -241,7 +264,7 @@ if ( ! class_exists( 'ewdupcpDashboard' ) ) {
 
 			</div>
 
-				<?php if ( ! $permission or get_option( 'EWD_UPCP_Trial_Happening' ) == 'Yes' ) { ?>
+				<?php if ( ! $permission or $trial_active ) { ?>
 				<div class="ewd-upcp-dashboard-guarantee">
 					<img src="<?php echo plugins_url( '../assets/img/dash-asset-badge.png', __FILE__ ); ?>" alt="14-Day 100% Money-Back Guarantee">
 					<div class="ewd-upcp-dashboard-guarantee-title-and-text">

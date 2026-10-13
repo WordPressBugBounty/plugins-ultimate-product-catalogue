@@ -67,6 +67,9 @@ class ewdupcpViewCatalogProduct extends ewdupcpViewProduct {
 	 */
 	public function maybe_print_cart_action_button( $location ) {
 		global $ewd_upcp_controller;
+		if ( $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) && ! $ewd_upcp_controller->woocommerce->get_checkout_product( $this->product->ID ) ) {
+			return;
+		}
 
 		if ( $location == 'top' and ( $this->style != 'main-minimalist' and $this->style != 'contemporary' and $this->style != 'showcase' ) ) {
 			return; }

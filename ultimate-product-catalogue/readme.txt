@@ -2,7 +2,7 @@
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce catalog
 Tested up to: 7.1
-Stable tag: 5.4.0
+Stable tag: 5.5.0
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GPLv3
@@ -87,6 +87,8 @@ The Ultimate Product Catalog is also a great option for those running a mobile s
 [youtube https://www.youtube.com/watch?v=sQMkiEG9gNg]
 
 The flexibility, advanced product filter and features you love from the Ultimate Product Catalog combined with the ease and power of WooCommerce checkout! For more information about WooCommerce integration, please see the video above.
+
+Automatic WooCommerce synchronization uses scheduled tasks. WP-Cron or a configured system cron must be running for synchronization to progress.
 
 ### Premium Features
 
@@ -222,6 +224,13 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 
 == Changelog ==
 
+= 5.5.0 (2026-10-12) =
+- Improved reliability and error handling for supported WooCommerce synchronization, product mappings and checkout integration.
+- Improved validation, data handling and error reporting for supported product imports and exports.
+- Improved Premium license validation and entitlement handling, including clearer status information and recovery options.
+- Improved compatibility between Ultimate Product Catalog and EWD Premium Helper, with safer handling of incompatible versions and licensing interruptions.
+- Improved preservation of existing catalog data and settings when Premium license status changes.
+
 = 5.4.0 (2026-09-23) =
 - **IMPORTANT NOTE: This is a major update with several big changes. We suggest testing this update in a staging environment before updating your live environment. Or wait a few days before updating in the event that an issue is identified that requires a fix/new update.**
 - Improved catalog filtering and discovery reliability across categories, sub-categories, search, sorting, pagination and AJAX updates, including clearer handling of failed catalog requests.
@@ -234,5 +243,5 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 
 == Upgrade Notice ==
 
-= 5.4.0 =
-This update includes substantial catalog reliability, security, Premium Helper and WooCommerce integration changes. If your site uses the Premium Helper, WooCommerce synchronization, template overrides or extensive custom CSS, we recommend testing the update on a staging site before updating your production site.
+= 5.5.0 =
+This update includes substantial changes to WooCommerce sync and to the interaction between this plugin and the Premium Helper. If your site uses the Premium Helper or WooCommerce synchronization, we recommend testing the update on a staging site before updating your production site.

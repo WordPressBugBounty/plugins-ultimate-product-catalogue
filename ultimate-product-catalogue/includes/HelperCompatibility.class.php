@@ -28,6 +28,7 @@ if ( ! class_exists( 'ewdupcpHelperCompatibility' ) ) {
 				'api_version'            => EWD_UPCP_HELPER_API_VERSION,
 				'min_helper_version'     => EWD_UPCP_MIN_HELPER_VERSION,
 				'max_helper_api_version' => EWD_UPCP_MAX_HELPER_API_VERSION,
+				'entitlement_contract_version' => EWD_UPCP_ENTITLEMENT_CONTRACT_VERSION,
 			);
 		}
 
@@ -73,7 +74,9 @@ if ( ! class_exists( 'ewdupcpHelperCompatibility' ) ) {
 			$free_api_min   = isset( $helper_descriptor['supported_free_api_min'] ) ? absint( $helper_descriptor['supported_free_api_min'] ) : 0;
 			$free_api_max   = isset( $helper_descriptor['supported_free_api_max'] ) ? absint( $helper_descriptor['supported_free_api_max'] ) : 0;
 
-			if ( version_compare( $helper_version, EWD_UPCP_MIN_HELPER_VERSION, '<' )
+			if ( ! isset( $helper_descriptor['entitlement_contract_version'] )
+				|| EWD_UPCP_ENTITLEMENT_CONTRACT_VERSION !== $helper_descriptor['entitlement_contract_version']
+				|| version_compare( $helper_version, EWD_UPCP_MIN_HELPER_VERSION, '<' )
 				|| $helper_api < EWD_UPCP_HELPER_API_VERSION
 				|| EWD_UPCP_HELPER_API_VERSION < $free_api_min ) {
 				return array(
@@ -97,6 +100,16 @@ if ( ! class_exists( 'ewdupcpHelperCompatibility' ) ) {
 				'helper_version' => $helper_version,
 				'helper_api'     => $helper_api,
 			);
+		}
+
+		/** Historical evidence is notice scope only, never permission to run paid features. */
+		public function has_prior_access() {
+			$key = get_option( 'EWD_UPCP_License_Key', '' );
+			if ( is_string( $key ) && '' !== trim( $key ) && 'EWD Trial' !== trim( $key ) ) {
+				return true;
+			}
+			$state = get_option( 'ewdph-upcp-entitlement-v1', array() );
+			return is_array( $state ) && ! empty( $state['last_success_at'] );
 		}
 
 		public function get_state() {
@@ -134,6 +147,15 @@ if ( ! class_exists( 'ewdupcpHelperCompatibility' ) ) {
 					'legacy_unsupported'   => __( 'Legacy Helper unsupported', 'ultimate-product-catalogue' ),
 				),
 				'entitlement'   => array(
+					'valid'               => __( 'Premium active', 'ultimate-product-catalogue' ),
+					'valid_cached'        => __( 'Premium active using bounded cached validation', 'ultimate-product-catalogue' ),
+					'trial'               => __( 'Trial active', 'ultimate-product-catalogue' ),
+					'legacy_transition'   => __( 'Temporary legacy transition', 'ultimate-product-catalogue' ),
+					'missing'             => __( 'No license saved', 'ultimate-product-catalogue' ),
+					'expired'             => __( 'Entitlement expired', 'ultimate-product-catalogue' ),
+					'invalid'             => __( 'License rejected', 'ultimate-product-catalogue' ),
+					'unauthorized'        => __( 'Site not authorized', 'ultimate-product-catalogue' ),
+					'unverifiable'        => __( 'Entitlement unverifiable', 'ultimate-product-catalogue' ),
 					'free_no_entitlement' => __( 'Free features', 'ultimate-product-catalogue' ),
 					'trial_active'        => __( 'Trial active', 'ultimate-product-catalogue' ),
 					'paid_active'         => __( 'Paid access active', 'ultimate-product-catalogue' ),
@@ -161,14 +183,10 @@ if ( ! class_exists( 'ewdupcpHelperCompatibility' ) ) {
 		}
 
 		private function resolve_entitlement_state( $premium_active ) {
-			$trial_active = 'Yes' === get_option( 'EWD_UPCP_Trial_Happening' )
-				&& time() < absint( get_option( 'EWD_UPCP_Trial_Expiry_Time' ) );
-			if ( $trial_active ) {
-				return 'trial_active'; }
-			if ( $premium_active ) {
-				return 'paid_active'; }
-			if ( defined( 'EWDPH_VERSION' ) && '' === trim( (string) get_option( 'EWD_UPCP_License_Key', '' ) ) ) {
-				return 'key_missing'; }
+			$contract = apply_filters( 'ewd_upcp_entitlement_contract', array() );
+			if ( isset( $contract['effective_status'] ) && is_string( $contract['effective_status'] ) ) {
+				return $contract['effective_status'];
+			}
 			return 'free_no_entitlement';
 		}
 

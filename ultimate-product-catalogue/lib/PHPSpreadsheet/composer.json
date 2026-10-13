@@ -4,10 +4,10 @@
     "type": "project",
     "license": "GPL-2.0-or-later",
     "require": {
-        "phpoffice/phpspreadsheet": "1.30.6"
+        "phpoffice/phpspreadsheet": "1.30.7"
     },
     "config": {
-        "autoloader-suffix": "EwdUpcpSpreadsheet1306",
+        "autoloader-suffix": "EwdUpcpSpreadsheet1307",
         "platform": {
             "php": "7.4.33"
         },

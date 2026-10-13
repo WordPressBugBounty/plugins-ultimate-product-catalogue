@@ -27,6 +27,7 @@ if ( ! class_exists( 'ewdupcpSettings' ) ) {
 		public $settings = array();
 
 		public function __construct() {
+			add_filter( 'pre_update_option_ewd-upcp-settings', array( $this, 'preserve_locked_settings' ), 10, 2 );
 
 			add_action( 'init', array( $this, 'set_defaults' ) );
 
@@ -135,6 +136,11 @@ if ( ! class_exists( 'ewdupcpSettings' ) ) {
 		 * @since 5.0.0
 		 */
 		public function get_setting( $setting ) {
+			$capability = self::setting_capability( $setting );
+			global $ewd_upcp_controller;
+			if ( $capability && ( ! is_object( $ewd_upcp_controller ) || ! is_object( $ewd_upcp_controller->permissions ) || ! $ewd_upcp_controller->permissions->check_permission( $capability ) ) ) {
+				return isset( $this->defaults[ $setting ] ) ? $this->defaults[ $setting ] : null;
+			}
 
 			if ( empty( $this->settings ) ) {
 				$this->settings = get_option( 'ewd-upcp-settings' );
@@ -181,6 +187,15 @@ if ( ! class_exists( 'ewdupcpSettings' ) ) {
 			$this->settings[ $setting ] = $value;
 		}
 
+		/** Shared Release 3 seam: runtime denial never overwrites stored settings. */
+		public static function setting_capability( $setting ) {
+			static $map;
+			if ( null === $map ) {
+				$map = require EWD_UPCP_PLUGIN_DIR . '/includes/PremiumSettings.php';
+			}
+			return isset( $map[ $setting ] ) ? $map[ $setting ] : '';
+		}
+
 		/**
 		 * Save all settings, to be used with set_setting
 		 * @since 5.0.0
@@ -188,6 +203,23 @@ if ( ! class_exists( 'ewdupcpSettings' ) ) {
 		public function save_settings() {
 
 			update_option( 'ewd-upcp-settings', $this->settings );
+		}
+
+		/** Hidden or forged paid fields cannot erase or alter saved configuration. */
+		public function preserve_locked_settings( $value, $old_value ) {
+			global $ewd_upcp_controller;
+			if ( ! is_array( $value ) || empty( $ewd_upcp_controller->permissions ) ) {
+				return $old_value;
+			}
+			$old_value = is_array( $old_value ) ? $old_value : array();
+			foreach ( require EWD_UPCP_PLUGIN_DIR . '/includes/PremiumSettings.php' as $setting => $capability ) {
+				if ( ! $ewd_upcp_controller->permissions->check_permission( $capability ) ) {
+					unset( $value[ $setting ] );
+					if ( array_key_exists( $setting, $old_value ) ) {
+						$value[ $setting ] = $old_value[ $setting ]; }
+				}
+			}
+			return $value;
 		}
 
 		/**
@@ -818,6 +850,10 @@ if ( ! class_exists( 'ewdupcpSettings' ) ) {
 		 * @since 5.0.0
 		 */
 		public function get_custom_fields() {
+			global $ewd_upcp_controller;
+			if ( ! $ewd_upcp_controller->permissions->check_permission( 'custom_fields' ) ) {
+				return array();
+			}
 
 			if ( empty( $this->custom_fields ) ) {
 

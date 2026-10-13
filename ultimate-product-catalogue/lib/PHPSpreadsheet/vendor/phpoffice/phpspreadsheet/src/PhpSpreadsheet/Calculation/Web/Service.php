@@ -1,11 +1,10 @@
 <?php
 
-namespace PhpOffice\PhpSpreadsheet\Calculation\Web;
+namespace EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Calculation\Web;
 
-use PhpOffice\PhpSpreadsheet\Calculation\Functions;
-use PhpOffice\PhpSpreadsheet\Calculation\Information\ExcelError;
-use PhpOffice\PhpSpreadsheet\Cell\Cell;
-
+use EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Calculation\Functions;
+use EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Calculation\Information\ExcelError;
+use EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Cell\Cell;
 class Service
 {
     /**
@@ -22,20 +21,23 @@ class Service
      */
     public static function webService($url, ?Cell $cell = null)
     {
-        if (is_array($url)) {
+        if (\is_array($url)) {
             $url = Functions::flattenSingleValue($url);
         }
-        if (!is_string($url)) {
-            return ExcelError::VALUE(); // Invalid URL length
+        if (!\is_string($url)) {
+            return ExcelError::VALUE();
+            // Invalid URL length
         }
-        $url = trim($url);
-        if (mb_strlen($url) > 2048) {
-            return ExcelError::VALUE(); // Invalid URL length
+        $url = \trim($url);
+        if (\mb_strlen($url) > 2048) {
+            return ExcelError::VALUE();
+            // Invalid URL length
         }
-        $parsed = parse_url($url);
+        $parsed = \parse_url($url);
         $scheme = $parsed['scheme'] ?? '';
         if ($scheme !== 'http' && $scheme !== 'https') {
-            return ExcelError::VALUE(); // Invalid protocol
+            return ExcelError::VALUE();
+            // Invalid protocol
         }
         $domainWhiteList = [];
         if ($cell !== null) {
@@ -45,29 +47,23 @@ class Service
             }
         }
         $host = $parsed['host'] ?? '';
-        if (!in_array($host, $domainWhiteList, true)) {
-            return ($cell === null) ? null : Functions::NOT_YET_IMPLEMENTED; // will be converted to oldCalculatedValue or null
+        if (!\in_array($host, $domainWhiteList, \true)) {
+            return $cell === null ? null : Functions::NOT_YET_IMPLEMENTED;
+            // will be converted to oldCalculatedValue or null
         }
-
         // Get results from the webservice
-        $ctxArray = [
-            'http' => [
-                'follow_location' => 0,
-                'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-            ],
-        ];
+        $ctxArray = ['http' => ['follow_location' => 0, 'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36']];
         if ($scheme === 'https') {
-            $ctxArray['ssl'] = ['crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT];
+            $ctxArray['ssl'] = ['crypto_method' => \STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT];
         }
-        $ctx = stream_context_create($ctxArray);
-        $output = @file_get_contents($url, false, $ctx);
-        if ($output === false || mb_strlen($output) > 32767) {
-            return ExcelError::VALUE(); // Output not a string or too long
+        $ctx = \stream_context_create($ctxArray);
+        $output = @\file_get_contents($url, \false, $ctx);
+        if ($output === \false || \mb_strlen($output) > 32767) {
+            return ExcelError::VALUE();
+            // Output not a string or too long
         }
-
-        return ($output === '') ? Functions::NOT_YET_IMPLEMENTED : $output;
+        return $output === '' ? Functions::NOT_YET_IMPLEMENTED : $output;
     }
-
     /**
      * URLENCODE.
      *
@@ -82,10 +78,9 @@ class Service
      */
     public static function urlEncode($text)
     {
-        if (!is_string($text)) {
+        if (!\is_string($text)) {
             return ExcelError::VALUE();
         }
-
-        return str_replace('+', '%20', urlencode($text));
+        return \str_replace('+', '%20', \urlencode($text));
     }
 }

@@ -144,6 +144,9 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	 */
 	public function maybe_print_add_to_cart() {
 		global $ewd_upcp_controller;
+		if ( ! $ewd_upcp_controller->woocommerce->get_checkout_product( $this->product->ID ) ) {
+			return;
+		}
 
 		if ( empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ) or empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-sync' ) ) ) { return; }
 
@@ -156,6 +159,9 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 
 	public function maybe_print_cart_quantity_select() {
 		global $ewd_upcp_controller;
+		if ( ! $ewd_upcp_controller->woocommerce->get_checkout_product( $this->product->ID ) ) {
+			return;
+		}
 		
 		if ( empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-checkout' ) ) or empty( $ewd_upcp_controller->settings->get_setting( 'woocommerce-sync' ) ) ) { return; }
 
@@ -467,6 +473,9 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	 */
 	public function get_custom_product_page_elements() {
 		global $ewd_upcp_controller;
+		if ( ! $ewd_upcp_controller->permissions->check_permission( 'product_page' ) ) {
+			return array();
+		}
 
 		$product_page_serialized = get_option( 'UPCP_Product_Page_Serialized' );
 
@@ -486,6 +495,8 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	 */
 	public function get_mobile_custom_product_page_elements() {
 		global $ewd_upcp_controller;
+		if ( ! $ewd_upcp_controller->permissions->check_permission( 'product_page' ) ) {
+			return array(); }
 
 		$product_page_serialized = get_option( 'UPCP_Product_Page_Serialized_Mobile' );
 
@@ -504,6 +515,9 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	 * @since 5.0.0
 	 */
 	public function print_custom_product_page_element( $element ) {
+		global $ewd_upcp_controller;
+		if ( ! $ewd_upcp_controller->permissions->check_permission( 'product_page' ) ) {
+			return; }
 
 		$this->element = $element;
 		
@@ -956,11 +970,13 @@ class ewdupcpViewSingleProduct extends ewdupcpViewProduct {
 	 * @since 5.0.0
 	 */
 	public function enqueue_assets() {
+		global $ewd_upcp_controller;
 		
 		wp_enqueue_style( 'ewd-upcp-css' );
 		wp_enqueue_style( 'rrssb' );
 
-		wp_enqueue_script( 'ewd-upcp-gridster' );
+		if ( in_array( $ewd_upcp_controller->settings->get_setting( 'product-page' ), array( 'custom', 'large' ), true ) ) {
+			wp_enqueue_script( 'ewd-upcp-gridster' ); }
 		wp_enqueue_script( 'ewd-upcp-js' );
 
 	}

@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace EwdUpcpVendor\ZipStream\Exception;
 
-namespace ZipStream\Exception;
-
-use ZipStream\Exception;
-
+use EwdUpcpVendor\ZipStream\Exception;
 /**
  * This Exception gets invoked if options are incompatible
  */

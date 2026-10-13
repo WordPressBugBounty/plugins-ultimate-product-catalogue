@@ -1,9 +1,8 @@
 <?php
 
-namespace PhpOffice\PhpSpreadsheet\Chart;
+namespace EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Chart;
 
-use PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
-
+use EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
 class Exception extends PhpSpreadsheetException
 {
 }

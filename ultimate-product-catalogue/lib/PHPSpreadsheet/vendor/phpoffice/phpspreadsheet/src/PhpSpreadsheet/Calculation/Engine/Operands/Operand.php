@@ -1,10 +1,9 @@
 <?php
 
-namespace PhpOffice\PhpSpreadsheet\Calculation\Engine\Operands;
+namespace EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Calculation\Engine\Operands;
 
 interface Operand
 {
-    public static function fromParser(string $formula, int $index, array $matches): self;
-
-    public function value(): string;
+    public static function fromParser(string $formula, int $index, array $matches) : self;
+    public function value() : string;
 }

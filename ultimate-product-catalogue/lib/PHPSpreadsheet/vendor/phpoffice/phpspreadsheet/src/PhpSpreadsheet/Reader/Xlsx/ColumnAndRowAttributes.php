@@ -1,28 +1,24 @@
 <?php
 
-namespace PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+namespace EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
-use PhpOffice\PhpSpreadsheet\Cell\AddressRange;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-use PhpOffice\PhpSpreadsheet\Reader\DefaultReadFilter;
-use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Cell\AddressRange;
+use EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Reader\DefaultReadFilter;
+use EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
+use EwdUpcpVendor\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use SimpleXMLElement;
-
 class ColumnAndRowAttributes extends BaseParserClass
 {
     /** @var Worksheet */
     private $worksheet;
-
     /** @var ?SimpleXMLElement */
     private $worksheetXml;
-
     public function __construct(Worksheet $workSheet, ?SimpleXMLElement $worksheetXml = null)
     {
         $this->worksheet = $workSheet;
         $this->worksheetXml = $worksheetXml;
     }
-
     /**
      * Set Worksheet column attributes by attributes array passed.
      *
@@ -30,7 +26,7 @@ class ColumnAndRowAttributes extends BaseParserClass
      * @param array $columnAttributes array of attributes (indexes are attribute name, values are value)
      *                               'xfIndex', 'visible', 'collapsed', 'outlineLevel', 'width', ... ?
      */
-    private function setColumnAttributes($columnAddress, array $columnAttributes): void
+    private function setColumnAttributes($columnAddress, array $columnAttributes) : void
     {
         if (isset($columnAttributes['xfIndex'])) {
             $this->worksheet->getColumnDimension($columnAddress)->setXfIndex($columnAttributes['xfIndex']);
@@ -48,7 +44,6 @@ class ColumnAndRowAttributes extends BaseParserClass
             $this->worksheet->getColumnDimension($columnAddress)->setWidth($columnAttributes['width']);
         }
     }
-
     /**
      * Set Worksheet row attributes by attributes array passed.
      *
@@ -56,7 +51,7 @@ class ColumnAndRowAttributes extends BaseParserClass
      * @param array $rowAttributes array of attributes (indexes are attribute name, values are value)
      *                               'xfIndex', 'visible', 'collapsed', 'outlineLevel', 'rowHeight', ... ?
      */
-    private function setRowAttributes($rowNumber, array $rowAttributes): void
+    private function setRowAttributes($rowNumber, array $rowAttributes) : void
     {
         if (isset($rowAttributes['xfIndex'])) {
             $this->worksheet->getRowDimension($rowNumber)->setXfIndex($rowAttributes['xfIndex']);
@@ -74,91 +69,72 @@ class ColumnAndRowAttributes extends BaseParserClass
             $this->worksheet->getRowDimension($rowNumber)->setRowHeight($rowAttributes['rowHeight']);
         }
     }
-
-    public function load(?IReadFilter $readFilter = null, bool $readDataOnly = false): void
+    public function load(?IReadFilter $readFilter = null, bool $readDataOnly = \false) : void
     {
         if ($this->worksheetXml === null) {
             return;
         }
-
         $columnsAttributes = [];
         $rowsAttributes = [];
         if (isset($this->worksheetXml->cols)) {
             $columnsAttributes = $this->readColumnAttributes($this->worksheetXml->cols, $readDataOnly);
         }
-
         if ($this->worksheetXml->sheetData && $this->worksheetXml->sheetData->row) {
             $rowsAttributes = $this->readRowAttributes($this->worksheetXml->sheetData->row, $readDataOnly);
         }
-
-        if ($readFilter !== null && get_class($readFilter) === DefaultReadFilter::class) {
+        if ($readFilter !== null && \get_class($readFilter) === DefaultReadFilter::class) {
             $readFilter = null;
         }
-
         // set columns/rows attributes
         $columnsAttributesAreSet = [];
         foreach ($columnsAttributes as $columnCoordinate => $columnAttributes) {
-            if (
-                $readFilter === null ||
-                !$this->isFilteredColumn($readFilter, $columnCoordinate, $rowsAttributes)
-            ) {
+            if ($readFilter === null || !$this->isFilteredColumn($readFilter, $columnCoordinate, $rowsAttributes)) {
                 if (!isset($columnsAttributesAreSet[$columnCoordinate])) {
                     $this->setColumnAttributes($columnCoordinate, $columnAttributes);
-                    $columnsAttributesAreSet[$columnCoordinate] = true;
+                    $columnsAttributesAreSet[$columnCoordinate] = \true;
                 }
             }
         }
-
         $rowsAttributesAreSet = [];
         foreach ($rowsAttributes as $rowCoordinate => $rowAttributes) {
-            if (
-                $readFilter === null ||
-                !$this->isFilteredRow($readFilter, $rowCoordinate, $columnsAttributes)
-            ) {
+            if ($readFilter === null || !$this->isFilteredRow($readFilter, $rowCoordinate, $columnsAttributes)) {
                 if (!isset($rowsAttributesAreSet[$rowCoordinate])) {
                     $this->setRowAttributes($rowCoordinate, $rowAttributes);
-                    $rowsAttributesAreSet[$rowCoordinate] = true;
+                    $rowsAttributesAreSet[$rowCoordinate] = \true;
                 }
             }
         }
     }
-
-    private function isFilteredColumn(IReadFilter $readFilter, string $columnCoordinate, array $rowsAttributes): bool
+    private function isFilteredColumn(IReadFilter $readFilter, string $columnCoordinate, array $rowsAttributes) : bool
     {
         foreach ($rowsAttributes as $rowCoordinate => $rowAttributes) {
             if (!$readFilter->readCell($columnCoordinate, $rowCoordinate, $this->worksheet->getTitle())) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
-    private function readColumnAttributes(SimpleXMLElement $worksheetCols, bool $readDataOnly): array
+    private function readColumnAttributes(SimpleXMLElement $worksheetCols, bool $readDataOnly) : array
     {
         $columnAttributes = [];
-
         foreach ($worksheetCols->col as $columnx) {
             /** @scrutinizer ignore-call */
             $column = $columnx->attributes();
             if ($column !== null) {
                 $startColumn = Coordinate::stringFromColumnIndex((int) $column['min']);
                 $endColumn = Coordinate::stringFromColumnIndex((int) $column['max']);
-                ++$endColumn;
-                for ($columnAddress = $startColumn; $columnAddress !== $endColumn; ++$columnAddress) {
+                $endColumn = Coordinate::stringFromColumnIndex(Coordinate::columnIndexFromString($endColumn) + 1);
+                for ($columnAddress = $startColumn; $columnAddress !== $endColumn; $columnAddress = Coordinate::stringFromColumnIndex(Coordinate::columnIndexFromString($columnAddress) + 1)) {
                     $columnAttributes[$columnAddress] = $this->readColumnRangeAttributes($column, $readDataOnly);
-
-                    if ((int) ($column['max']) == 16384) {
+                    if ((int) $column['max'] == 16384) {
                         break;
                     }
                 }
             }
         }
-
         return $columnAttributes;
     }
-
-    private function readColumnRangeAttributes(?SimpleXMLElement $column, bool $readDataOnly): array
+    private function readColumnRangeAttributes(?SimpleXMLElement $column, bool $readDataOnly) : array
     {
         $columnAttributes = [];
         if ($column !== null) {
@@ -166,37 +142,32 @@ class ColumnAndRowAttributes extends BaseParserClass
                 $columnAttributes['xfIndex'] = (int) $column['style'];
             }
             if (isset($column['hidden']) && self::boolean($column['hidden'])) {
-                $columnAttributes['visible'] = false;
+                $columnAttributes['visible'] = \false;
             }
             if (isset($column['collapsed']) && self::boolean($column['collapsed'])) {
-                $columnAttributes['collapsed'] = true;
+                $columnAttributes['collapsed'] = \true;
             }
-            if (isset($column['outlineLevel']) && ((int) $column['outlineLevel']) > 0) {
+            if (isset($column['outlineLevel']) && (int) $column['outlineLevel'] > 0) {
                 $columnAttributes['outlineLevel'] = (int) $column['outlineLevel'];
             }
             if (isset($column['width'])) {
                 $columnAttributes['width'] = (float) $column['width'];
             }
         }
-
         return $columnAttributes;
     }
-
-    private function isFilteredRow(IReadFilter $readFilter, int $rowCoordinate, array $columnsAttributes): bool
+    private function isFilteredRow(IReadFilter $readFilter, int $rowCoordinate, array $columnsAttributes) : bool
     {
         foreach ($columnsAttributes as $columnCoordinate => $columnAttributes) {
             if (!$readFilter->readCell($columnCoordinate, $rowCoordinate, $this->worksheet->getTitle())) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
-    private function readRowAttributes(SimpleXMLElement $worksheetRow, bool $readDataOnly): array
+    private function readRowAttributes(SimpleXMLElement $worksheetRow, bool $readDataOnly) : array
     {
         $rowAttributes = [];
-
         $rowIndex = 0;
         foreach ($worksheetRow as $rowx) {
             $row = $rowx->attributes();
@@ -212,10 +183,10 @@ class ColumnAndRowAttributes extends BaseParserClass
                     $rowAttributes[$rowIndex]['rowHeight'] = (float) $row['ht'];
                 }
                 if (isset($row['hidden']) && self::boolean($row['hidden'])) {
-                    $rowAttributes[$rowIndex]['visible'] = false;
+                    $rowAttributes[$rowIndex]['visible'] = \false;
                 }
                 if (isset($row['collapsed']) && self::boolean($row['collapsed'])) {
-                    $rowAttributes[$rowIndex]['collapsed'] = true;
+                    $rowAttributes[$rowIndex]['collapsed'] = \true;
                 }
                 if (isset($row['outlineLevel']) && (int) $row['outlineLevel'] > 0) {
                     $rowAttributes[$rowIndex]['outlineLevel'] = (int) $row['outlineLevel'];
@@ -225,7 +196,6 @@ class ColumnAndRowAttributes extends BaseParserClass
                 }
             }
         }
-
         return $rowAttributes;
     }
 }

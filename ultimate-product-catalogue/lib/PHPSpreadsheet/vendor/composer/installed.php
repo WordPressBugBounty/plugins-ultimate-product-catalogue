@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
-        'name' => 'etoilewebdesign/ultimate-faqs-spreadsheet-runtime',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '5af1e5a0f7b60fc6f98b891b63c2e243d6a47983',
+        'name' => 'etoilewebdesign/ultimate-product-catalogue-spreadsheet-runtime',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -19,10 +19,10 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'etoilewebdesign/ultimate-faqs-spreadsheet-runtime' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '5af1e5a0f7b60fc6f98b891b63c2e243d6a47983',
+        'etoilewebdesign/ultimate-product-catalogue-spreadsheet-runtime' => array(
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -74,9 +74,9 @@
             'dev_requirement' => false,
         ),
         'phpoffice/phpspreadsheet' => array(
-            'pretty_version' => '1.30.6',
-            'version' => '1.30.6.0',
-            'reference' => 'a416375ffc8bf5b661c1bb4e6c60d8f3fddbe5ce',
+            'pretty_version' => '1.30.7',
+            'version' => '1.30.7.0',
+            'reference' => 'f5dd9c1f084d336ea63cf53099533e061a9c157a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpoffice/phpspreadsheet',
             'aliases' => array(),

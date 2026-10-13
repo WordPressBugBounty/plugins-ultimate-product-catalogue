@@ -31,7 +31,7 @@ if ( ! class_exists( 'ewdupcpWooCommerce' ) ) {
 		public function add_hooks() {
 			global $ewd_upcp_controller;
 
-			if ( ! $this->sync_enabled() || ! $ewd_upcp_controller->permissions->check_permission( 'woocommerce' ) || ! $ewd_upcp_controller->helper_compatibility->is_compatible() ) {
+			if ( ! $this->sync_enabled() || ! $ewd_upcp_controller->permissions->check_permission( 'woocommerce', true ) || ! $ewd_upcp_controller->helper_compatibility->is_compatible() ) {
 				return;
 			}
 			if ( ! $this->woocommerce_available() ) {
@@ -46,6 +46,7 @@ if ( ! class_exists( 'ewdupcpWooCommerce' ) ) {
 			add_action( 'woocommerce_attribute_added', array( $this, 'import_attributes_into_upcp' ) );
 			add_action( 'woocommerce_attribute_updated', array( $this, 'import_attributes_into_upcp' ) );
 			add_action( 'woocommerce_update_product', array( $this, 'import_product_into_upcp' ) );
+			add_action( 'woocommerce_new_product', array( $this, 'import_product_into_upcp' ) );
 			add_action( 'edited_' . EWD_UPCP_PRODUCT_CATEGORY_TAXONOMY, array( $this, 'import_category_from_upcp' ) );
 			add_action( 'edited_' . EWD_UPCP_PRODUCT_TAG_TAXONOMY, array( $this, 'import_tag_from_upcp' ) );
 			add_action( 'ewd_upcp_product_saved', array( $this, 'import_product_from_upcp' ) );
@@ -114,6 +115,9 @@ if ( ! class_exists( 'ewdupcpWooCommerce' ) ) {
 		}
 
 		private function import_attribute_into_upcp( $attribute ) {
+			if ( ! $this->can_sync() ) {
+				return false;
+			}
 			global $ewd_upcp_controller;
 			if ( ! is_object( $attribute ) || empty( $attribute->attribute_id ) ) {
 				return false;
@@ -176,6 +180,9 @@ if ( ! class_exists( 'ewdupcpWooCommerce' ) ) {
 		}
 
 		private function sync_term_into_upcp( $source_id, $source_taxonomy, $destination_taxonomy, $hierarchical ) {
+			if ( ! $this->can_sync() ) {
+				return false;
+			}
 			if ( ! empty( $this->active_entities['term'] ) ) {
 				return false;
 			}
@@ -243,6 +250,9 @@ if ( ! class_exists( 'ewdupcpWooCommerce' ) ) {
 		}
 
 		private function sync_term_from_upcp( $source_id, $source_taxonomy, $destination_taxonomy, $hierarchical ) {
+			if ( ! $this->can_sync() ) {
+				return false;
+			}
 			if ( ! empty( $this->active_entities['term'] ) ) {
 				return false;
 			}
@@ -324,6 +334,9 @@ if ( ! class_exists( 'ewdupcpWooCommerce' ) ) {
 		}
 
 		public function import_product_into_upcp( $wc_product_id ) {
+			if ( ! $this->can_sync() ) {
+				return false;
+			}
 			global $ewd_upcp_controller;
 			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 				return false;
@@ -415,6 +428,9 @@ if ( ! class_exists( 'ewdupcpWooCommerce' ) ) {
 		}
 
 		public function import_product_from_upcp( $upcp_id ) {
+			if ( ! $this->can_sync() ) {
+				return false;
+			}
 			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 				return false;
 			}
@@ -845,7 +861,7 @@ if ( ! class_exists( 'ewdupcpWooCommerce' ) ) {
 			if ( ! current_user_can( 'manage_options' ) && ! current_user_can( $capability ) ) {
 				wp_send_json_error( array( 'code' => 'forbidden' ), 403 );
 			}
-			if ( ! $ewd_upcp_controller->permissions->check_permission( 'woocommerce' ) ) {
+			if ( ! $ewd_upcp_controller->permissions->check_permission( 'woocommerce', true ) ) {
 				wp_send_json_error( array( 'code' => 'entitlement_required' ), 403 );
 			}
 			$this->ensure_automatic_sync();
@@ -859,7 +875,29 @@ if ( ! class_exists( 'ewdupcpWooCommerce' ) ) {
 
 		private function can_sync() {
 			global $ewd_upcp_controller;
-			return $this->sync_enabled() && $this->woocommerce_available() && $ewd_upcp_controller->permissions->check_permission( 'woocommerce' ) && $ewd_upcp_controller->helper_compatibility->is_compatible();
+			return $this->sync_enabled() && $this->woocommerce_available() && $ewd_upcp_controller->permissions->check_permission( 'woocommerce', true ) && $ewd_upcp_controller->helper_compatibility->is_compatible();
+		}
+
+		/** Checkout uses exactly one existing mapping and current Woo purchase rules. */
+		public function get_checkout_product( $upcp_id ) {
+			if ( ! $this->can_sync() || 'publish' !== get_post_status( $upcp_id ) ) {
+				return false;
+			}
+			$link   = absint( get_post_meta( $upcp_id, 'woocommerce_id', true ) );
+			$woo    = $link ? wc_get_product( $link ) : false;
+			$linked = $link ? $this->find_linked_upcp_products( $link ) : array();
+			if ( ! $woo || ! $woo->is_type( 'simple' ) || 'publish' !== $woo->get_status() || ! $woo->is_purchasable() || ! $woo->is_in_stock()
+				|| 1 !== count( $linked ) || absint( reset( $linked )->ID ) !== absint( $upcp_id ) ) {
+				$this->log(
+					'checkout_mapping_unusable',
+					array(
+						'source_id'      => absint( $upcp_id ),
+						'destination_id' => $link,
+					)
+				);
+				return false;
+			}
+			return $woo;
 		}
 
 		private function sync_phases() {
@@ -976,6 +1014,10 @@ if ( ! class_exists( 'ewdupcpWooCommerce' ) ) {
 					return;
 				}
 				$summary               = get_option( self::SUMMARY_OPTION, $summary );
+				if ( ! $this->can_sync() ) {
+					wp_clear_scheduled_hook( self::CRON_HOOK );
+					return;
+				}
 				$summary['last_phase'] = $phase;
 				$summary['last_page']  = $page;
 				if ( $result['query_error'] || $result['failed'] ) {

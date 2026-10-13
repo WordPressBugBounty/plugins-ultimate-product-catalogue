@@ -51,6 +51,7 @@ if ( ! class_exists( 'ewdupcpCustomPostTypes' ) ) {
 
 			// Sort the products by custom ordering, save updated order
 			add_action( 'pre_get_posts', array( $this, 'sort_products_by_order' ) );
+			add_filter( 'posts_orderby', array( $this, 'admin_product_orderby' ), 10, 2 );
 			add_action( 'wp_ajax_ewd_upcp_update_product_order', array( $this, 'update_product_order' ) );
 
 			// Add an image input for categories, save image data
@@ -1059,11 +1060,11 @@ if ( ! class_exists( 'ewdupcpCustomPostTypes' ) ) {
 			update_post_meta( $post_id, 'sale_mode', empty( $_POST['sale_mode'] ) ? false : true );
 			update_post_meta( $post_id, 'display', empty( $_POST['display'] ) ? false : true );
 
-			if ( isset( $_POST['related_products'] ) ) {
+			if ( $ewd_upcp_controller->permissions->check_permission( 'product_page' ) && isset( $_POST['related_products'] ) ) {
 				update_post_meta( $post_id, 'related_products', is_array( $_POST['related_products'] ) ? array_filter( array_map( 'sanitize_text_field', $_POST['related_products'] ) ) : array() ); }
-			if ( isset( $_POST['next_product'] ) ) {
+			if ( $ewd_upcp_controller->permissions->check_permission( 'product_page' ) && isset( $_POST['next_product'] ) ) {
 				update_post_meta( $post_id, 'next_product', sanitize_text_field( $_POST['next_product'] ) ); }
-			if ( isset( $_POST['previous_product'] ) ) {
+			if ( $ewd_upcp_controller->permissions->check_permission( 'product_page' ) && isset( $_POST['previous_product'] ) ) {
 				update_post_meta( $post_id, 'previous_product', sanitize_text_field( $_POST['previous_product'] ) ); }
 
 			$custom_fields = $ewd_upcp_controller->settings->get_custom_fields();
@@ -1642,7 +1643,7 @@ if ( ! class_exists( 'ewdupcpCustomPostTypes' ) ) {
 		 */
 		public function sort_products_by_order( $query ) {
 
-			if ( ! is_admin() ) {
+			if ( ! is_admin() || ! $query->is_main_query() || EWD_UPCP_PRODUCT_POST_TYPE !== $query->get( 'post_type' ) || $query->get( 'orderby' ) ) {
 				return; }
 
 			if ( ! isset( $_GET['post_type'] ) ) {
@@ -1661,9 +1662,17 @@ if ( ! class_exists( 'ewdupcpCustomPostTypes' ) ) {
 			if ( $pagenow != 'edit.php' ) {
 				return; }
 
-			$query->set( 'meta_key', 'order' );
-			$query->set( 'orderby', 'meta_value_num' );
-			$query->set( 'order', 'ASC' );
+			$query->set( 'ewd_upcp_admin_order', true );
+		}
+
+		/** Optional order metadata must not filter products, authors, or background queries. */
+		public function admin_product_orderby( $orderby, $query ) {
+			if ( ! is_admin() || ! $query->is_main_query() || ! $query->get( 'ewd_upcp_admin_order' ) || EWD_UPCP_PRODUCT_POST_TYPE !== $query->get( 'post_type' ) ) {
+				return $orderby;
+			}
+			global $wpdb;
+			// A scalar lookup retains missing metadata and avoids duplicate rows from repeated metadata.
+			return "COALESCE((SELECT MIN(CAST(upcp_order.meta_value AS SIGNED)) FROM {$wpdb->postmeta} upcp_order WHERE upcp_order.post_id = {$wpdb->posts}.ID AND upcp_order.meta_key = 'order'), 0) ASC, {$wpdb->posts}.ID ASC";
 		}
 
 		/**

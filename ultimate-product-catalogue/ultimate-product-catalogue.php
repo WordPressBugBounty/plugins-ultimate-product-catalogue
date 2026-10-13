@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Ultimate Product Catalog
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-product-catalog/
- * Description: Build a standalone product catalog with blocks or shortcodes, responsive filtering and search, plus optional WooCommerce integration.
- * Version: 5.4.0
+ * Description: Add a product catalog to your site with blocks or shortcodes. Works with WooCommerce or standalone. Flexible and customizable, works with any theme.
+ * Version: 5.5.0
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author: Etoile Web Design
@@ -14,7 +14,7 @@
  * Text Domain: ultimate-product-catalogue
  * Domain Path: /languages/
  * WC requires at least: 7.1
- * WC tested up to: 11.1
+ * WC tested up to: 11.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -68,10 +68,11 @@ if ( ! class_exists( 'ewdupcpInit' ) ) {
 			define( 'EWD_UPCP_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 			define( 'EWD_UPCP_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 			define( 'EWD_UPCP_TEMPLATE_DIR', 'ewd-upcp-templates' );
-			define( 'EWD_UPCP_VERSION', '5.4.0' );
-			define( 'EWD_UPCP_HELPER_API_VERSION', 1 );
-			define( 'EWD_UPCP_MAX_HELPER_API_VERSION', 1 );
-			define( 'EWD_UPCP_MIN_HELPER_VERSION', '0.1.2' );
+			define( 'EWD_UPCP_VERSION', '5.5.0' );
+			define( 'EWD_UPCP_HELPER_API_VERSION', 2 );
+			define( 'EWD_UPCP_MAX_HELPER_API_VERSION', 2 );
+			define( 'EWD_UPCP_MIN_HELPER_VERSION', '0.2.0' );
+			define( 'EWD_UPCP_ENTITLEMENT_CONTRACT_VERSION', 1 );
 
 			define( 'EWD_UPCP_PRODUCT_POST_TYPE', 'upcp_product' );
 			define( 'EWD_UPCP_CATALOG_POST_TYPE', 'upcp_catalog' );
@@ -699,7 +700,7 @@ if ( ! class_exists( 'ewdupcpInit' ) ) {
 
 			if ( ! current_user_can( 'manage_options' ) ) {
 				return; }
-			if ( empty( $ewd_upcp_controller->permissions->check_permission( 'premium' ) ) ) {
+			if ( ! $ewd_upcp_controller->helper_compatibility->has_prior_access() ) {
 				return; }
 
 			$lifecycle = $ewd_upcp_controller->helper_compatibility->get_lifecycle_status();
@@ -720,6 +721,7 @@ if ( ! class_exists( 'ewdupcpInit' ) ) {
 			<div class='ewd-upcp-helper-install-notice-txt'>
 				<?php if ( 'installed_inactive' === $lifecycle['presence'] ) { ?>
 					<?php esc_html_e( 'Premium access is recorded for Ultimate Product Catalog, but EWD Premium Helper is installed and inactive. Activate the Helper to load premium catalog features. Free catalog features remain available.', 'ultimate-product-catalogue' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'plugins.php' ) ); ?>"><?php esc_html_e( 'Open Plugins to activate Helper', 'ultimate-product-catalogue' ); ?></a>
 				<?php } else { ?>
 					<?php echo wp_kses_post( sprintf( __( 'Premium access is recorded for Ultimate Product Catalog, but EWD Premium Helper is not installed. <a target="_blank" rel="noopener noreferrer" href="%s">Download and install the Helper</a> to load premium catalog features. Free catalog features remain available.', 'ultimate-product-catalogue' ), esc_url( 'https://www.etoilewebdesign.com/2021/12/11/requiring-premium-helper-plugin/' ) ) ); ?>
 				<?php } ?>

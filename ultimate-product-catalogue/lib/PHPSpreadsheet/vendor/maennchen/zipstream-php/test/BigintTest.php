@@ -1,64 +1,57 @@
 <?php
 
-declare(strict_types=1);
-
-namespace BigintTest;
+declare (strict_types=1);
+namespace EwdUpcpVendor\BigintTest;
 
 use OverflowException;
-use PHPUnit\Framework\TestCase;
-use ZipStream\Bigint;
-
+use EwdUpcpVendor\PHPUnit\Framework\TestCase;
+use EwdUpcpVendor\ZipStream\Bigint;
 class BigintTest extends TestCase
 {
-    public function testConstruct(): void
+    public function testConstruct() : void
     {
         $bigint = new Bigint(0x12345678);
         $this->assertSame('0x0000000012345678', $bigint->getHex64());
         $this->assertSame(0x12345678, $bigint->getLow32());
         $this->assertSame(0, $bigint->getHigh32());
     }
-
-    public function testConstructLarge(): void
+    public function testConstructLarge() : void
     {
         $bigint = new Bigint(0x87654321);
         $this->assertSame('0x0000000087654321', $bigint->getHex64());
-        $this->assertSame('87654321', bin2hex(pack('N', $bigint->getLow32())));
+        $this->assertSame('87654321', \bin2hex(\pack('N', $bigint->getLow32())));
         $this->assertSame(0, $bigint->getHigh32());
     }
-
-    public function testAddSmallValue(): void
+    public function testAddSmallValue() : void
     {
         $bigint = new Bigint(1);
         $bigint = $bigint->add(Bigint::init(2));
         $this->assertSame(3, $bigint->getLow32());
         $this->assertFalse($bigint->isOver32());
-        $this->assertTrue($bigint->isOver32(true));
-        $this->assertSame($bigint->getLowFF(), (float)$bigint->getLow32());
-        $this->assertSame($bigint->getLowFF(true), (float)0xFFFFFFFF);
+        $this->assertTrue($bigint->isOver32(\true));
+        $this->assertSame($bigint->getLowFF(), (float) $bigint->getLow32());
+        $this->assertSame($bigint->getLowFF(\true), (float) 0xffffffff);
     }
-
-    public function testAddWithOverflowAtLowestByte(): void
+    public function testAddWithOverflowAtLowestByte() : void
     {
-        $bigint = new Bigint(0xFF);
-        $bigint = $bigint->add(Bigint::init(0x01));
+        $bigint = new Bigint(0xff);
+        $bigint = $bigint->add(Bigint::init(0x1));
         $this->assertSame(0x100, $bigint->getLow32());
     }
-
-    public function testAddWithOverflowAtInteger32(): void
+    public function testAddWithOverflowAtInteger32() : void
     {
-        $bigint = new Bigint(0xFFFFFFFE);
+        $bigint = new Bigint(0xfffffffe);
         $this->assertFalse($bigint->isOver32());
-        $bigint = $bigint->add(Bigint::init(0x01));
+        $bigint = $bigint->add(Bigint::init(0x1));
         $this->assertTrue($bigint->isOver32());
-        $bigint = $bigint->add(Bigint::init(0x01));
+        $bigint = $bigint->add(Bigint::init(0x1));
         $this->assertSame('0x0000000100000000', $bigint->getHex64());
         $this->assertTrue($bigint->isOver32());
-        $this->assertSame((float)0xFFFFFFFF, $bigint->getLowFF());
+        $this->assertSame((float) 0xffffffff, $bigint->getLowFF());
     }
-
-    public function testAddWithOverflowAtInteger64(): void
+    public function testAddWithOverflowAtInteger64() : void
     {
-        $bigint = Bigint::fromLowHigh(0xFFFFFFFF, 0xFFFFFFFF);
+        $bigint = Bigint::fromLowHigh(0xffffffff, 0xffffffff);
         $this->assertSame('0xFFFFFFFFFFFFFFFF', $bigint->getHex64());
         $this->expectException(OverflowException::class);
         $bigint->add(Bigint::init(1));
