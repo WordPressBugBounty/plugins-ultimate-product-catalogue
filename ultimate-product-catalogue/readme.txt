@@ -2,7 +2,7 @@
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce catalog
 Tested up to: 7.1
-Stable tag: 5.5.0
+Stable tag: 5.5.1
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GPLv3
@@ -224,20 +224,15 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 
 == Changelog ==
 
+= 5.5.1 (2026-10-26) =
+- Fixed an import issue caused by commas in prices.
+
 = 5.5.0 (2026-10-12) =
 - Improved reliability and error handling for supported WooCommerce synchronization, product mappings and checkout integration.
 - Improved validation, data handling and error reporting for supported product imports and exports.
 - Improved Premium license validation and entitlement handling, including clearer status information and recovery options.
 - Improved compatibility between Ultimate Product Catalog and EWD Premium Helper, with safer handling of incompatible versions and licensing interruptions.
 - Improved preservation of existing catalog data and settings when Premium license status changes.
-
-= 5.4.0 (2026-09-23) =
-- **IMPORTANT NOTE: This is a major update with several big changes. We suggest testing this update in a staging environment before updating your live environment. Or wait a few days before updating in the event that an issue is identified that requires a fix/new update.**
-- Improved catalog filtering and discovery reliability across categories, sub-categories, search, sorting, pagination and AJAX updates, including clearer handling of failed catalog requests.
-- Improved the catalog browsing and filtering experience on mobile devices.
-- Improved WooCommerce integration safety and clarified supported synchronization behavior to reduce unintended changes to WooCommerce data.
-- Hardened permissions and security for administrative actions, product imports and role/capability handling.
-- Improved compatibility and regression protection for existing 5.x catalogs, shortcodes, blocks, templates, layouts, settings and Premium configurations.
 
 [See changelog for all versions](https://www.etoilewebdesign.com/changelogs/ultimate-product-catalogue.txt).
 

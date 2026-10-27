@@ -683,7 +683,7 @@ class ewdupcpImport {
 		}
 		foreach ( $price_columns as $column ) {
 			$value = isset( $values[ $column ] ) ? trim( (string) $values[ $column ] ) : '';
-			if ( '' !== $value && ( ! is_numeric( $value ) || ! is_finite( (float) $value ) || (float) $value < 0 ) ) {
+			if ( ! $this->valid_price( $value ) ) {
 				return false; }
 		}
 		foreach ( $url_columns as $column ) {
@@ -692,6 +692,23 @@ class ewdupcpImport {
 				return false; }
 		}
 		return true;
+	}
+
+	/** Validate localized prices without changing the text stored/displayed by UPCP. */
+	private function valid_price( $value ) {
+		if ( '' === $value ) {
+			return true;
+		}
+		if ( false !== strpos( $value, ',' ) ) {
+			if ( preg_match( '/^[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?$/D', $value ) ) {
+				$value = str_replace( ',', '', $value );
+			} elseif ( preg_match( '/^(?:[0-9]+|[0-9]{1,3}(?:\.[0-9]{3})+),[0-9]+$/D', $value ) ) {
+				$value = str_replace( ',', '.', str_replace( '.', '', $value ) );
+			} else {
+				return false;
+			}
+		}
+		return is_numeric( $value ) && is_finite( (float) $value ) && (float) $value >= 0;
 	}
 
 	/** Backward-compatible wrapper around the single maintained upload boundary. */
