@@ -60,6 +60,11 @@ if ( ! class_exists( 'ewdupcpPermissions' ) ) {
 		}
 
 		public function check_permission( $permission_type = '', $fresh = false ) {
+			global $ewd_upcp_controller;
+			if ( defined( 'EWD_UPCP_PREMIUM_RUNTIME_API' ) && in_array( $permission_type, array( 'import', 'export' ), true )
+				&& empty( $ewd_upcp_controller->premium_runtime_modules['transfers'] ) ) {
+				return false;
+			}
 			if ( ! array_key_exists( $permission_type, $this->plugin_permissions ) || ! defined( 'EWDPH_VERSION' )
 				|| ! class_exists( 'ewdphUPCPCompatibility' ) ) {
 				return false;

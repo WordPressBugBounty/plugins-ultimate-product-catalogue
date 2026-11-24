@@ -2,7 +2,7 @@
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce catalog
 Tested up to: 7.1
-Stable tag: 5.5.1
+Stable tag: 5.6.0
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GPLv3
@@ -139,6 +139,7 @@ The Ultimate Product Catalog plugin comes translation ready, with many already a
 - [The Ultimate Product Catalog support forum](https://wordpress.org/support/plugin/ultimate-product-catalogue/)
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
+
 == Installation ==
 
 1. Upload the 'ultimate-product-catalogue' folder to the '/wp-content/plugins/' directory
@@ -178,6 +179,8 @@ Yes, you can search for the Display Product Catalog block. Alternatively, you'll
 = Do I need WooCommerce to use Ultimate Product Catalog? =
 
 No. Ultimate Product Catalog works as a standalone product catalog. WooCommerce is optional. WooCommerce integration and checkout features are available with Premium.
+
+Automatic WooCommerce synchronization uses scheduled tasks. WP-Cron or a configured system cron must be running for synchronization to progress.
 
 = Can I change the default layout of the catalog? =
 
@@ -224,19 +227,14 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 
 == Changelog ==
 
-= 5.5.1 (2026-10-26) =
-- Fixed an import issue caused by commas in prices.
-
-= 5.5.0 (2026-10-12) =
-- Improved reliability and error handling for supported WooCommerce synchronization, product mappings and checkout integration.
-- Improved validation, data handling and error reporting for supported product imports and exports.
-- Improved Premium license validation and entitlement handling, including clearer status information and recovery options.
-- Improved compatibility between Ultimate Product Catalog and EWD Premium Helper, with safer handling of incompatible versions and licensing interruptions.
-- Improved preservation of existing catalog data and settings when Premium license status changes.
+= 5.6.0 (2026-11-24) =
+- **If you are using the premium version, please make sure to also update the EWD Premium Helper plugin to version 0.3.1 at the same time.**
+- Several updates have been made to separate and streamline the functionality of the premium version via the EWD Premium Helper plugin.
+- Added XLSX as an export option.
 
 [See changelog for all versions](https://www.etoilewebdesign.com/changelogs/ultimate-product-catalogue.txt).
 
 == Upgrade Notice ==
 
-= 5.5.0 =
-This update includes substantial changes to WooCommerce sync and to the interaction between this plugin and the Premium Helper. If your site uses the Premium Helper or WooCommerce synchronization, we recommend testing the update on a staging site before updating your production site.
+= 5.6.0 =
+Several updates have been made to separate and streamline the functionality of the premium version via the EWD Premium Helper plugin. If you are using the premium version, please make sure to also update the EWD Premium Helper plugin to version 0.3.1 at the same time.

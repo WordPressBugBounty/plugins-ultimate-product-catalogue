@@ -24,11 +24,12 @@ if ( ! class_exists( 'ewdupcpHelperCompatibility' ) ) {
 		public static function get_descriptor() {
 
 			return array(
-				'plugin_version'         => EWD_UPCP_VERSION,
-				'api_version'            => EWD_UPCP_HELPER_API_VERSION,
-				'min_helper_version'     => EWD_UPCP_MIN_HELPER_VERSION,
-				'max_helper_api_version' => EWD_UPCP_MAX_HELPER_API_VERSION,
+				'plugin_version'               => EWD_UPCP_VERSION,
+				'api_version'                  => EWD_UPCP_HELPER_API_VERSION,
+				'min_helper_version'           => EWD_UPCP_MIN_HELPER_VERSION,
+				'max_helper_api_version'       => EWD_UPCP_MAX_HELPER_API_VERSION,
 				'entitlement_contract_version' => EWD_UPCP_ENTITLEMENT_CONTRACT_VERSION,
+				'premium_runtime_api'          => defined( 'EWD_UPCP_PREMIUM_RUNTIME_API' ) ? EWD_UPCP_PREMIUM_RUNTIME_API : 0,
 			);
 		}
 
@@ -67,6 +68,15 @@ if ( ! class_exists( 'ewdupcpHelperCompatibility' ) ) {
 
 			if ( empty( $helper_descriptor ) || ! is_array( $helper_descriptor ) ) {
 				return array( 'state' => 'active_legacy_no_descriptor' );
+			}
+			if ( defined( 'EWD_UPCP_PREMIUM_RUNTIME_API' ) && ( 1 !== EWD_UPCP_PREMIUM_RUNTIME_API
+				|| ! isset( $helper_descriptor['premium_runtime_api'], $helper_descriptor['premium_runtime_modules'] )
+				|| 1 !== $helper_descriptor['premium_runtime_api'] || ! is_array( $helper_descriptor['premium_runtime_modules'] )
+				|| ! in_array( 'transfers', $helper_descriptor['premium_runtime_modules'], true ) ) ) {
+				return array( 'state' => 'too_old' );
+			}
+			if ( isset( $helper_descriptor['plugin_version'] ) && ! is_string( $helper_descriptor['plugin_version'] ) ) {
+				return array( 'state' => 'too_old' );
 			}
 
 			$helper_version = isset( $helper_descriptor['plugin_version'] ) ? $helper_descriptor['plugin_version'] : '0';

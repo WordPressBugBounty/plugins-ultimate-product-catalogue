@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate Product Catalog
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-product-catalog/
  * Description: Add a product catalog to your site with blocks or shortcodes. Works with WooCommerce or standalone. Flexible and customizable, works with any theme.
- * Version: 5.5.1
+ * Version: 5.6.0
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author: Etoile Web Design
@@ -14,7 +14,7 @@
  * Text Domain: ultimate-product-catalogue
  * Domain Path: /languages/
  * WC requires at least: 7.1
- * WC tested up to: 11.2
+ * WC tested up to: 11.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -30,6 +30,8 @@ if ( ! class_exists( 'ewdupcpInit' ) ) {
 		public $ajax;
 		public $cpts;
 		public $exports;
+		public $imports;
+		public $premium_runtime_modules = array();
 		public $helper_compatibility;
 		public $permissions;
 		public $settings;
@@ -68,10 +70,11 @@ if ( ! class_exists( 'ewdupcpInit' ) ) {
 			define( 'EWD_UPCP_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 			define( 'EWD_UPCP_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 			define( 'EWD_UPCP_TEMPLATE_DIR', 'ewd-upcp-templates' );
-			define( 'EWD_UPCP_VERSION', '5.5.1' );
+			define( 'EWD_UPCP_VERSION', '5.6.0' );
 			define( 'EWD_UPCP_HELPER_API_VERSION', 2 );
 			define( 'EWD_UPCP_MAX_HELPER_API_VERSION', 2 );
-			define( 'EWD_UPCP_MIN_HELPER_VERSION', '0.2.0' );
+			define( 'EWD_UPCP_MIN_HELPER_VERSION', '0.3.0' );
+			define( 'EWD_UPCP_PREMIUM_RUNTIME_API', 1 );
 			define( 'EWD_UPCP_ENTITLEMENT_CONTRACT_VERSION', 1 );
 
 			define( 'EWD_UPCP_PRODUCT_POST_TYPE', 'upcp_product' );
@@ -100,15 +103,13 @@ if ( ! class_exists( 'ewdupcpInit' ) ) {
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/DeactivationSurvey.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/Helper.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/HelperCompatibility.class.php';
-			require_once EWD_UPCP_PLUGIN_DIR . '/includes/Export.class.php';
-			require_once EWD_UPCP_PLUGIN_DIR . '/includes/Import.class.php';
+			require_once EWD_UPCP_PLUGIN_DIR . '/includes/TransferFallback.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/InstallationWalkthrough.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/Product.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/Permissions.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/ReviewAsk.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/SEO.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/Settings.class.php';
-			require_once EWD_UPCP_PLUGIN_DIR . '/includes/SpreadsheetRuntime.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/template-functions.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/Widgets.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/WooCommerce.class.php';
@@ -132,7 +133,7 @@ if ( ! class_exists( 'ewdupcpInit' ) ) {
 			$this->cpts                 = new ewdupcpCustomPostTypes();
 			$this->admin_custom_fields  = new ewdupcpAdminCustomFields();
 			$this->admin_product_page   = new ewdupcpAdminProductPage();
-			$this->exports              = new ewdupcpExport();
+			$this->exports              = new ewdupcpTransferFallback();
 			$this->helper_compatibility = new ewdupcpHelperCompatibility();
 			$this->permissions          = new ewdupcpPermissions();
 			$this->settings             = new ewdupcpSettings();
@@ -145,7 +146,6 @@ if ( ! class_exists( 'ewdupcpInit' ) ) {
 			new ewdupcpBlocks();
 			if ( function_exists( 'register_block_pattern' ) ) {
 				new ewdupcpPatterns(); }
-			new ewdupcpImport();
 			new ewdupcpSEO();
 			new ewdupcpWidgetManager();
 			new ewdupcpAboutUs();
