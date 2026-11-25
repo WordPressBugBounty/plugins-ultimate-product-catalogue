@@ -2,7 +2,7 @@
 Contributors: Rustaurius
 Tags: catalog, product catalog, product, catalogue, woocommerce catalog
 Tested up to: 7.1
-Stable tag: 5.6.0
+Stable tag: 5.6.1
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GPLv3
@@ -226,6 +226,9 @@ For more info about the premium version, please see here: https://doc.etoilewebd
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 5.6.1 (2026-11-25) =
+- Update for premium helper compatibility.
 
 = 5.6.0 (2026-11-24) =
 - **If you are using the premium version, please make sure to also update the EWD Premium Helper plugin to version 0.3.1 at the same time.**

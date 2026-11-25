@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate Product Catalog
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-product-catalog/
  * Description: Add a product catalog to your site with blocks or shortcodes. Works with WooCommerce or standalone. Flexible and customizable, works with any theme.
- * Version: 5.6.0
+ * Version: 5.6.1
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author: Etoile Web Design
@@ -70,7 +70,7 @@ if ( ! class_exists( 'ewdupcpInit' ) ) {
 			define( 'EWD_UPCP_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 			define( 'EWD_UPCP_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 			define( 'EWD_UPCP_TEMPLATE_DIR', 'ewd-upcp-templates' );
-			define( 'EWD_UPCP_VERSION', '5.6.0' );
+			define( 'EWD_UPCP_VERSION', '5.6.1' );
 			define( 'EWD_UPCP_HELPER_API_VERSION', 2 );
 			define( 'EWD_UPCP_MAX_HELPER_API_VERSION', 2 );
 			define( 'EWD_UPCP_MIN_HELPER_VERSION', '0.3.0' );
@@ -96,6 +96,7 @@ if ( ! class_exists( 'ewdupcpInit' ) ) {
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/Ajax.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/AdminCustomFields.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/AdminProductPage.class.php';
+			require_once EWD_UPCP_PLUGIN_DIR . '/includes/BlackFriday2026Notice.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/Blocks.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/Patterns.class.php';
 			require_once EWD_UPCP_PLUGIN_DIR . '/includes/CustomPostTypes.class.php';
@@ -128,6 +129,7 @@ if ( ! class_exists( 'ewdupcpInit' ) ) {
 			new ewdupcpDeactivationSurvey();
 			new ewdupcpInstallationWalkthrough();
 			new ewdupcpReviewAsk();
+			new ewdupcpBlackFriday2026Notice();
 
 			$this->ajax                 = new ewdupcpAJAX();
 			$this->cpts                 = new ewdupcpCustomPostTypes();
